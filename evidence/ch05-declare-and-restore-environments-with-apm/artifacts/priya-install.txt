@@ -10,19 +10,31 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
   |-- 3 agents integrated -> 3 targets
   |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
   |-- 3 rule(s) integrated -> 3 targets
-+- MCP Servers (1)
-[i] Targeting declared targets from apm.yml: copilot, claude, cursor
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + ledger
+Successfully configured MCP server 'ledger' for VS Code
+  + ledger
+Successfully configured MCP server 'ledger' for Claude Code
+  + ledger
+Successfully configured MCP server 'ledger' for Cursor
+  + ledger
+|  [+]  ledger -> Copilot, Vscode, Claude, Cursor (configured)
 |  [>]  microsoft-learn (self-defined, http)
-|     +- Configuring for Copilot, Claude, Cursor...
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for VS Code
   + microsoft-learn
 Successfully configured MCP server 'microsoft-learn' for Claude Code
   + microsoft-learn
 Successfully configured MCP server 'microsoft-learn' for Cursor
   + microsoft-learn
-|  [+]  microsoft-learn -> Copilot, Claude, Cursor (configured)
-[*] Configured 1 server
+|  [+]  microsoft-learn -> Copilot, Vscode, Claude, Cursor (configured)
+[*] Configured 2 servers
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 2 APM dependencies and 1 MCP server in 3.0s.
+[*] Installed 2 APM dependencies and 2 MCP servers in 5.0s.

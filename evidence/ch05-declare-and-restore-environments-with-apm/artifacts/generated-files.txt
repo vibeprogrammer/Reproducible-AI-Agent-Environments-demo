@@ -22,3 +22,4 @@
 .github/mcp.json
 .github/prompts/review-checkout-change.prompt.md
 .mcp.json
+.vscode/mcp.json

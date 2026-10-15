@@ -1,0 +1,25 @@
+[>] Installing dependencies from apm.yml...
+[i] Targets: claude  (source: --target flag)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927 (cached)
+  |-- (files unchanged)
+  [+] <project root> (local)
+  |-- 1 agents adopted -> .claude/agents/
+  |-- 1 commands integrated -> .claude/commands/
+  |-- 1 rule(s) adopted -> .claude/rules/
++- MCP Servers (2)
+[i] Targeting specific runtime: claude
+|  [+] ledger (already configured)
+|  [+] microsoft-learn (already configured)
+[*] All servers up to date
+[+] Removed stale MCP server 'ledger' from Copilot CLI config
+[+] Removed stale MCP server 'microsoft-learn' from Copilot CLI config
+[+] Removed stale MCP server 'ledger' from .cursor/mcp.json
+[+] Removed stale MCP server 'microsoft-learn' from .cursor/mcp.json
+[i] Removed stale MCP server 'ledger' from .vscode/mcp.json
+[i] Removed stale MCP server 'microsoft-learn' from .vscode/mcp.json
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 1 APM dependency in 0.3s.

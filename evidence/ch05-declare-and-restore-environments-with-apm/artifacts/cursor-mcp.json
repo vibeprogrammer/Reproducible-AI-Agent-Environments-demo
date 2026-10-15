@@ -1,5 +1,16 @@
 {
   "mcpServers": {
+    "ledger": {
+      "type": "stdio",
+      "command": "npx",
+      "env": {
+        "LEDGER_API_KEY": "${env:LEDGER_API_KEY}"
+      },
+      "args": [
+        "-y",
+        "@meridian-finance/ledger-mcp@1.4.2"
+      ]
+    },
     "microsoft-learn": {
       "type": "http",
       "url": "https://learn.microsoft.com/api/mcp"

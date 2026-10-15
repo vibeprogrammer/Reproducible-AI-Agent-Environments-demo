@@ -28,13 +28,13 @@ inside the disposable workspace.
 | Path | What it is |
 |------|------------|
 | `run.sh` | The automated demo (sources `../scripts/lib.sh`) |
-| `fixture/meridian-checkout/apm.yml` | Meridian's manifest: targets, the pinned skill, one MCP server |
+| `fixture/meridian-checkout/apm.yml` | Meridian's manifest: four targets, the pinned skill, two MCP servers |
 | `fixture/meridian-checkout/.apm/instructions/money-handling.instructions.md` | Repo-owned instruction (`applyTo: "src/**/*.ts"`) |
 | `fixture/meridian-checkout/.apm/prompts/review-checkout-change.prompt.md` | Repo-owned prompt with one input |
 | `fixture/meridian-checkout/.apm/agents/payments-reviewer.agent.md` | Repo-owned agent |
 | `fixture/meridian-checkout/gitignore.txt` | Becomes `.gitignore`: generated files are not committed |
 | `fixture/meridian-checkout/src/`, `package.json`, `tsconfig.json` | A tiny synthetic TypeScript service |
-| `expected/generated-files.txt` | The 24 files `apm install` must generate for the three targets |
+| `expected/generated-files.txt` | The 25 files `apm install` must generate for Meridian's targets |
 
 ## Run it
 
@@ -50,27 +50,39 @@ Evidence lands in `evidence/ch05-declare-and-restore-environments-with-apm/`
 1. `apm --version` reports 0.33.0. `apm init -y` in an empty repository
    writes an `apm.yml` with commented-out `targets`, empty `apm` and `mcp`
    lists, and `includes: auto`.
-2. **Priya's install.** `apm targets` reports all targets inactive before
-   the first install, even though `apm.yml` pins three (it reports on-disk
-   detection signals). `apm install` then uses the pinned list
-   (`Targets: claude, copilot, cursor (source: apm.yml)`), resolves the skill
-   tag to commit `d77ad92`, and configures the `microsoft-learn` MCP server
-   for all three targets.
-3. **What lands where.** Exactly the 24 files in
+2. **Priya's install.** The manifest pins `targets: [copilot, vscode,
+   claude, cursor]`. `apm targets` reports all targets inactive before the
+   first install (it reports on-disk detection signals). `apm install` then
+   uses the pinned list (`Targets: claude, copilot, cursor (source: apm.yml)`
+   for file primitives; `vscode` is folded into `copilot` there but still
+   gets its own MCP config), resolves the skill tag to commit `d77ad92`, and
+   configures two self-defined MCP servers: `ledger` (stdio,
+   `npx -y @meridian-finance/ledger-mcp@1.4.2`, key referenced as
+   `${LEDGER_API_KEY}`) and `microsoft-learn` (remote, no credentials).
+   Priya's shell has a dummy `LEDGER_API_KEY` set.
+3. **What lands where.** Exactly the 25 files in
    `expected/generated-files.txt`: the skill folder under `.claude/skills/`
    and under `.agents/skills/` (shared by Copilot and Cursor); the
    instruction as `.github/instructions/*.instructions.md` (`applyTo`),
    `.claude/rules/*.md` (`paths:`) and `.cursor/rules/*.mdc` (`globs:`); the
    prompt as a Copilot prompt file and as Claude and Cursor commands; the
-   agent once per target; and the MCP server in `.github/mcp.json`,
-   `.mcp.json` and `.cursor/mcp.json`, with no secrets in any of them.
+   agent once per target; and the MCP servers in `.github/mcp.json`
+   (Copilot CLI), `.vscode/mcp.json`, `.mcp.json` (Claude Code) and
+   `.cursor/mcp.json`. The key is written as a reference in the Copilot,
+   VS Code and Cursor files (`${LEDGER_API_KEY}` or `${env:LEDGER_API_KEY}`),
+   **but `.mcp.json` receives the dummy value itself** because the variable
+   was set at install time. The value appears in no other file, including
+   the lockfile.
 4. **Lockfile.** `apm.lock.yaml` records `apm_version: 0.33.0`, the skill's
-   `resolved_ref` and `resolved_commit`, and the MCP server.
+   `resolved_ref` and `resolved_commit`, and both MCP servers.
 5. **Commit.** Only the declaration is committed: `apm.yml`,
    `apm.lock.yaml`, `.apm/` and `.gitignore` (plus the service code).
-6. **Anika's restore.** From an empty `HOME` and a fresh clone, `apm install`
-   produces the same 24 files with the same SHA-256 digests as on Priya's
-   machine, and leaves `git status` clean (the lockfile is unchanged).
+6. **Anika's restore.** From an empty `HOME` and a fresh clone (no
+   `LEDGER_API_KEY` set), `apm install` produces the same 25 files. All of
+   them except `.mcp.json` have the same SHA-256 digests as on Priya's
+   machine; `.mcp.json` differs in exactly one line (the reference instead
+   of the value). `git status` stays clean (the lockfile is unchanged), and
+   the install warns that Copilot CLI needs `LEDGER_API_KEY` at runtime.
 7. **Verification.** `apm targets` shows the three targets active;
    `apm deps tree` shows the skill at 1.0.0; `apm audit` finds no drift and
    no content issues; `apm audit --ci` passes; `apm install --frozen` and
@@ -78,14 +90,18 @@ Evidence lands in `evidence/ch05-declare-and-restore-environments-with-apm/`
 8. **Drift.** After a hand edit to `.claude/rules/money-handling.md`, plain
    `apm audit` prints `Drift detected: 1 file(s)` but exits 0;
    `apm audit --ci` exits 1. `apm install` restores the original bytes.
-9. **User scope.** `apm install -g ... --target claude` writes
+9. **Narrowing the target.** A one-off `apm install --target claude`
+   removes both MCP servers from the Copilot CLI, VS Code and Cursor configs
+   (`Removed stale MCP server ...`). A plain `apm install` puts them back and
+   the digests match again.
+10. **User scope.** `apm install -g ... --target claude` writes
    `~/.apm/apm.yml`, `~/.apm/apm.lock.yaml` and
    `~/.claude/skills/meridian-code-review/`, and touches nothing in the
    current directory.
-10. **Side lab A.** A registry MCP server (`io.github.upstash/context7`)
+11. **Side lab A.** A registry MCP server (`io.github.upstash/context7`)
     makes `apm install` ask for `CONTEXT7_API_KEY`; with no terminal input
     the install exits 1 and writes no MCP config.
-11. **Side lab B.** Adding the public Agent Plugin
+12. **Side lab B.** Adding the public Agent Plugin
     `github/awesome-copilot/plugins/context-engineering` (pinned to a commit)
     to Meridian's manifest: the install succeeds and registers the plugin in
     `.github/copilot/settings.local.json`, but the fetched plugin directory
@@ -100,6 +116,11 @@ Evidence lands in `evidence/ch05-declare-and-restore-environments-with-apm/`
   works. A project without local content lists its dependencies normally.
 - Plain `apm audit` reports drift without failing; use `apm audit --ci` as
   a gate.
+- For the Claude Code target, a `${VAR}` in a self-defined server's `env` is
+  resolved from the installing shell when the variable is set, and the value
+  is written into `.mcp.json`. With the variable unset, the reference is
+  written. Keep `.mcp.json` out of Git (the fixture's `.gitignore` does).
+- `apm install --target X` rewrites the MCP configs of targets outside `X`.
 
 ## Limitations (what this demo does NOT verify)
 
@@ -108,6 +129,9 @@ Evidence lands in `evidence/ch05-declare-and-restore-environments-with-apm/`
   APM's file deployment only.
 - Whether `https://learn.microsoft.com/api/mcp` answers MCP requests. APM
   writes the configuration; it does not start or contact the server.
+- The `ledger` server is synthetic: `@meridian-finance/ledger-mcp` is not a
+  published npm package, so it cannot start. Only its configuration is
+  verified.
 - Whether the Copilot plugin registration in side lab B results in any
   usable agent or skill in Copilot.
 - Windows and macOS installs, and the official release binaries (the run used

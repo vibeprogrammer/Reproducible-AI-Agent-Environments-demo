@@ -251,8 +251,26 @@ deployments:
   content_hash: sha256:7ed31078319c1c2bcbb676a14b40fee91dc7865cfe9cf265bade81338ef55d25
 - kind: uri
   target: mcp
+  value: ledger
+  runtime: claude
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: uri
+  target: mcp
   value: microsoft-learn
   runtime: claude
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: uri
+  target: mcp
+  value: ledger
+  runtime: copilot
   scope: project
   owners:
   - .
@@ -269,6 +287,15 @@ deployments:
   content_hash: null
 - kind: uri
   target: mcp
+  value: ledger
+  runtime: cursor
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: uri
+  target: mcp
   value: microsoft-learn
   runtime: cursor
   scope: project
@@ -276,9 +303,38 @@ deployments:
   - .
   active_owner: .
   content_hash: null
+- kind: uri
+  target: mcp
+  value: ledger
+  runtime: vscode
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
+- kind: uri
+  target: mcp
+  value: microsoft-learn
+  runtime: vscode
+  scope: project
+  owners:
+  - .
+  active_owner: .
+  content_hash: null
 mcp_servers:
+- ledger
 - microsoft-learn
 mcp_configs:
+  ledger:
+    name: ledger
+    transport: stdio
+    env:
+      LEDGER_API_KEY: ${LEDGER_API_KEY}
+    args:
+    - -y
+    - '@meridian-finance/ledger-mcp@1.4.2'
+    registry: false
+    command: npx
   microsoft-learn:
     name: microsoft-learn
     transport: http
@@ -286,10 +342,16 @@ mcp_configs:
     url: https://learn.microsoft.com/api/mcp
 mcp_target_servers:
   claude:
+  - ledger
   - microsoft-learn
   copilot:
+  - ledger
   - microsoft-learn
   cursor:
+  - ledger
+  - microsoft-learn
+  vscode:
+  - ledger
   - microsoft-learn
 local_deployed_files:
 - .claude/agents/payments-reviewer.md

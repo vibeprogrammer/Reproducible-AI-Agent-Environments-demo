@@ -9,4 +9,5 @@ apm_modules/
 .github/instructions/
 .github/prompts/
 .github/mcp.json
+.vscode/mcp.json
 .mcp.json

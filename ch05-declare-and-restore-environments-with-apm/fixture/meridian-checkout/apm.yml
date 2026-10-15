@@ -5,8 +5,11 @@ author: meridian-finance
 license: UNLICENSED
 
 # Pin the tools Meridian supports instead of relying on auto-detection.
+# copilot = GitHub Copilot files (and Copilot CLI's MCP config);
+# vscode adds the MCP config that VS Code reads.
 targets:
   - copilot
+  - vscode
   - claude
   - cursor
 
@@ -15,7 +18,16 @@ dependencies:
     # Chapter 2's skill, from a Git subdirectory, pinned to its release tag.
     - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0
   mcp:
-    # Self-defined remote server; it needs no credentials.
+    # Meridian's own ledger server (Chapter 1's audit), pinned to 1.4.2.
+    # The key is referenced, never written: each developer exports it.
+    - name: ledger
+      registry: false
+      transport: stdio
+      command: npx
+      args: ["-y", "@meridian-finance/ledger-mcp@1.4.2"]
+      env:
+        LEDGER_API_KEY: ${LEDGER_API_KEY}
+    # Public documentation server; it needs no credentials.
     - name: microsoft-learn
       registry: false
       transport: http

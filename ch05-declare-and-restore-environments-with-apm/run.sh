@@ -21,10 +21,12 @@ keep_out() { mkdir -p "$EVIDENCE/artifacts"; _norm < "$LAST_OUT" > "$EVIDENCE/ar
 
 # Deployed files that `apm install` generates for the three targets.
 generated() {
-  find .agents .claude .cursor .github .mcp.json -type f 2>/dev/null | LC_ALL=C sort
+  find .agents .claude .cursor .github .vscode .mcp.json -type f 2>/dev/null | LC_ALL=C sort
 }
 # One SHA-256 line per generated file, for comparing two machines.
-fingerprint() { generated | xargs sha256sum; }
+# .mcp.json is compared separately (see step 6a): its content depends on
+# the shell environment at install time.
+fingerprint() { generated | grep -vx '\.mcp\.json' | xargs sha256sum; }
 
 # ---------------------------------------------------------------------------
 step "1. The pinned CLI"
@@ -68,17 +70,18 @@ expect_out '^ +claude +inactive'
 keep_out targets-before-install.txt
 
 # ---------------------------------------------------------------------------
-step "4. Priya: apm install"
+step "4. Priya: apm install (with a dummy LEDGER_API_KEY in her shell)"
+export LEDGER_API_KEY="demo-value-not-a-real-key"
 run apm install
 expect_rc 0
 expect_out 'Targets: claude, copilot, cursor +\(source: apm\.yml\)'
 expect_out 'meridian-code-review-v1\.0\.0 @d77ad927'
 expect_out 'microsoft-learn'
-expect_out 'Installed 2 APM dependencies and 1 MCP server'
+expect_out 'Installed 2 APM dependencies and 2 MCP servers'
 keep_out priya-install.txt
 
 step "4a. What landed where"
-run_sh 'find .agents .claude .cursor .github .mcp.json -type f | LC_ALL=C sort'
+run_sh 'find .agents .claude .cursor .github .vscode .mcp.json -type f | LC_ALL=C sort'
 expect_rc 0
 generated > ../generated-files.txt
 keep_artifact ../generated-files.txt generated-files.txt
@@ -102,11 +105,21 @@ expect_file .github/agents/payments-reviewer.agent.md
 expect_file .claude/agents/payments-reviewer.md
 expect_file .cursor/agents/payments-reviewer.md
 # MCP: one config file per target, no secrets in any of them
-run_sh 'for f in .github/mcp.json .mcp.json .cursor/mcp.json; do echo "== $f"; cat "$f"; echo; done'
-expect_in_file .github/mcp.json 'https://learn\.microsoft\.com/api/mcp'
-expect_in_file .mcp.json 'https://learn\.microsoft\.com/api/mcp'
-expect_in_file .cursor/mcp.json 'https://learn\.microsoft\.com/api/mcp'
-expect_not_in_file .mcp.json '(token|secret|Authorization|api[_-]?key)'
+run_sh 'for f in .github/mcp.json .vscode/mcp.json .mcp.json .cursor/mcp.json; do echo "== $f"; cat "$f"; echo; done'
+for f in .github/mcp.json .vscode/mcp.json .mcp.json .cursor/mcp.json; do
+  expect_in_file "$f" 'https://learn\.microsoft\.com/api/mcp'
+  expect_in_file "$f" '@meridian-finance/ledger-mcp@1\.4\.2'
+done
+# The key is written as a reference in each tool's own syntax, never as a value
+expect_in_file .github/mcp.json '"LEDGER_API_KEY": "\$\{LEDGER_API_KEY\}"'
+expect_in_file .vscode/mcp.json '"LEDGER_API_KEY": "\$\{env:LEDGER_API_KEY\}"'
+expect_in_file .cursor/mcp.json '"LEDGER_API_KEY": "\$\{env:LEDGER_API_KEY\}"'
+# Observed in 0.33.0: with the variable set, the Claude Code config gets the value
+run_sh 'grep -rl "demo-value-not-a-real-key" .agents .claude .cursor .github .vscode .mcp.json apm.lock.yaml apm.yml'
+expect_out '^\.mcp\.json$'
+expect_no_out 'apm\.lock\.yaml|apm\.yml|\.github|\.vscode|\.cursor'
+expect_in_file .mcp.json '"LEDGER_API_KEY": "demo-value-not-a-real-key"'
+keep_artifact .vscode/mcp.json vscode-mcp.json
 keep_artifact .github/mcp.json copilot-mcp.json
 keep_artifact .mcp.json claude-mcp.json
 keep_artifact .cursor/mcp.json cursor-mcp.json
@@ -131,6 +144,7 @@ expect_out '^\.apm/instructions/money-handling\.instructions\.md$'
 expect_no_out '^\.claude/'
 fingerprint > ../../priya.sha256
 keep_artifact ../../priya.sha256 priya-generated.sha256
+unset LEDGER_API_KEY
 cd "$WORK"
 
 # ---------------------------------------------------------------------------
@@ -153,6 +167,7 @@ run apm install
 expect_rc 0
 expect_out 'Targets: claude, copilot, cursor +\(source: apm\.yml\)'
 expect_out '@d77ad927'
+expect_out 'not currently set: LEDGER_API_KEY'
 keep_out anika-install.txt
 
 # ---------------------------------------------------------------------------
@@ -163,6 +178,10 @@ run_sh 'wc -l < ../../anika.sha256'
 expect_same ../../priya.sha256 ../../anika.sha256
 run_sh 'git status --porcelain; echo "status-lines: $(git status --porcelain | wc -l)"'
 expect_out '^status-lines: 0$'
+step "6a2. The one file that differs: .mcp.json (Anika has no LEDGER_API_KEY set)"
+expect_in_file .mcp.json '"LEDGER_API_KEY": "\$\{LEDGER_API_KEY\}"'
+run_sh 'diff ../../priya/meridian-checkout/.mcp.json .mcp.json'
+expect_rc 1
 
 step "6b. apm targets"
 run apm targets
@@ -216,6 +235,17 @@ run apm install
 expect_rc 0
 fingerprint > ../../anika-after.sha256
 expect_same ../../priya.sha256 ../../anika-after.sha256
+
+step "6i. A one-off --target narrows the MCP set and rewrites the other configs"
+run apm install --target claude
+expect_rc 0
+expect_out 'Removed stale MCP server'
+expect_not_in_file .cursor/mcp.json 'ledger'
+keep_out install-target-claude.txt
+run apm install
+expect_rc 0
+fingerprint > ../../anika-final.sha256
+expect_same ../../priya.sha256 ../../anika-final.sha256
 cd "$WORK"
 
 # ---------------------------------------------------------------------------

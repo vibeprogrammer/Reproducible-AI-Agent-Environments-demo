@@ -72,8 +72,11 @@ author: meridian-finance
 license: UNLICENSED
 
 # Pin the tools Meridian supports instead of relying on auto-detection.
+# copilot = GitHub Copilot files (and Copilot CLI's MCP config);
+# vscode adds the MCP config that VS Code reads.
 targets:
   - copilot
+  - vscode
   - claude
   - cursor
 
@@ -82,7 +85,16 @@ dependencies:
     # Chapter 2's skill, from a Git subdirectory, pinned to its release tag.
     - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0
   mcp:
-    # Self-defined remote server; it needs no credentials.
+    # Meridian's own ledger server (Chapter 1's audit), pinned to 1.4.2.
+    # The key is referenced, never written: each developer exports it.
+    - name: ledger
+      registry: false
+      transport: stdio
+      command: npx
+      args: ["-y", "@meridian-finance/ledger-mcp@1.4.2"]
+      env:
+        LEDGER_API_KEY: ${LEDGER_API_KEY}
+    # Public documentation server; it needs no credentials.
     - name: microsoft-learn
       registry: false
       transport: http
@@ -113,7 +125,7 @@ apm.yml.
   PASS: exit code 0
   PASS: output matches /^ +claude +inactive/
 
-## 4. Priya: apm install
+## 4. Priya: apm install (with a dummy LEDGER_API_KEY in her shell)
 $ apm install
 [>] Installing dependencies from apm.yml...
 [>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
@@ -127,31 +139,43 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
   |-- 3 agents integrated -> 3 targets
   |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
   |-- 3 rule(s) integrated -> 3 targets
-+- MCP Servers (1)
-[i] Targeting declared targets from apm.yml: copilot, claude, cursor
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + ledger
+Successfully configured MCP server 'ledger' for VS Code
+  + ledger
+Successfully configured MCP server 'ledger' for Claude Code
+  + ledger
+Successfully configured MCP server 'ledger' for Cursor
+  + ledger
+|  [+]  ledger -> Copilot, Vscode, Claude, Cursor (configured)
 |  [>]  microsoft-learn (self-defined, http)
-|     +- Configuring for Copilot, Claude, Cursor...
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for VS Code
   + microsoft-learn
 Successfully configured MCP server 'microsoft-learn' for Claude Code
   + microsoft-learn
 Successfully configured MCP server 'microsoft-learn' for Cursor
   + microsoft-learn
-|  [+]  microsoft-learn -> Copilot, Claude, Cursor (configured)
-[*] Configured 1 server
+|  [+]  microsoft-learn -> Copilot, Vscode, Claude, Cursor (configured)
+[*] Configured 2 servers
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 2 APM dependencies and 1 MCP server in 3.0s.
+[*] Installed 2 APM dependencies and 2 MCP servers in 5.0s.
 [exit 0]
   PASS: exit code 0
   PASS: output matches /Targets: claude, copilot, cursor +\(source: apm\.yml\)/
   PASS: output matches /meridian-code-review-v1\.0\.0 @d77ad927/
   PASS: output matches /microsoft-learn/
-  PASS: output matches /Installed 2 APM dependencies and 1 MCP server/
+  PASS: output matches /Installed 2 APM dependencies and 2 MCP servers/
 
 ## 4a. What landed where
-$ bash -c find .agents .claude .cursor .github .mcp.json -type f | LC_ALL=C sort
+$ bash -c find .agents .claude .cursor .github .vscode .mcp.json -type f | LC_ALL=C sort
 .agents/skills/meridian-code-review/SKILL.md
 .agents/skills/meridian-code-review/apm.yml
 .agents/skills/meridian-code-review/assets/review-report-template.md
@@ -176,6 +200,7 @@ $ bash -c find .agents .claude .cursor .github .mcp.json -type f | LC_ALL=C sort
 .github/mcp.json
 .github/prompts/review-checkout-change.prompt.md
 .mcp.json
+.vscode/mcp.json
 [exit 0]
   PASS: exit code 0
   PASS: identical: ../generated-files.txt == ../expected-generated-files.txt
@@ -206,10 +231,25 @@ globs: src/**/*.ts
   PASS: exists: .github/agents/payments-reviewer.agent.md
   PASS: exists: .claude/agents/payments-reviewer.md
   PASS: exists: .cursor/agents/payments-reviewer.md
-$ bash -c for f in .github/mcp.json .mcp.json .cursor/mcp.json; do echo "== $f"; cat "$f"; echo; done
+$ bash -c for f in .github/mcp.json .vscode/mcp.json .mcp.json .cursor/mcp.json; do echo "== $f"; cat "$f"; echo; done
 == .github/mcp.json
 {
   "mcpServers": {
+    "ledger": {
+      "type": "local",
+      "tools": [
+        "*"
+      ],
+      "id": "",
+      "command": "npx",
+      "env": {
+        "LEDGER_API_KEY": "${LEDGER_API_KEY}"
+      },
+      "args": [
+        "-y",
+        "@meridian-finance/ledger-mcp@1.4.2"
+      ]
+    },
     "microsoft-learn": {
       "type": "http",
       "url": "https://learn.microsoft.com/api/mcp",
@@ -220,9 +260,42 @@ $ bash -c for f in .github/mcp.json .mcp.json .cursor/mcp.json; do echo "== $f";
     }
   }
 }
+== .vscode/mcp.json
+{
+  "servers": {
+    "ledger": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@meridian-finance/ledger-mcp@1.4.2"
+      ],
+      "env": {
+        "LEDGER_API_KEY": "${env:LEDGER_API_KEY}"
+      }
+    },
+    "microsoft-learn": {
+      "type": "http",
+      "url": "https://learn.microsoft.com/api/mcp",
+      "headers": {}
+    }
+  },
+  "inputs": []
+}
 == .mcp.json
 {
   "mcpServers": {
+    "ledger": {
+      "type": "stdio",
+      "command": "npx",
+      "env": {
+        "LEDGER_API_KEY": "demo-value-not-a-real-key"
+      },
+      "args": [
+        "-y",
+        "@meridian-finance/ledger-mcp@1.4.2"
+      ]
+    },
     "microsoft-learn": {
       "type": "http",
       "url": "https://learn.microsoft.com/api/mcp"
@@ -233,6 +306,17 @@ $ bash -c for f in .github/mcp.json .mcp.json .cursor/mcp.json; do echo "== $f";
 == .cursor/mcp.json
 {
   "mcpServers": {
+    "ledger": {
+      "type": "stdio",
+      "command": "npx",
+      "env": {
+        "LEDGER_API_KEY": "${env:LEDGER_API_KEY}"
+      },
+      "args": [
+        "-y",
+        "@meridian-finance/ledger-mcp@1.4.2"
+      ]
+    },
     "microsoft-learn": {
       "type": "http",
       "url": "https://learn.microsoft.com/api/mcp"
@@ -241,9 +325,22 @@ $ bash -c for f in .github/mcp.json .mcp.json .cursor/mcp.json; do echo "== $f";
 }
 [exit 0]
   PASS: .github/mcp.json matches /https://learn\.microsoft\.com/api/mcp/
+  PASS: .github/mcp.json matches /@meridian-finance/ledger-mcp@1\.4\.2/
+  PASS: .vscode/mcp.json matches /https://learn\.microsoft\.com/api/mcp/
+  PASS: .vscode/mcp.json matches /@meridian-finance/ledger-mcp@1\.4\.2/
   PASS: .mcp.json matches /https://learn\.microsoft\.com/api/mcp/
+  PASS: .mcp.json matches /@meridian-finance/ledger-mcp@1\.4\.2/
   PASS: .cursor/mcp.json matches /https://learn\.microsoft\.com/api/mcp/
-  PASS: .mcp.json does not match /(token|secret|Authorization|api[_-]?key)/
+  PASS: .cursor/mcp.json matches /@meridian-finance/ledger-mcp@1\.4\.2/
+  PASS: .github/mcp.json matches /"LEDGER_API_KEY": "\$\{LEDGER_API_KEY\}"/
+  PASS: .vscode/mcp.json matches /"LEDGER_API_KEY": "\$\{env:LEDGER_API_KEY\}"/
+  PASS: .cursor/mcp.json matches /"LEDGER_API_KEY": "\$\{env:LEDGER_API_KEY\}"/
+$ bash -c grep -rl "demo-value-not-a-real-key" .agents .claude .cursor .github .vscode .mcp.json apm.lock.yaml apm.yml
+.mcp.json
+[exit 0]
+  PASS: output matches /^\.mcp\.json$/
+  PASS: output does not match /apm\.lock\.yaml|apm\.yml|\.github|\.vscode|\.cursor/
+  PASS: .mcp.json matches /"LEDGER_API_KEY": "demo-value-not-a-real-key"/
 
 ## 4b. The lockfile (introduced here; Chapter 7 covers it in depth)
   PASS: exists: apm.lock.yaml
@@ -339,26 +436,43 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
   |-- 3 agents integrated -> 3 targets
   |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
   |-- 3 rule(s) integrated -> 3 targets
-+- MCP Servers (1)
-[i] Targeting declared targets from apm.yml: copilot, claude, cursor
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + ledger
+
+[!] Copilot CLI will resolve 1 environment variable at runtime that is not currently set: LEDGER_API_KEY.
+    Export it in your shell before running 'gh copilot', e.g.:
+      export LEDGER_API_KEY=...
+Successfully configured MCP server 'ledger' for VS Code
+  + ledger
+Successfully configured MCP server 'ledger' for Claude Code
+  + ledger
+Successfully configured MCP server 'ledger' for Cursor
+  + ledger
+|  [+]  ledger -> Copilot, Vscode, Claude, Cursor (configured)
 |  [>]  microsoft-learn (self-defined, http)
-|     +- Configuring for Copilot, Claude, Cursor...
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for VS Code
   + microsoft-learn
 Successfully configured MCP server 'microsoft-learn' for Claude Code
   + microsoft-learn
 Successfully configured MCP server 'microsoft-learn' for Cursor
   + microsoft-learn
-|  [+]  microsoft-learn -> Copilot, Claude, Cursor (configured)
-[*] Configured 1 server
+|  [+]  microsoft-learn -> Copilot, Vscode, Claude, Cursor (configured)
+[*] Configured 2 servers
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 2 APM dependencies and 1 MCP server in 0.9s.
+[*] Installed 2 APM dependencies and 2 MCP servers in 2.0s.
 [exit 0]
   PASS: exit code 0
   PASS: output matches /Targets: claude, copilot, cursor +\(source: apm\.yml\)/
   PASS: output matches /@d77ad927/
+  PASS: output matches /not currently set: LEDGER_API_KEY/
 
 ## 6. Anika: verify the restored environment
 
@@ -371,6 +485,16 @@ $ bash -c git status --porcelain; echo "status-lines: $(git status --porcelain |
 status-lines: 0
 [exit 0]
   PASS: output matches /^status-lines: 0$/
+
+## 6a2. The one file that differs: .mcp.json (Anika has no LEDGER_API_KEY set)
+  PASS: .mcp.json matches /"LEDGER_API_KEY": "\$\{LEDGER_API_KEY\}"/
+$ bash -c diff ../../priya/meridian-checkout/.mcp.json .mcp.json
+7c7
+<         "LEDGER_API_KEY": "demo-value-not-a-real-key"
+---
+>         "LEDGER_API_KEY": "${LEDGER_API_KEY}"
+[exit 1]
+  PASS: exit code 1
 
 ## 6b. apm targets
 $ apm targets
@@ -462,15 +586,16 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
   |-- 3 agents adopted -> 3 targets
   |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
   |-- 3 rule(s) adopted -> 3 targets
-+- MCP Servers (1)
-[i] Targeting declared targets from apm.yml: copilot, claude, cursor
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [+] ledger (already configured)
 |  [+] microsoft-learn (already configured)
 [*] All servers up to date
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 1 APM dependency in 0.3s.
+[*] Installed 1 APM dependency in 0.4s.
 [i] Lockfile presence verified. Run 'apm audit' for on-disk content integrity.
 [exit 0]
   PASS: exit code 0
@@ -564,18 +689,96 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
   |-- 3 agents adopted -> 3 targets
   |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
   |-- 1 rule(s) integrated (2 adopted) -> 3 targets
-+- MCP Servers (1)
-[i] Targeting declared targets from apm.yml: copilot, claude, cursor
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [+] ledger (already configured)
 |  [+] microsoft-learn (already configured)
 [*] All servers up to date
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 1 APM dependency in 0.2s.
+[*] Installed 1 APM dependency in 0.3s.
 [exit 0]
   PASS: exit code 0
   PASS: identical: ../../priya.sha256 == ../../anika-after.sha256
+
+## 6i. A one-off --target narrows the MCP set and rewrites the other configs
+$ apm install --target claude
+[>] Installing dependencies from apm.yml...
+[i] Targets: claude  (source: --target flag)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927 (cached)
+  |-- (files unchanged)
+  [+] <project root> (local)
+  |-- 1 agents adopted -> .claude/agents/
+  |-- 1 commands integrated -> .claude/commands/
+  |-- 1 rule(s) adopted -> .claude/rules/
++- MCP Servers (2)
+[i] Targeting specific runtime: claude
+|  [+] ledger (already configured)
+|  [+] microsoft-learn (already configured)
+[*] All servers up to date
+[+] Removed stale MCP server 'ledger' from Copilot CLI config
+[+] Removed stale MCP server 'microsoft-learn' from Copilot CLI config
+[+] Removed stale MCP server 'ledger' from .cursor/mcp.json
+[+] Removed stale MCP server 'microsoft-learn' from .cursor/mcp.json
+[i] Removed stale MCP server 'ledger' from .vscode/mcp.json
+[i] Removed stale MCP server 'microsoft-learn' from .vscode/mcp.json
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 1 APM dependency in 0.3s.
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /Removed stale MCP server/
+  PASS: .cursor/mcp.json does not match /ledger/
+$ apm install
+[>] Installing dependencies from apm.yml...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927 (cached)
+  |-- (files unchanged)
+  [+] <project root> (local)
+  |-- 1 prompts adopted -> .github/prompts/
+  |-- 3 agents adopted -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) adopted -> 3 targets
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + ledger
+
+[!] Copilot CLI will resolve 1 environment variable at runtime that is not currently set: LEDGER_API_KEY.
+    Export it in your shell before running 'gh copilot', e.g.:
+      export LEDGER_API_KEY=...
+Successfully configured MCP server 'ledger' for VS Code
+  + ledger
+  ledger already configured, skipping
+Successfully configured MCP server 'ledger' for Cursor
+  + ledger
+|  [+]  ledger -> Copilot, Vscode, Claude, Cursor (configured)
+|  [>]  microsoft-learn (self-defined, http)
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for VS Code
+  + microsoft-learn
+  microsoft-learn already configured, skipping
+Successfully configured MCP server 'microsoft-learn' for Cursor
+  + microsoft-learn
+|  [+]  microsoft-learn -> Copilot, Vscode, Claude, Cursor (configured)
+[*] Configured 2 servers
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 1 APM dependency and 2 MCP servers in 0.3s.
+[exit 0]
+  PASS: exit code 0
+  PASS: identical: ../../priya.sha256 == ../../anika-final.sha256
 
 ## 7. Scope: Anika installs the skill for herself at user scope
 $ apm install -g vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0 --target claude
@@ -600,7 +803,7 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
   |-- (files unchanged)
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 1 APM dependency in 0.8s.
+[*] Installed 1 APM dependency in 0.6s.
 [exit 0]
   PASS: exit code 0
   PASS: output matches /Installing to user scope/
@@ -675,22 +878,38 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
   |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
   |-- 3 rule(s) integrated -> 3 targets
 [+] Registered 1 Agent Plugin with GitHub Copilot via the 'apm' marketplace (context-engineering)
-+- MCP Servers (1)
-[i] Targeting declared targets from apm.yml: copilot, claude, cursor
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + ledger
+
+[!] Copilot CLI will resolve 1 environment variable at runtime that is not currently set: LEDGER_API_KEY.
+    Export it in your shell before running 'gh copilot', e.g.:
+      export LEDGER_API_KEY=...
+Successfully configured MCP server 'ledger' for VS Code
+  + ledger
+Successfully configured MCP server 'ledger' for Claude Code
+  + ledger
+Successfully configured MCP server 'ledger' for Cursor
+  + ledger
+|  [+]  ledger -> Copilot, Vscode, Claude, Cursor (configured)
 |  [>]  microsoft-learn (self-defined, http)
-|     +- Configuring for Copilot, Claude, Cursor...
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for VS Code
   + microsoft-learn
 Successfully configured MCP server 'microsoft-learn' for Claude Code
   + microsoft-learn
 Successfully configured MCP server 'microsoft-learn' for Cursor
   + microsoft-learn
-|  [+]  microsoft-learn -> Copilot, Claude, Cursor (configured)
-[*] Configured 1 server
+|  [+]  microsoft-learn -> Copilot, Vscode, Claude, Cursor (configured)
+[*] Configured 2 servers
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 3 APM dependencies and 1 MCP server in 2.1s.
+[*] Installed 3 APM dependencies and 2 MCP servers in 2.7s.
 [exit 0]
   PASS: exit code 0
   PASS: output matches /Registered 1 Agent Plugin with GitHub Copilot/
@@ -745,4 +964,4 @@ including --root DIR or --global if specified.
 [exit 1]
   PASS: exit code 1
   PASS: output matches /out of sync/
-== ch05-declare-and-restore-environments-with-apm: passed (101 passed, 0 failed) ==
+== ch05-declare-and-restore-environments-with-apm: passed (119 passed, 0 failed) ==
