@@ -1,0 +1,7 @@
+name: meridian-claude-notes
+version: 1.0.0
+description: Claude Code-specific notes for Meridian repositories
+author: meridian-finance
+license: MIT
+# Package-level restriction: these files only ever reach Claude Code.
+target: claude

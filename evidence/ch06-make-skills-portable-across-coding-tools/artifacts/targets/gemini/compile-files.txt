@@ -1,0 +1,4 @@
+new before-compile.json
+new compile.log
+new project/AGENTS.md
+new project/GEMINI.md

@@ -1,0 +1,37 @@
+{
+  "harness": "codex",
+  "version": "codex-cli 0.163.0",
+  "case": "instructions-money",
+  "workspace": "codex",
+  "prompt": "Without using any tools and without reading files: what do the instructions you were given for this project say about logging card data? Quote the sentence exactly, or reply UNKNOWN.",
+  "pass_pattern": "not even partially",
+  "runs": 3,
+  "passed": 3,
+  "status": "ran",
+  "results": [
+    {
+      "rc": 0,
+      "answer": "\u201cNever log card data or customer PII, not even partially.\u201d",
+      "model": "gpt-6-sol",
+      "commands_run": [],
+      "stderr_tail": "",
+      "passed": true
+    },
+    {
+      "rc": 0,
+      "answer": "\u201cNever log card data or customer PII, not even partially.\u201d",
+      "model": "gpt-6-sol",
+      "commands_run": [],
+      "stderr_tail": "",
+      "passed": true
+    },
+    {
+      "rc": 0,
+      "answer": "\u201cNever log card data or customer PII, not even partially.\u201d",
+      "model": "gpt-6-sol",
+      "commands_run": [],
+      "stderr_tail": "",
+      "passed": true
+    }
+  ]
+}

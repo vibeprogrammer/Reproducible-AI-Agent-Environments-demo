@@ -1,0 +1,17 @@
+new before.json
+new home/.apm/.apm-lifecycle.lock
+new home/.apm/config.json
+new install.log
+new project/.agents/apm-hooks.json
+new project/.agents/hooks.json
+new project/.agents/hooks/meridian-checkout/scripts/money-rules-reminder.sh
+new project/.agents/mcp_config.json
+new project/.agents/rules/money-handling.md
+new project/.agents/skills/meridian-code-review/SKILL.md
+new project/.agents/skills/meridian-code-review/apm.yml
+new project/.agents/skills/meridian-code-review/assets/review-report-template.md
+new project/.agents/skills/meridian-code-review/references/false-positives.md
+new project/.agents/skills/meridian-code-review/references/money-rules.md
+new project/.agents/skills/meridian-code-review/scripts/check_money_rules.py
+new project/apm.lock.yaml
+new rc

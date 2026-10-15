@@ -1,0 +1,3 @@
+new before-compile.json
+new compile.log
+new project/AGENTS.md

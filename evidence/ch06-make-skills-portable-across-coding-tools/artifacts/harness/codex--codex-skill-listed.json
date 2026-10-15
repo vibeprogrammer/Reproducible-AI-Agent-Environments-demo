@@ -1,0 +1,37 @@
+{
+  "harness": "codex",
+  "version": "codex-cli 0.163.0",
+  "case": "skill-listed",
+  "workspace": "codex",
+  "prompt": "Without using any tools, list the names of the agent skills available to you in this session, one per line. Reply with the names only. If there are none, reply NONE.",
+  "pass_pattern": "meridian-code-review",
+  "runs": 3,
+  "passed": 3,
+  "status": "ran",
+  "results": [
+    {
+      "rc": 0,
+      "answer": "imagegen\nopenai-docs\nskill-creator\nskill-installer\nmeridian-code-review",
+      "model": "gpt-6-sol",
+      "commands_run": [],
+      "stderr_tail": "",
+      "passed": true
+    },
+    {
+      "rc": 0,
+      "answer": "imagegen\nopenai-docs\nskill-creator\nskill-installer\nmeridian-code-review",
+      "model": "gpt-6-sol",
+      "commands_run": [],
+      "stderr_tail": "",
+      "passed": true
+    },
+    {
+      "rc": 0,
+      "answer": "imagegen\nopenai-docs\nskill-creator\nskill-installer\nmeridian-code-review",
+      "model": "gpt-6-sol",
+      "commands_run": [],
+      "stderr_tail": "",
+      "passed": true
+    }
+  ]
+}

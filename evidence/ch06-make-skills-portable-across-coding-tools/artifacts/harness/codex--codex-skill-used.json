@@ -1,0 +1,45 @@
+{
+  "harness": "codex",
+  "version": "codex-cli 0.163.0",
+  "case": "skill-used",
+  "workspace": "codex",
+  "prompt": "Use the meridian-code-review skill. According to that skill, what does rule MR004 check? Answer in one sentence.",
+  "pass_pattern": "4217",
+  "runs": 3,
+  "passed": 3,
+  "status": "ran",
+  "results": [
+    {
+      "rc": 0,
+      "answer": "MR004 checks that currency codes are uppercase, alphabetic ISO 4217 codes, such as `\"EUR\"` rather than `\"eur\"` or `\"\u20ac\"`.",
+      "model": "gpt-6-sol",
+      "commands_run": [
+        "/bin/bash -lc 'rg -n \"MR004|MR004\" .agents/skills/meridian-code-review .claude/skills/meridian-code-review'",
+        "/bin/bash -lc 'cat .agents/skills/meridian-code-review/SKILL.md'"
+      ],
+      "stderr_tail": "",
+      "passed": true
+    },
+    {
+      "rc": 0,
+      "answer": "MR004 checks that currency codes are uppercase, alphabetic ISO 4217 codes, such as `\"EUR\"`.",
+      "model": "gpt-6-sol",
+      "commands_run": [
+        "/bin/bash -lc \"rg -n 'MR004|\"'^#|rule'\"' .agents/skills/meridian-code-review/SKILL.md .agents/skills/meridian-code-review/scripts/check_money_rules.py\""
+      ],
+      "stderr_tail": "",
+      "passed": true
+    },
+    {
+      "rc": 0,
+      "answer": "MR004 checks that currency codes are uppercase, alphabetic ISO 4217 codes, such as `\"EUR\"`.",
+      "model": "gpt-6-sol",
+      "commands_run": [
+        "/bin/bash -lc \"rg -n 'MR004|\"'^#|''^##'\"' .agents/skills/meridian-code-review/SKILL.md .agents/skills/meridian-code-review/scripts/check_money_rules.py\"",
+        "/bin/bash -lc 'cat .agents/skills/meridian-code-review/SKILL.md'"
+      ],
+      "stderr_tail": "",
+      "passed": true
+    }
+  ]
+}

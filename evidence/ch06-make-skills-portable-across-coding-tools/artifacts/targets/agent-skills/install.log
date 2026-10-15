@@ -1,0 +1,26 @@
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[i] Targets: agent-skills  (source: --target flag)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .agents/skills/
+  [+] <project root> (local)
+  |-- (files unchanged)
++- MCP Servers (1)
+[i] Skipped targets without MCP support: agent-skills
+[!] No selected target supports MCP -- skipping MCP configuration. Targets without an MCP client: agent-skills. Re-run 
+with an MCP-capable target (for example `--target copilot`) to install MCP servers.
+[x] MCP dependencies are declared, but no effective target can accept their configuration. Choose a supported --target 
+and retry.
+  [!] [../agent-packages/meridian-claude-notes] Package targets [claude] do not overlap authorized active targets; 
+skipping
+  [!] [../agent-packages/meridian-cursor-notes] Per-dependency targets [cursor] do not overlap active install targets; 
+skipping
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[x] Install failed after 1.0s.

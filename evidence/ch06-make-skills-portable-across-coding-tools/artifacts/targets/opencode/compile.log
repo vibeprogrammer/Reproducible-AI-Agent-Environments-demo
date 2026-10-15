@@ -1,0 +1,28 @@
+[*] Starting context compilation...
+[i] Targets: opencode  (source: --target flag)
+[i] Compiling for AGENTS.md + .opencode/agents/ + .opencode/commands/ + .opencode/skills/ - explicit --target flag
+[i] Analyzing project structure...
+|- 3 directories scanned (max depth: 2)
+|- 8 files analyzed across 5 file types (json, md, ts and 2 more)
++- 3 instruction patterns detected
+Optimizing placements...
+  Pattern                     Source                 Coverage   
+ Placement                   Metrics               
+ ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+  src/**/*.ts                 money-handling.inst…   2/3          ./AGENTS.md                
+rel: 0%               
+  (global)                    claude-code-notes.i…   1/3          ./AGENTS.md                
+rel: 100%             
+  (global)                    cursor-notes.instru…   1/3          ./AGENTS.md                
+rel: 100%             
+Generated 1 AGENTS.md file
++- Context efficiency:    88.9%
++- Generation time:       3ms
+Placement Distribution
++- .                              3 instructions from 3 sources
+[+] Compilation completed successfully!
+[!] Compilation completed with 2 warning(s):
+[!]   apm_modules/_local/meridian-claude-notes/.apm/instructions/claude-code-notes.instructions.md: No 'applyTo' pattern
+specified -- instruction will apply globally
+[!]   apm_modules/_local/meridian-cursor-notes/.apm/instructions/cursor-notes.instructions.md: No 'applyTo' pattern 
+specified -- instruction will apply globally

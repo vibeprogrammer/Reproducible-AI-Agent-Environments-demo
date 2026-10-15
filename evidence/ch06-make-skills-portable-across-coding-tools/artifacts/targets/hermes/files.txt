@@ -1,0 +1,13 @@
+new before.json
+new home/.apm/.apm-lifecycle.lock
+new home/.apm/config.json
+new home/.hermes/config.yaml
+new install.log
+new project/.agents/skills/meridian-code-review/SKILL.md
+new project/.agents/skills/meridian-code-review/apm.yml
+new project/.agents/skills/meridian-code-review/assets/review-report-template.md
+new project/.agents/skills/meridian-code-review/references/false-positives.md
+new project/.agents/skills/meridian-code-review/references/money-rules.md
+new project/.agents/skills/meridian-code-review/scripts/check_money_rules.py
+new project/apm.lock.yaml
+new rc

@@ -1,0 +1,311 @@
+{
+  "harness": "claude",
+  "version": "2.1.301 (Claude Code)",
+  "case": "skill-used",
+  "workspace": "claude",
+  "prompt": "Use the meridian-code-review skill. According to that skill, what does rule MR004 check? Answer in one sentence.",
+  "pass_pattern": "4217",
+  "runs": 3,
+  "passed": 3,
+  "status": "ran",
+  "results": [
+    {
+      "rc": 0,
+      "answer": "MR004 requires that currency values be represented as ISO 4217 alphabetic currency codes in upper case (e.g., `\"EUR\"`, not `\"eur\"` or `\"\u20ac\"`).",
+      "model": "claude-sonnet-5",
+      "tool_uses": [
+        {
+          "tool": "Skill",
+          "input": {
+            "skill": "meridian-code-review"
+          }
+        }
+      ],
+      "init": {
+        "skills": [
+          "meridian-code-review",
+          "deep-research",
+          "dataviz",
+          "update-config",
+          "verify",
+          "debug",
+          "code-review",
+          "simplify",
+          "batch",
+          "fewer-permission-prompts",
+          "doctor",
+          "loop",
+          "claude-api",
+          "workflow-authoring",
+          "run",
+          "run-skill-generator",
+          "plugin-authoring"
+        ],
+        "agents": [
+          "claude",
+          "Explore",
+          "general-purpose",
+          "payments-reviewer",
+          "Plan",
+          "statusline-setup"
+        ],
+        "slash_commands": [
+          "meridian-code-review",
+          "review-checkout-change",
+          "deep-research",
+          "dataviz",
+          "update-config",
+          "verify",
+          "debug",
+          "code-review",
+          "simplify",
+          "batch",
+          "fewer-permission-prompts",
+          "doctor",
+          "loop",
+          "claude-api",
+          "workflow-authoring",
+          "run",
+          "run-skill-generator",
+          "plugin-authoring",
+          "agents",
+          "auto-mode-setup",
+          "autocompact",
+          "clear",
+          "color",
+          "compact",
+          "config",
+          "output-style",
+          "context",
+          "effort",
+          "fast",
+          "focus",
+          "heapdump",
+          "init",
+          "mcp",
+          "model",
+          "__remote-workflow",
+          "workflow-launch-exec",
+          "reload-plugins",
+          "reload-skills",
+          "rename",
+          "security-review",
+          "usage",
+          "insights",
+          "recap",
+          "goal",
+          "list-agents",
+          "team-onboarding"
+        ],
+        "mcp_servers": [
+          {
+            "name": "ledger",
+            "status": "failed",
+            "source": "project"
+          }
+        ]
+      },
+      "commands_run": [],
+      "passed": true
+    },
+    {
+      "rc": 0,
+      "answer": "MR004 checks that currency codes are valid ISO 4217 alphabetic codes written in upper case (e.g., `\"EUR\"`, not `\"eur\"` or `\"\u20ac\"`).",
+      "model": "claude-sonnet-5",
+      "tool_uses": [
+        {
+          "tool": "Skill",
+          "input": {
+            "skill": "meridian-code-review",
+            "args": "What does rule MR004 check?"
+          }
+        }
+      ],
+      "init": {
+        "skills": [
+          "meridian-code-review",
+          "deep-research",
+          "dataviz",
+          "update-config",
+          "verify",
+          "debug",
+          "code-review",
+          "simplify",
+          "batch",
+          "fewer-permission-prompts",
+          "doctor",
+          "loop",
+          "claude-api",
+          "workflow-authoring",
+          "run",
+          "run-skill-generator",
+          "plugin-authoring"
+        ],
+        "agents": [
+          "claude",
+          "Explore",
+          "general-purpose",
+          "payments-reviewer",
+          "Plan",
+          "statusline-setup"
+        ],
+        "slash_commands": [
+          "meridian-code-review",
+          "review-checkout-change",
+          "deep-research",
+          "dataviz",
+          "update-config",
+          "verify",
+          "debug",
+          "code-review",
+          "simplify",
+          "batch",
+          "fewer-permission-prompts",
+          "doctor",
+          "loop",
+          "claude-api",
+          "workflow-authoring",
+          "run",
+          "run-skill-generator",
+          "plugin-authoring",
+          "agents",
+          "auto-mode-setup",
+          "autocompact",
+          "clear",
+          "color",
+          "compact",
+          "config",
+          "output-style",
+          "context",
+          "effort",
+          "fast",
+          "focus",
+          "heapdump",
+          "init",
+          "mcp",
+          "model",
+          "__remote-workflow",
+          "workflow-launch-exec",
+          "reload-plugins",
+          "reload-skills",
+          "rename",
+          "security-review",
+          "usage",
+          "insights",
+          "recap",
+          "goal",
+          "list-agents",
+          "team-onboarding"
+        ],
+        "mcp_servers": [
+          {
+            "name": "ledger",
+            "status": "failed",
+            "source": "project"
+          }
+        ]
+      },
+      "commands_run": [],
+      "passed": true
+    },
+    {
+      "rc": 0,
+      "answer": "MR004 checks that currency codes are valid ISO 4217 alphabetic codes written in upper case (e.g., `\"EUR\"` rather than `\"eur\"` or `\"\u20ac\"`).",
+      "model": "claude-sonnet-5",
+      "tool_uses": [
+        {
+          "tool": "Skill",
+          "input": {
+            "skill": "meridian-code-review"
+          }
+        }
+      ],
+      "init": {
+        "skills": [
+          "meridian-code-review",
+          "deep-research",
+          "dataviz",
+          "update-config",
+          "verify",
+          "debug",
+          "code-review",
+          "simplify",
+          "batch",
+          "fewer-permission-prompts",
+          "doctor",
+          "loop",
+          "claude-api",
+          "workflow-authoring",
+          "run",
+          "run-skill-generator",
+          "plugin-authoring"
+        ],
+        "agents": [
+          "claude",
+          "Explore",
+          "general-purpose",
+          "payments-reviewer",
+          "Plan",
+          "statusline-setup"
+        ],
+        "slash_commands": [
+          "meridian-code-review",
+          "review-checkout-change",
+          "deep-research",
+          "dataviz",
+          "update-config",
+          "verify",
+          "debug",
+          "code-review",
+          "simplify",
+          "batch",
+          "fewer-permission-prompts",
+          "doctor",
+          "loop",
+          "claude-api",
+          "workflow-authoring",
+          "run",
+          "run-skill-generator",
+          "plugin-authoring",
+          "agents",
+          "auto-mode-setup",
+          "autocompact",
+          "clear",
+          "color",
+          "compact",
+          "config",
+          "output-style",
+          "context",
+          "effort",
+          "fast",
+          "focus",
+          "heapdump",
+          "init",
+          "mcp",
+          "model",
+          "__remote-workflow",
+          "workflow-launch-exec",
+          "reload-plugins",
+          "reload-skills",
+          "rename",
+          "security-review",
+          "usage",
+          "insights",
+          "recap",
+          "goal",
+          "list-agents",
+          "team-onboarding"
+        ],
+        "mcp_servers": [
+          {
+            "name": "ledger",
+            "status": "failed",
+            "source": "project"
+          }
+        ]
+      },
+      "commands_run": [],
+      "passed": true
+    }
+  ]
+}

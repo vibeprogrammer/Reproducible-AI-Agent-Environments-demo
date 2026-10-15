@@ -1,0 +1,19 @@
+[*] Starting context compilation...
+[i] Targets: grok-build  (source: --target flag)
+[i] Compiling for AGENTS.md + .grok/rules/ + .grok/agents/ + .grok/commands/ + .grok/skills/ - explicit --target flag
+[i] Analyzing project structure...
+|- 3 directories scanned (max depth: 2)
+|- 7 files analyzed across 5 file types (json, md, ts and 2 more)
++- 1 instruction patterns detected
+Optimizing placements...
+  Pattern                     Source                 Coverage   
+ Placement                   Metrics               
+ ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+  src/**/*.ts                 money-handling.inst…   2/3          ./AGENTS.md                
+rel: 0%               
+Generated 1 AGENTS.md file
++- Context efficiency:    66.7%
++- Generation time:       2ms
+Placement Distribution
++- .                              1 instruction from 1 source
+[+] Compilation completed successfully!

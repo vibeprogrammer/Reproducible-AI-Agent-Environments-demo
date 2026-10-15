@@ -1,0 +1,15 @@
+new before.json
+new home/.apm/.apm-lifecycle.lock
+new home/.apm/config.json
+new install.log
+new project/.grok/agents/payments-reviewer.md
+new project/.grok/commands/review-checkout-change.md
+new project/.grok/rules/money-handling.instructions.md
+new project/.grok/skills/meridian-code-review/SKILL.md
+new project/.grok/skills/meridian-code-review/apm.yml
+new project/.grok/skills/meridian-code-review/assets/review-report-template.md
+new project/.grok/skills/meridian-code-review/references/false-positives.md
+new project/.grok/skills/meridian-code-review/references/money-rules.md
+new project/.grok/skills/meridian-code-review/scripts/check_money_rules.py
+new project/apm.lock.yaml
+new rc

@@ -1,0 +1,1248 @@
+== ch06-make-skills-portable-across-coding-tools == workspace: <workspace> (fresh mktemp dir, isolated HOME)
+
+## APM version and the targets command
+$ apm --version
+Agent Package Manager (APM) CLI version 0.33.0
+[exit 0]
+  PASS: output matches /0\.33\.0/
+$ apm targets --help
+Usage: apm targets [OPTIONS] [COMMAND] [ARGS]...
+
+  Show resolved targets for the current project. If APM detects a target you
+  don't intend (e.g. CLAUDE.md is documentation, not a Claude Code config),
+  pin your targets explicitly in apm.yml.
+
+Options:
+  --json  Output as JSON instead of a table.
+  --all   Include the agent-skills meta-target in JSON output (excluded by
+          default).
+  --help  Show this message and exit.
+[exit 0]
+  PASS: output matches /Show resolved targets/
+
+## Target detection: no markers, then a .cursor/ folder and a CLAUDE.md
+  PASS: apm.yml does not match /^targets:/
+$ apm targets
+  TARGET       STATUS     SOURCE                                   DEPLOY DIR
+  ------------ ---------- ---------------------------------------- ----------
+  claude       inactive   needs CLAUDE.md                          .claude/
+  copilot      inactive   needs .github/copilot-instructions.md    .github/
+  cursor       inactive   needs .cursor/                           .cursor/
+  codex        inactive   needs .codex/                            .codex/
+  gemini       inactive   needs GEMINI.md                          .gemini/
+  grok-build   inactive   needs .grok/                             .grok/
+  opencode     inactive   needs .opencode/                         .opencode/
+  windsurf     inactive   needs .windsurf/                         .windsurf/
+  kiro         inactive   needs .kiro/                             .kiro/
+
+[i] Create a harness config (e.g. CLAUDE.md, .cursor/, .github/copilot-instructions.md) or declare `targets:` in 
+apm.yml.
+[exit 0]
+  PASS: output matches /claude +inactive +needs CLAUDE.md/
+$ bash -c HOME='<workspace>/detect/home' apm install 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean; exit ${PIPESTATUS[0]}
+[>] Installing dependencies from apm.yml...
+[!] Install interrupted after 0.0s.
+Usage: apm install [OPTIONS] [PACKAGES]...
+Try 'apm install --help' for help.
+Error: [x] No harness detected
+APM scanned for harness markers (.claude/, CLAUDE.md, .cursor/, .cursorrules, .github/copilot-instructions.md, .github/instructions/, .github/agents/, .github/prompts/, .github/hooks/, .codex/, .gemini/, GEMINI.md, .opencode/, .windsurf/, .kiro/) but found none in this project.
+Previously APM defaulted to copilot; this is now explicit.
+Fix with one of:
+  apm targets                            # see all supported harnesses
+  apm install <pkg> --target claude      # deploy to a specific harness
+  apm install <pkg> --target copilot     # or any supported target
+Or declare in apm.yml:
+  targets:
+    - claude
+[exit 2]
+  PASS: exit code 2 (install with nothing to detect)
+  PASS: absent: apm.lock.yaml
+$ apm targets
+  TARGET       STATUS     SOURCE                                   DEPLOY DIR
+  ------------ ---------- ---------------------------------------- ----------
+  claude       active     CLAUDE.md                                .claude/
+  copilot      inactive   needs .github/copilot-instructions.md    .github/
+  cursor       active     .cursor/                                 .cursor/
+  codex        inactive   needs .codex/                            .codex/
+  gemini       inactive   needs GEMINI.md                          .gemini/
+  grok-build   inactive   needs .grok/                             .grok/
+  opencode     inactive   needs .opencode/                         .opencode/
+  windsurf     inactive   needs .windsurf/                         .windsurf/
+  kiro         inactive   needs .kiro/                             .kiro/
+[exit 0]
+  PASS: output matches /claude +active +CLAUDE.md/
+  PASS: output matches /cursor +active +\.cursor//
+$ apm targets --json
+[
+  {
+    "target": "claude",
+    "status": "active",
+    "source": "CLAUDE.md",
+    "deploy_dir": ".claude/",
+    "needs": null
+  },
+  {
+    "target": "copilot",
+    "status": "inactive",
+    "source": null,
+    "deploy_dir": ".github/",
+    "needs": ".github/copilot-instructions.md"
+  },
+  {
+    "target": "cursor",
+    "status": "active",
+    "source": ".cursor/",
+    "deploy_dir": ".cursor/",
+    "needs": null
+  },
+  {
+    "target": "codex",
+    "status": "inactive",
+    "source": null,
+    "deploy_dir": ".codex/",
+    "needs": ".codex/"
+  },
+  {
+    "target": "gemini",
+    "status": "inactive",
+    "source": null,
+    "deploy_dir": ".gemini/",
+    "needs": "GEMINI.md"
+  },
+  {
+    "target": "grok-build",
+    "status": "inactive",
+    "source": null,
+    "deploy_dir": ".grok/",
+    "needs": ".grok/"
+  },
+  {
+    "target": "opencode",
+    "status": "inactive",
+    "source": null,
+    "deploy_dir": ".opencode/",
+    "needs": ".opencode/"
+  },
+  {
+    "target": "windsurf",
+    "status": "inactive",
+    "source": null,
+    "deploy_dir": ".windsurf/",
+    "needs": ".windsurf/"
+  },
+  {
+    "target": "kiro",
+    "status": "inactive",
+    "source": null,
+    "deploy_dir": ".kiro/",
+    "needs": ".kiro/"
+  }
+]
+[exit 0]
+  PASS: output matches /"target": "cursor"/
+$ apm targets
+  TARGET       STATUS     SOURCE                                   DEPLOY DIR
+  ------------ ---------- ---------------------------------------- ----------
+  claude       active     CLAUDE.md                                .claude/
+  copilot      inactive   needs .github/copilot-instructions.md    .github/
+  cursor       active     .cursor/                                 .cursor/
+  codex        inactive   needs .codex/                            .codex/
+  gemini       inactive   needs GEMINI.md                          .gemini/
+  grok-build   inactive   needs .grok/                             .grok/
+  opencode     inactive   needs .opencode/                         .opencode/
+  windsurf     inactive   needs .windsurf/                         .windsurf/
+  kiro         inactive   needs .kiro/                             .kiro/
+[exit 0]
+  PASS: output matches /copilot +inactive/
+
+## One target at a time (stable targets)
+$ bash -c cd '<workspace>/trials/copilot/project' && set -o pipefail && HOME='<workspace>/trials/copilot/home' apm install --target copilot 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[i] Targets: copilot  (source: --target flag)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .agents/skills/
+  [+] <project root> (local)
+  |-- 1 prompts integrated -> .github/prompts/
+  |-- 1 agents integrated -> .github/agents/
+  |-- 1 instruction(s) integrated -> .github/instructions/
+  |-- 1 hook(s) integrated -> .github/hooks/
+  |   postToolUse: runs .github/hooks/scripts/meridian-checkout/scripts/money-rules-reminder.sh 
+(money-rules-reminder.json)
++- MCP Servers (1)
+[i] Targeting specific runtime: copilot
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Copilot...
+  + ledger
+[!] Copilot CLI will resolve 1 environment variable at runtime that is not currently set: LEDGER_API_KEY.
+    Export it in your shell before running 'gh copilot', e.g.:
+      export LEDGER_API_KEY=...
+|  [+]  ledger -> Copilot (configured)
+[*] Configured 1 server
+  [!] [../agent-packages/meridian-claude-notes] Package targets [claude] do not overlap authorized active targets; 
+skipping
+  [!] [../agent-packages/meridian-cursor-notes] Per-dependency targets [cursor] do not overlap active install targets; 
+skipping
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 4 APM dependencies and 1 MCP server in 3.3s.
+[exit 0]
+  PASS: exit code 0 (install --target copilot)
+  PASS: exists: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/copilot/project/.agents/skills/meridian-code-review/SKILL.md
+$ bash -c cd '<workspace>/trials/vscode/project' && set -o pipefail && HOME='<workspace>/trials/vscode/home' apm install --target vscode 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[>] Installing dependencies from apm.yml...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Targets: copilot  (source: --target flag)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .agents/skills/
+  [+] <project root> (local)
+  |-- 1 prompts integrated -> .github/prompts/
+  |-- 1 agents integrated -> .github/agents/
+  |-- 1 instruction(s) integrated -> .github/instructions/
+  |-- 1 hook(s) integrated -> .github/hooks/
+  |   postToolUse: runs .github/hooks/scripts/meridian-checkout/scripts/money-rules-reminder.sh 
+(money-rules-reminder.json)
++- MCP Servers (1)
+[i] Targeting specific runtime: vscode
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Vscode...
+Successfully configured MCP server 'ledger' for VS Code
+  + ledger
+|  [+]  ledger -> Vscode (configured)
+[*] Configured 1 server
+  [!] [../agent-packages/meridian-claude-notes] Package targets [claude] do not overlap authorized active targets; 
+skipping
+  [!] [../agent-packages/meridian-cursor-notes] Per-dependency targets [cursor] do not overlap active install targets; 
+skipping
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 4 APM dependencies and 1 MCP server in 2.8s.
+[exit 0]
+  PASS: exit code 0 (install --target vscode)
+  PASS: exists: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/vscode/project/.agents/skills/meridian-code-review/SKILL.md
+$ bash -c cd '<workspace>/trials/intellij/project' && set -o pipefail && HOME='<workspace>/trials/intellij/home' apm install --target intellij 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[>] Installing dependencies from apm.yml...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Targets: copilot  (source: --target flag)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .agents/skills/
+  [+] <project root> (local)
+  |-- 1 prompts integrated -> .github/prompts/
+  |-- 1 agents integrated -> .github/agents/
+  |-- 1 instruction(s) integrated -> .github/instructions/
+  |-- 1 hook(s) integrated -> .github/hooks/
+  |   postToolUse: runs .github/hooks/scripts/meridian-checkout/scripts/money-rules-reminder.sh 
+(money-rules-reminder.json)
++- MCP Servers (1)
+[i] Targeting specific runtime: intellij
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Intellij...
+  + ledger
+|  [+]  ledger -> Intellij (configured)
+[*] Configured 1 server
+  [!] [../agent-packages/meridian-claude-notes] Package targets [claude] do not overlap authorized active targets; 
+skipping
+  [!] [../agent-packages/meridian-cursor-notes] Per-dependency targets [cursor] do not overlap active install targets; 
+skipping
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 4 APM dependencies and 1 MCP server in 2.8s.
+[exit 0]
+  PASS: exit code 0 (install --target intellij)
+  PASS: exists: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/intellij/project/.agents/skills/meridian-code-review/SKILL.md
+$ bash -c cd '<workspace>/trials/claude/project' && set -o pipefail && HOME='<workspace>/trials/claude/home' apm install --target claude 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[>] Installing dependencies from apm.yml...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Targets: claude  (source: --target flag)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- 1 rule(s) integrated -> .claude/rules/
+  |-- Skill integrated -> .claude/skills/
+  [+] <project root> (local)
+  |-- 1 agents integrated -> .claude/agents/
+  |-- 1 commands integrated -> .claude/commands/
+  |-- 1 rule(s) integrated -> .claude/rules/
+  |-- 1 hook(s) integrated -> .claude/settings.json
+  |   PostToolUse: runs ${CLAUDE_PROJECT_DIR}/.claude/hooks/meridian-checkout/scripts/money-rules-reminder.sh 
+(money-rules-reminder.json)
++- MCP Servers (1)
+[i] Targeting specific runtime: claude
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Claude...
+Successfully configured MCP server 'ledger' for Claude Code
+  + ledger
+|  [+]  ledger -> Claude (configured)
+[*] Configured 1 server
+  [!] [../agent-packages/meridian-cursor-notes] Per-dependency targets [cursor] do not overlap active install targets; 
+skipping
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 4 APM dependencies and 1 MCP server in 3.8s.
+[exit 0]
+  PASS: exit code 0 (install --target claude)
+  PASS: exists: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/claude/project/.claude/skills/meridian-code-review/SKILL.md
+$ bash -c cd '<workspace>/trials/cursor/project' && set -o pipefail && HOME='<workspace>/trials/cursor/home' apm install --target cursor 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[>] Installing dependencies from apm.yml...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[i] Targets: cursor  (source: --target flag)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- 1 rule(s) integrated -> .cursor/rules/
+  |-- Skill integrated -> .agents/skills/
+  [+] <project root> (local)
+  |-- 1 agents integrated -> .cursor/agents/
+  |-- 1 commands integrated -> .cursor/commands/
+  |-- 1 rule(s) integrated -> .cursor/rules/
+  |-- 1 hook(s) integrated -> .cursor/hooks.json
+  |   PostToolUse: runs .cursor/hooks/meridian-checkout/scripts/money-rules-reminder.sh (money-rules-reminder.json)
++- MCP Servers (1)
+[i] Targeting specific runtime: cursor
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Cursor...
+Successfully configured MCP server 'ledger' for Cursor
+  + ledger
+|  [+]  ledger -> Cursor (configured)
+[*] Configured 1 server
+  [!] [../agent-packages/meridian-claude-notes] Package targets [claude] do not overlap authorized active targets; 
+skipping
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 4 APM dependencies and 1 MCP server in 2.6s.
+[exit 0]
+  PASS: exit code 0 (install --target cursor)
+  PASS: exists: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/cursor/project/.agents/skills/meridian-code-review/SKILL.md
+$ bash -c cd '<workspace>/trials/codex/project' && set -o pipefail && HOME='<workspace>/trials/codex/home' apm install --target codex 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[>] Installing dependencies from apm.yml...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[i] Targets: codex  (source: --target flag)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .agents/skills/
+  [+] <project root> (local)
+  |-- 1 agents integrated -> .codex/agents/
+  |-- 1 hook(s) integrated -> .codex/hooks.json
+  |   PostToolUse: runs .codex/hooks/meridian-checkout/scripts/money-rules-reminder.sh (money-rules-reminder.json)
+[i] Instructions installed for codex. Run 'apm compile' to update AGENTS.md.
++- MCP Servers (1)
+[i] Targeting specific runtime: codex
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Codex...
+[*] Configured MCP server 'ledger' for Codex CLI
+  + ledger
+|  [+]  ledger -> Codex (configured)
+[*] Configured 1 server
+  [!] [../agent-packages/meridian-claude-notes] Package targets [claude] do not overlap authorized active targets; 
+skipping
+  [!] [../agent-packages/meridian-cursor-notes] Per-dependency targets [cursor] do not overlap active install targets; 
+skipping
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 4 APM dependencies and 1 MCP server in 2.4s.
+[exit 0]
+  PASS: exit code 0 (install --target codex)
+  PASS: exists: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/codex/project/.agents/skills/meridian-code-review/SKILL.md
+$ bash -c cd '<workspace>/trials/codex/project' && set -o pipefail && HOME='<workspace>/trials/codex/home' apm compile --target codex 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[*] Starting context compilation...
+[i] Targets: codex  (source: --target flag)
+[i] Compiling for AGENTS.md + .agents/skills/ + .codex/agents/ + .codex/hooks.json - explicit --target flag
+[i] Analyzing project structure...
+|- 3 directories scanned (max depth: 2)
+|- 7 files analyzed across 5 file types (json, md, ts and 2 more)
++- 3 instruction patterns detected
+Optimizing placements...
+  Pattern                     Source                 Coverage   
+ Placement                   Metrics               
+ ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+  src/**/*.ts                 money-handling.inst…   2/3          ./AGENTS.md                
+rel: 0%               
+  (global)                    claude-code-notes.i…   1/3          ./AGENTS.md                
+rel: 100%             
+  (global)                    cursor-notes.instru…   1/3          ./AGENTS.md                
+rel: 100%             
+Generated 1 AGENTS.md file
++- Context efficiency:    88.9%
++- Generation time:       3ms
+Placement Distribution
++- .                              3 instructions from 3 sources
+[+] Compilation completed successfully!
+[!] Compilation completed with 2 warning(s):
+[!]   apm_modules/_local/meridian-claude-notes/.apm/instructions/claude-code-notes.instructions.md: No 'applyTo' pattern
+specified -- instruction will apply globally
+[!]   apm_modules/_local/meridian-cursor-notes/.apm/instructions/cursor-notes.instructions.md: No 'applyTo' pattern 
+specified -- instruction will apply globally
+[exit 0]
+  PASS: exit code 0 (compile --target codex)
+$ bash -c cd '<workspace>/trials/gemini/project' && set -o pipefail && HOME='<workspace>/trials/gemini/home' apm install --target gemini 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[>] Installing dependencies from apm.yml...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Targets: gemini  (source: --target flag)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .agents/skills/
+  [+] <project root> (local)
+  |-- 1 commands integrated -> .gemini/commands/
+  |-- 1 hook(s) integrated -> .gemini/settings.json
+  |   AfterTool: runs .gemini/hooks/meridian-checkout/scripts/money-rules-reminder.sh (money-rules-reminder.json)
+[i] Instructions installed for gemini. Run 'apm compile' to update AGENTS.md / GEMINI.md.
++- MCP Servers (1)
+[i] Targeting specific runtime: gemini
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Gemini...
+[*] Configured MCP server 'ledger' for gemini
+  + ledger
+|  [+]  ledger -> Gemini (configured)
+[*] Configured 1 server
+  [!] [../agent-packages/meridian-claude-notes] Package targets [claude] do not overlap authorized active targets; 
+skipping
+  [!] [../agent-packages/meridian-cursor-notes] Per-dependency targets [cursor] do not overlap active install targets; 
+skipping
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 4 APM dependencies and 1 MCP server in 2.4s.
+[exit 0]
+  PASS: exit code 0 (install --target gemini)
+  PASS: exists: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/gemini/project/.agents/skills/meridian-code-review/SKILL.md
+$ bash -c cd '<workspace>/trials/gemini/project' && set -o pipefail && HOME='<workspace>/trials/gemini/home' apm compile --target gemini 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[*] Starting context compilation...
+[i] Targets: gemini  (source: --target flag)
+[i] Compiling for GEMINI.md + .gemini/commands/ + .gemini/skills/ + .gemini/settings.json (MCP/hooks) - explicit 
+--target flag
+[i] Analyzing project structure...
+|- 3 directories scanned (max depth: 2)
+|- 7 files analyzed across 5 file types (json, md, ts and 2 more)
++- 3 instruction patterns detected
+Optimizing placements...
+  Pattern                     Source                 Coverage   
+ Placement                   Metrics               
+ ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+  src/**/*.ts                 money-handling.inst…   2/3          ./AGENTS.md                
+rel: 0%               
+  (global)                    claude-code-notes.i…   1/3          ./AGENTS.md                
+rel: 100%             
+  (global)                    cursor-notes.instru…   1/3          ./AGENTS.md                
+rel: 100%             
+Generated 1 AGENTS.md file
++- Context efficiency:    88.9%
++- Generation time:       3ms
+Placement Distribution
++- .                              3 instructions from 3 sources
+[i] Generated GEMINI.md (imports AGENTS.md)
+[+] Compilation completed successfully!
+[!] Compilation completed with 2 warning(s):
+[!]   apm_modules/_local/meridian-claude-notes/.apm/instructions/claude-code-notes.instructions.md: No 'applyTo' pattern
+specified -- instruction will apply globally
+[!]   apm_modules/_local/meridian-cursor-notes/.apm/instructions/cursor-notes.instructions.md: No 'applyTo' pattern 
+specified -- instruction will apply globally
+[exit 0]
+  PASS: exit code 0 (compile --target gemini)
+$ bash -c cd '<workspace>/trials/antigravity/project' && set -o pipefail && HOME='<workspace>/trials/antigravity/home' apm install --target antigravity 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[i] Targets: antigravity  (source: --target flag)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .agents/skills/
+  [+] <project root> (local)
+  |-- 1 rule(s) integrated -> .agents/rules/
+  |-- 1 hook(s) integrated -> .agents/hooks.json
+  |   PostToolUse: runs .agents/hooks/meridian-checkout/scripts/money-rules-reminder.sh (money-rules-reminder.json)
++- MCP Servers (1)
+[i] Targeting specific runtime: antigravity
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Antigravity...
+[*] Configured MCP server 'ledger' for antigravity
+  + ledger
+|  [+]  ledger -> Antigravity (configured)
+[*] Configured 1 server
+  [!] [../agent-packages/meridian-claude-notes] Package targets [claude] do not overlap authorized active targets; 
+skipping
+  [!] [../agent-packages/meridian-cursor-notes] Per-dependency targets [cursor] do not overlap active install targets; 
+skipping
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 4 APM dependencies and 1 MCP server in 2.0s.
+[exit 0]
+  PASS: exit code 0 (install --target antigravity)
+  PASS: exists: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/antigravity/project/.agents/skills/meridian-code-review/SKILL.md
+$ bash -c cd '<workspace>/trials/opencode/project' && set -o pipefail && HOME='<workspace>/trials/opencode/home' apm install --target opencode 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[>] Installing dependencies from apm.yml...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[i] Targets: opencode  (source: --target flag)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .agents/skills/
+  [+] <project root> (local)
+  |-- 1 agents integrated -> .opencode/agents/
+  |-- 1 commands integrated -> .opencode/commands/
+[i] Instructions installed for opencode. Run 'apm compile' to update AGENTS.md.
++- MCP Servers (1)
+[i] Targeting specific runtime: opencode
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Opencode...
+Successfully configured MCP server 'ledger' for OpenCode
+  + ledger
+|  [+]  ledger -> Opencode (configured)
+[*] Configured 1 server
+  [!] [../agent-packages/meridian-claude-notes] Package targets [claude] do not overlap authorized active targets; 
+skipping
+  [!] [../agent-packages/meridian-cursor-notes] Per-dependency targets [cursor] do not overlap active install targets; 
+skipping
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 4 APM dependencies and 1 MCP server in 3.9s.
+[exit 0]
+  PASS: exit code 0 (install --target opencode)
+  PASS: exists: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/opencode/project/.agents/skills/meridian-code-review/SKILL.md
+$ bash -c cd '<workspace>/trials/opencode/project' && set -o pipefail && HOME='<workspace>/trials/opencode/home' apm compile --target opencode 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[*] Starting context compilation...
+[i] Targets: opencode  (source: --target flag)
+[i] Compiling for AGENTS.md + .opencode/agents/ + .opencode/commands/ + .opencode/skills/ - explicit --target flag
+[i] Analyzing project structure...
+|- 3 directories scanned (max depth: 2)
+|- 8 files analyzed across 5 file types (json, md, ts and 2 more)
++- 3 instruction patterns detected
+Optimizing placements...
+  Pattern                     Source                 Coverage   
+ Placement                   Metrics               
+ ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+  src/**/*.ts                 money-handling.inst…   2/3          ./AGENTS.md                
+rel: 0%               
+  (global)                    claude-code-notes.i…   1/3          ./AGENTS.md                
+rel: 100%             
+  (global)                    cursor-notes.instru…   1/3          ./AGENTS.md                
+rel: 100%             
+Generated 1 AGENTS.md file
++- Context efficiency:    88.9%
++- Generation time:       3ms
+Placement Distribution
++- .                              3 instructions from 3 sources
+[+] Compilation completed successfully!
+[!] Compilation completed with 2 warning(s):
+[!]   apm_modules/_local/meridian-claude-notes/.apm/instructions/claude-code-notes.instructions.md: No 'applyTo' pattern
+specified -- instruction will apply globally
+[!]   apm_modules/_local/meridian-cursor-notes/.apm/instructions/cursor-notes.instructions.md: No 'applyTo' pattern 
+specified -- instruction will apply globally
+[exit 0]
+  PASS: exit code 0 (compile --target opencode)
+$ bash -c cd '<workspace>/trials/windsurf/project' && set -o pipefail && HOME='<workspace>/trials/windsurf/home' apm install --target windsurf 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[i] Targets: windsurf  (source: --target flag)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .agents/skills/
+  [+] <project root> (local)
+  |-- 1 commands integrated -> .windsurf/workflows/
+  |-- 1 rule(s) integrated -> .windsurf/rules/
+  |-- 1 hook(s) integrated -> .windsurf/hooks.json
+  |   PostToolUse: runs .windsurf/hooks/meridian-checkout/scripts/money-rules-reminder.sh (money-rules-reminder.json)
++- MCP Servers (1)
+[i] Targeting specific runtime: windsurf
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Windsurf...
+  + ledger
+|  [+]  ledger -> Windsurf (configured)
+[*] Configured 1 server
+  [!] [../agent-packages/meridian-claude-notes] Package targets [claude] do not overlap authorized active targets; 
+skipping
+  [!] [../agent-packages/meridian-cursor-notes] Per-dependency targets [cursor] do not overlap active install targets; 
+skipping
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 4 APM dependencies and 1 MCP server in 4.4s.
+[exit 0]
+  PASS: exit code 0 (install --target windsurf)
+  PASS: exists: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/windsurf/project/.agents/skills/meridian-code-review/SKILL.md
+$ bash -c cd '<workspace>/trials/kiro/project' && set -o pipefail && HOME='<workspace>/trials/kiro/home' apm install --target kiro 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[>] Installing dependencies from apm.yml...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[i] Targets: kiro  (source: --target flag)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .kiro/skills/
+  [+] <project root> (local)
+  |-- 1 agents integrated -> .kiro/agents/
+  |-- 1 rule(s) integrated -> .kiro/steering/
+  |-- 1 hook(s) integrated -> .kiro/hooks/
+  |   PostToolUse: runs .kiro/hooks/meridian-checkout/scripts/money-rules-reminder.sh (money-rules-reminder.json)
++- MCP Servers (1)
+[i] Targeting specific runtime: kiro
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Kiro...
+[*] Configured MCP server 'ledger' for Kiro
+  + ledger
+|  [+]  ledger -> Kiro (configured)
+[*] Configured 1 server
+  [!] [../agent-packages/meridian-claude-notes] Package targets [claude] do not overlap authorized active targets; 
+skipping
+  [!] [../agent-packages/meridian-cursor-notes] Per-dependency targets [cursor] do not overlap active install targets; 
+skipping
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 4 APM dependencies and 1 MCP server in 1.0s.
+[exit 0]
+  PASS: exit code 0 (install --target kiro)
+  PASS: exists: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/kiro/project/.kiro/skills/meridian-code-review/SKILL.md
+$ bash -c cd '<workspace>/trials/grok-build/project' && set -o pipefail && HOME='<workspace>/trials/grok-build/home' apm install --target grok-build 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[>] Installing dependencies from apm.yml...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Targets: grok-build  (source: --target flag)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .grok/skills/
+  [+] <project root> (local)
+  |-- 1 agents integrated -> .grok/agents/
+  |-- 1 commands integrated -> .grok/commands/
+  |-- 1 instruction(s) integrated -> .grok/rules/
+[i] Instructions installed for grok-build. Run 'apm compile' to update AGENTS.md.
++- MCP Servers (1)
+[i] Skipped targets without MCP support: grok-build
+[!] No selected target supports MCP -- skipping MCP configuration. Targets without an MCP client: grok-build. Re-run 
+with an MCP-capable target (for example `--target copilot`) to install MCP servers.
+[x] MCP dependencies are declared, but no effective target can accept their configuration. Choose a supported --target 
+and retry.
+  [!] [../agent-packages/meridian-claude-notes] Package targets [claude] do not overlap authorized active targets; 
+skipping
+  [!] [../agent-packages/meridian-cursor-notes] Per-dependency targets [cursor] do not overlap active install targets; 
+skipping
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[x] Install failed after 1.1s.
+[exit 1]
+  PASS: exit code 1 (install --target grok-build)
+  PASS: exists: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/grok-build/project/.grok/skills/meridian-code-review/SKILL.md
+$ bash -c cd '<workspace>/trials/grok-build/project' && set -o pipefail && HOME='<workspace>/trials/grok-build/home' apm compile --target grok-build 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[*] Starting context compilation...
+[i] Targets: grok-build  (source: --target flag)
+[i] Compiling for AGENTS.md + .grok/rules/ + .grok/agents/ + .grok/commands/ + .grok/skills/ - explicit --target flag
+[i] Analyzing project structure...
+|- 3 directories scanned (max depth: 2)
+|- 7 files analyzed across 5 file types (json, md, ts and 2 more)
++- 1 instruction patterns detected
+Optimizing placements...
+  Pattern                     Source                 Coverage   
+ Placement                   Metrics               
+ ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+  src/**/*.ts                 money-handling.inst…   2/3          ./AGENTS.md                
+rel: 0%               
+Generated 1 AGENTS.md file
++- Context efficiency:    66.7%
++- Generation time:       2ms
+Placement Distribution
++- .                              1 instruction from 1 source
+[+] Compilation completed successfully!
+[exit 0]
+  PASS: exit code 0 (compile --target grok-build)
+$ bash -c cd '<workspace>/trials/hermes/project' && set -o pipefail && HOME='<workspace>/trials/hermes/home' apm install --target hermes 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[>] Installing dependencies from apm.yml...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[i] Targets: hermes  (source: --target flag)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .agents/skills/
+  [+] <project root> (local)
+  |-- (files unchanged)
+[i] Instructions installed for hermes. Run 'apm compile' to update AGENTS.md.
++- MCP Servers (1)
+[i] Targeting specific runtime: hermes
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Hermes...
+Successfully configured MCP server 'ledger' for Hermes
+  + ledger
+|  [+]  ledger -> Hermes (configured)
+[*] Configured 1 server
+  [!] [../agent-packages/meridian-claude-notes] Package targets [claude] do not overlap authorized active targets; 
+skipping
+  [!] [../agent-packages/meridian-cursor-notes] Per-dependency targets [cursor] do not overlap active install targets; 
+skipping
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 3 APM dependencies and 1 MCP server in 1.9s.
+[exit 0]
+  PASS: exit code 0 (install --target hermes)
+  PASS: exists: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/hermes/project/.agents/skills/meridian-code-review/SKILL.md
+$ bash -c cd '<workspace>/trials/hermes/project' && set -o pipefail && HOME='<workspace>/trials/hermes/home' apm compile --target hermes 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[*] Starting context compilation...
+[i] Targets: hermes  (source: --target flag)
+[i] Compiling for AGENTS.md + .agents/skills/ (project) or $HERMES_HOME/skills/ + $HERMES_HOME/config.yaml MCP (explicit
+--target only) - explicit --target flag
+[i] Analyzing project structure...
+|- 3 directories scanned (max depth: 2)
+|- 7 files analyzed across 5 file types (json, md, ts and 2 more)
++- 3 instruction patterns detected
+Optimizing placements...
+  Pattern                     Source                 Coverage   
+ Placement                   Metrics               
+ ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+  src/**/*.ts                 money-handling.inst…   2/3          ./AGENTS.md                
+rel: 0%               
+  (global)                    claude-code-notes.i…   1/3          ./AGENTS.md                
+rel: 100%             
+  (global)                    cursor-notes.instru…   1/3          ./AGENTS.md                
+rel: 100%             
+Generated 1 AGENTS.md file
++- Context efficiency:    88.9%
++- Generation time:       3ms
+Placement Distribution
++- .                              3 instructions from 3 sources
+[+] Compilation completed successfully!
+[!] Compilation completed with 2 warning(s):
+[!]   apm_modules/_local/meridian-claude-notes/.apm/instructions/claude-code-notes.instructions.md: No 'applyTo' pattern
+specified -- instruction will apply globally
+[!]   apm_modules/_local/meridian-cursor-notes/.apm/instructions/cursor-notes.instructions.md: No 'applyTo' pattern 
+specified -- instruction will apply globally
+[exit 0]
+  PASS: exit code 0 (compile --target hermes)
+$ bash -c cd '<workspace>/trials/agent-skills/project' && set -o pipefail && HOME='<workspace>/trials/agent-skills/home' apm install --target agent-skills 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[i] Targets: agent-skills  (source: --target flag)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .agents/skills/
+  [+] <project root> (local)
+  |-- (files unchanged)
++- MCP Servers (1)
+[i] Skipped targets without MCP support: agent-skills
+[!] No selected target supports MCP -- skipping MCP configuration. Targets without an MCP client: agent-skills. Re-run 
+with an MCP-capable target (for example `--target copilot`) to install MCP servers.
+[x] MCP dependencies are declared, but no effective target can accept their configuration. Choose a supported --target 
+and retry.
+  [!] [../agent-packages/meridian-claude-notes] Package targets [claude] do not overlap authorized active targets; 
+skipping
+  [!] [../agent-packages/meridian-cursor-notes] Per-dependency targets [cursor] do not overlap active install targets; 
+skipping
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[x] Install failed after 1.0s.
+[exit 1]
+  PASS: exit code 1 (install --target agent-skills)
+  PASS: exists: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/agent-skills/project/.agents/skills/meridian-code-review/SKILL.md
+
+## One target at a time (experimental targets, flag enabled in the run's HOME)
+$ bash -c HOME='<workspace>/trials/grok-cloud/home' apm experimental enable grok-cloud
+[+] Enabled experimental feature: grok-cloud
+[i] Use '--target grok-cloud' to deploy skills.
+[exit 0]
+$ bash -c cd '<workspace>/trials/grok-cloud/project' && set -o pipefail && HOME='<workspace>/trials/grok-cloud/home' apm install --target grok-cloud 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .grok/skills/
+  [+] <project root> (local)
+  |-- (files unchanged)
++- MCP Servers (1)
+[i] Skipped targets without MCP support: grok-cloud
+[!] No selected target supports MCP -- skipping MCP configuration. Targets without an MCP client: grok-cloud. Re-run 
+with an MCP-capable target (for example `--target copilot`) to install MCP servers.
+[x] MCP dependencies are declared, but no effective target can accept their configuration. Choose a supported --target 
+and retry.
+  [!] [../agent-packages/meridian-claude-notes] Package targets [claude] do not overlap authorized active targets; 
+skipping
+  [!] [../agent-packages/meridian-cursor-notes] Per-dependency targets [cursor] do not overlap active install targets; 
+skipping
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[x] Install failed after 1.2s.
+[exit 1]
+  PASS: exit code 1 (install --target grok-cloud)
+  PASS: exists: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/grok-cloud/project/.grok/skills/meridian-code-review/SKILL.md
+$ bash -c HOME='<workspace>/trials/openclaw/home' apm experimental enable openclaw
+[+] Enabled experimental feature: openclaw
+[i] Use '--target openclaw' to deploy skills to your project, or '--target openclaw --global' for your personal OpenClaw
+skills at ~/.openclaw/skills/.
+[exit 0]
+$ bash -c cd '<workspace>/trials/openclaw/project' && set -o pipefail && HOME='<workspace>/trials/openclaw/home' apm install --target openclaw 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[>] Installing dependencies from apm.yml...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .agents/skills/
+  [+] <project root> (local)
+  |-- (files unchanged)
++- MCP Servers (1)
+[i] Skipped targets without MCP support: openclaw
+[!] No selected target supports MCP -- skipping MCP configuration. Targets without an MCP client: openclaw. Re-run with 
+an MCP-capable target (for example `--target copilot`) to install MCP servers.
+[x] MCP dependencies are declared, but no effective target can accept their configuration. Choose a supported --target 
+and retry.
+  [!] [../agent-packages/meridian-claude-notes] Package targets [claude] do not overlap authorized active targets; 
+skipping
+  [!] [../agent-packages/meridian-cursor-notes] Per-dependency targets [cursor] do not overlap active install targets; 
+skipping
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[x] Install failed after 1.4s.
+[exit 1]
+  PASS: exit code 1 (install --target openclaw)
+  PASS: exists: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/openclaw/project/.agents/skills/meridian-code-review/SKILL.md
+  PASS: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/openclaw/install.log matches /Skill integrated -> \.agents/skills//
+
+## Isolation: tool-specific notes reach only their tool
+  PASS: exists: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/claude/project/.claude/rules/claude-code-notes.md
+  PASS: absent: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/claude/project/.claude/rules/cursor-notes.md
+  PASS: exists: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/cursor/project/.cursor/rules/cursor-notes.mdc
+  PASS: absent: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/cursor/project/.cursor/rules/claude-code-notes.mdc
+  PASS: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/copilot/install.log matches /Package targets \[claude\] do not overlap/
+  PASS: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/copilot/install.log matches /Per-dependency targets \[cursor\] do not overlap/
+  PASS: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/trials/copilot/files.txt does not match /notes/
+
+## Together: Meridian's declared targets (apm.yml targets:)
+$ bash -c set -o pipefail; HOME='<workspace>/together/home' apm install 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- 1 rule(s) integrated -> .claude/rules/
+  |-- 1 rule(s) integrated -> .cursor/rules/
+  |-- Skill integrated -> .agents/skills/, .claude/skills/
+  [+] <project root> (local)
+  |-- 1 prompts integrated -> .github/prompts/
+  |-- 3 agents integrated -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) integrated -> 3 targets
+  |-- 3 hook(s) integrated -> 3 targets
+  |   PostToolUse: runs ${CLAUDE_PROJECT_DIR}/.claude/hooks/meridian-checkout/scripts/money-rules-reminder.sh 
+(money-rules-reminder.json)
+  |   postToolUse: runs .github/hooks/scripts/meridian-checkout/scripts/money-rules-reminder.sh 
+(money-rules-reminder.json)
+  |   PostToolUse: runs .cursor/hooks/meridian-checkout/scripts/money-rules-reminder.sh (money-rules-reminder.json)
++- MCP Servers (1)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + ledger
+[!] Copilot CLI will resolve 1 environment variable at runtime that is not currently set: LEDGER_API_KEY.
+    Export it in your shell before running 'gh copilot', e.g.:
+      export LEDGER_API_KEY=...
+Successfully configured MCP server 'ledger' for VS Code
+  + ledger
+Successfully configured MCP server 'ledger' for Claude Code
+  + ledger
+Successfully configured MCP server 'ledger' for Cursor
+  + ledger
+|  [+]  ledger -> Copilot, Vscode, Claude, Cursor (configured)
+[*] Configured 1 server
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 4 APM dependencies and 1 MCP server in 2.4s.
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /Targets: claude, copilot, cursor +\(source: apm\.yml\)/
+  PASS: exists: .agents/skills/meridian-code-review/SKILL.md
+  PASS: exists: .claude/skills/meridian-code-review/SKILL.md
+  PASS: exists: .github/instructions/money-handling.instructions.md
+  PASS: exists: .claude/rules/money-handling.md
+  PASS: exists: .cursor/rules/money-handling.mdc
+  PASS: exists: .claude/rules/claude-code-notes.md
+  PASS: exists: .cursor/rules/cursor-notes.mdc
+  PASS: absent: .github/instructions/cursor-notes.instructions.md
+  PASS: absent: .github/instructions/claude-code-notes.instructions.md
+$ bash -c find . -name SKILL.md -path '*meridian-code-review*' -not -path './apm_modules/*' | sort
+./.agents/skills/meridian-code-review/SKILL.md
+./.claude/skills/meridian-code-review/SKILL.md
+[exit 0]
+  PASS: output matches /^\./\.agents/skills/meridian-code-review/SKILL\.md$/
+$ bash -c set -o pipefail; HOME='<workspace>/together/home' apm compile --target codex 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[*] Starting context compilation...
+[i] Targets: codex  (source: --target flag)
+[i] Compiling for AGENTS.md + .agents/skills/ + .codex/agents/ + .codex/hooks.json - explicit --target flag
+[i] Analyzing project structure...
+|- 3 directories scanned (max depth: 2)
+|- 7 files analyzed across 5 file types (json, md, ts and 2 more)
++- 3 instruction patterns detected
+Optimizing placements...
+  Pattern                     Source                 Coverage   
+ Placement                   Metrics               
+ ────────────────────────────────────────────────────────────────────────────────────────────────────────────────── 
+  src/**/*.ts                 money-handling.inst…   2/3          ./AGENTS.md                
+rel: 0%               
+  (global)                    claude-code-notes.i…   1/3          ./AGENTS.md                
+rel: 100%             
+  (global)                    cursor-notes.instru…   1/3          ./AGENTS.md                
+rel: 100%             
+Generated 1 AGENTS.md file
++- Context efficiency:    88.9%
++- Generation time:       4ms
+Placement Distribution
++- .                              3 instructions from 3 sources
+[+] Compilation completed successfully!
+[!] Compilation completed with 2 warning(s):
+[!]   apm_modules/_local/meridian-claude-notes/.apm/instructions/claude-code-notes.instructions.md: No 'applyTo' pattern
+specified -- instruction will apply globally
+[!]   apm_modules/_local/meridian-cursor-notes/.apm/instructions/cursor-notes.instructions.md: No 'applyTo' pattern 
+specified -- instruction will apply globally
+[exit 0]
+  PASS: exit code 0
+  PASS: AGENTS.md matches /\.claude/skills/meridian-code-review//
+  PASS: AGENTS.md matches /\.agents/skills/meridian-code-review//
+
+## Together: every stable target in one install
+$ bash -c set -o pipefail; HOME='<workspace>/all-stable/home' apm install --target copilot,vscode,intellij,claude,cursor,codex,gemini,antigravity,opencode,windsurf,kiro,grok-build,hermes,agent-skills 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[>] Installing dependencies from apm.yml...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[i] Targets: agent-skills, antigravity, claude, codex, copilot, cursor, gemini, grok-build, hermes, kiro, opencode, 
+windsurf  (source: --target flag)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- 1 rule(s) integrated -> .claude/rules/
+  |-- 1 rule(s) integrated -> .cursor/rules/
+  |-- Skill integrated -> 4 targets
+  [+] <project root> (local)
+  |-- 1 prompts integrated -> .github/prompts/
+  |-- 7 agents integrated -> 7 targets
+  |-- 6 commands integrated -> 6 targets
+  |-- 7 rule(s) integrated -> 7 targets
+  |-- 8 hook(s) integrated -> 8 targets
+  |   PostToolUse: runs .agents/hooks/meridian-checkout/scripts/money-rules-reminder.sh (money-rules-reminder.json)
+  |   PostToolUse: runs ${CLAUDE_PROJECT_DIR}/.claude/hooks/meridian-checkout/scripts/money-rules-reminder.sh 
+(money-rules-reminder.json)
+  |   PostToolUse: runs .codex/hooks/meridian-checkout/scripts/money-rules-reminder.sh (money-rules-reminder.json)
+  |   postToolUse: runs .github/hooks/scripts/meridian-checkout/scripts/money-rules-reminder.sh 
+(money-rules-reminder.json)
+  |   PostToolUse: runs .cursor/hooks/meridian-checkout/scripts/money-rules-reminder.sh (money-rules-reminder.json)
+  |   AfterTool: runs .gemini/hooks/meridian-checkout/scripts/money-rules-reminder.sh (money-rules-reminder.json)
+  |   PostToolUse: runs .kiro/hooks/meridian-checkout/scripts/money-rules-reminder.sh (money-rules-reminder.json)
+  |   PostToolUse: runs .windsurf/hooks/meridian-checkout/scripts/money-rules-reminder.sh (money-rules-reminder.json)
+[i] Instructions installed for codex, gemini, grok-build, hermes, opencode. Run 'apm compile' to update AGENTS.md / 
+GEMINI.md.
++- MCP Servers (1)
+[i] Skipped targets without MCP support: agent-skills, grok-build
+[i] Targeting specific runtimes: copilot, vscode, intellij, claude, cursor, codex, gemini, antigravity, opencode, 
+windsurf, kiro, hermes
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Copilot, Vscode, Intellij, Claude, Cursor, Codex, Gemini, Antigravity, Opencode, Windsurf, 
+Kiro, Hermes...
+  + ledger
+[!] Copilot CLI will resolve 1 environment variable at runtime that is not currently set: LEDGER_API_KEY.
+    Export it in your shell before running 'gh copilot', e.g.:
+      export LEDGER_API_KEY=...
+Successfully configured MCP server 'ledger' for VS Code
+  + ledger
+  + ledger
+Successfully configured MCP server 'ledger' for Claude Code
+  + ledger
+Successfully configured MCP server 'ledger' for Cursor
+  + ledger
+[*] Configured MCP server 'ledger' for Codex CLI
+  + ledger
+[*] Configured MCP server 'ledger' for gemini
+  + ledger
+[*] Configured MCP server 'ledger' for antigravity
+  + ledger
+Successfully configured MCP server 'ledger' for OpenCode
+  + ledger
+  + ledger
+[*] Configured MCP server 'ledger' for Kiro
+  + ledger
+Successfully configured MCP server 'ledger' for Hermes
+  + ledger
+|  [+]  ledger -> Copilot, Vscode, Intellij, Claude, Cursor, Codex, Gemini, Antigravity, Opencode, Windsurf, Kiro, 
+Hermes (configured)
+[*] Configured 1 server
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 4 APM dependencies and 1 MCP server in 2.0s.
+[exit 0]
+  PASS: exit code 0 (MCP-capable targets in the set, so no MCP failure)
+$ bash -c find . -name SKILL.md -path '*meridian-code-review*' -not -path './apm_modules/*' | sort
+./.agents/skills/meridian-code-review/SKILL.md
+./.claude/skills/meridian-code-review/SKILL.md
+./.grok/skills/meridian-code-review/SKILL.md
+./.kiro/skills/meridian-code-review/SKILL.md
+[exit 0]
+  PASS: output matches /\.agents/skills/meridian-code-review/
+  PASS: output matches /\.claude/skills/meridian-code-review/
+  PASS: output matches /\.kiro/skills/meridian-code-review/
+  PASS: output matches /\.grok/skills/meridian-code-review/
+
+## Together: --target all
+$ bash -c set -o pipefail; HOME='<workspace>/all/home' apm install --target all 2>&1 | python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py clean
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[i] Targets: claude, codex, copilot, cursor, gemini, grok-build, kiro, opencode, windsurf  (source: --target flag)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- 1 rule(s) integrated -> .claude/rules/
+  |-- 1 rule(s) integrated -> .cursor/rules/
+  |-- Skill integrated -> 4 targets
+  [+] <project root> (local)
+  |-- 1 prompts integrated -> .github/prompts/
+  |-- 7 agents integrated -> 7 targets
+  |-- 6 commands integrated -> 6 targets
+  |-- 6 rule(s) integrated -> 6 targets
+  |-- 7 hook(s) integrated -> 7 targets
+  |   PostToolUse: runs ${CLAUDE_PROJECT_DIR}/.claude/hooks/meridian-checkout/scripts/money-rules-reminder.sh 
+(money-rules-reminder.json)
+  |   PostToolUse: runs .codex/hooks/meridian-checkout/scripts/money-rules-reminder.sh (money-rules-reminder.json)
+  |   postToolUse: runs .github/hooks/scripts/meridian-checkout/scripts/money-rules-reminder.sh 
+(money-rules-reminder.json)
+  |   PostToolUse: runs .cursor/hooks/meridian-checkout/scripts/money-rules-reminder.sh (money-rules-reminder.json)
+  |   AfterTool: runs .gemini/hooks/meridian-checkout/scripts/money-rules-reminder.sh (money-rules-reminder.json)
+  |   PostToolUse: runs .kiro/hooks/meridian-checkout/scripts/money-rules-reminder.sh (money-rules-reminder.json)
+  |   PostToolUse: runs .windsurf/hooks/meridian-checkout/scripts/money-rules-reminder.sh (money-rules-reminder.json)
+[i] Instructions installed for codex, gemini, grok-build, opencode. Run 'apm compile' to update AGENTS.md / GEMINI.md.
++- MCP Servers (1)
+[i] Skipped targets without MCP support: grok-build
+[i] Targeting specific runtimes: claude, codex, cursor, gemini, kiro, opencode, vscode, windsurf
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Claude, Codex, Cursor, Gemini, Kiro, Opencode, Vscode, Windsurf...
+Successfully configured MCP server 'ledger' for Claude Code
+  + ledger
+[*] Configured MCP server 'ledger' for Codex CLI
+  + ledger
+Successfully configured MCP server 'ledger' for Cursor
+  + ledger
+[*] Configured MCP server 'ledger' for gemini
+  + ledger
+[*] Configured MCP server 'ledger' for Kiro
+  + ledger
+Successfully configured MCP server 'ledger' for OpenCode
+  + ledger
+Successfully configured MCP server 'ledger' for VS Code
+  + ledger
+  + ledger
+|  [+]  ledger -> Claude, Codex, Cursor, Gemini, Kiro, Opencode, Vscode, Windsurf (configured)
+[*] Configured 1 server
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 4 APM dependencies and 1 MCP server in 1.9s.
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /\[i\] Targets: /
+  PASS: output does not match /Targets: [^\n]*hermes/
+  PASS: output does not match /Targets: [^\n]*antigravity/
+
+## Runtime discovery in real harnesses (skipped without credentials)
+$ python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/harness_check.py claude <workspace>/harness/claude inventory 3 <workspace>/harness/results/claude
+claude inventory on claude: 3/3
+[exit 0]
+  PASS: exit code 0
+$ python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/harness_check.py claude <workspace>/harness/claude skill-used 3 <workspace>/harness/results/claude
+claude skill-used on claude: 3/3
+[exit 0]
+  PASS: exit code 0
+$ python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/harness_check.py claude <workspace>/harness/claude instructions-always 3 <workspace>/harness/results/claude
+claude instructions-always on claude: 3/3
+[exit 0]
+  PASS: exit code 0
+$ python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/harness_check.py claude <workspace>/harness/claude instructions-money 3 <workspace>/harness/results/claude
+claude instructions-money on claude: 0/3
+[exit 0]
+  PASS: exit code 0
+$ python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/harness_check.py claude <workspace>/harness/claude instructions-money-after-read 3 <workspace>/harness/results/claude
+claude instructions-money-after-read on claude: 1/3
+[exit 0]
+  PASS: exit code 0
+$ python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/harness_check.py claude <workspace>/harness/copilot-for-claude inventory 1 <workspace>/harness/results/copilot-for-claude
+claude inventory on copilot-for-claude: 0/1
+[exit 0]
+$ python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/harness_check.py codex <workspace>/harness/codex skill-listed 3 <workspace>/harness/results/codex
+codex skill-listed on codex: 3/3
+[exit 0]
+  PASS: exit code 0
+$ python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/harness_check.py codex <workspace>/harness/codex skill-used 3 <workspace>/harness/results/codex
+codex skill-used on codex: 3/3
+[exit 0]
+  PASS: exit code 0
+$ python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/harness_check.py codex <workspace>/harness/codex instructions-money 3 <workspace>/harness/results/codex
+codex instructions-money on codex: 3/3
+[exit 0]
+  PASS: exit code 0
+$ python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/harness_check.py codex <workspace>/harness/codex-installed-only instructions-money 3 <workspace>/harness/results/codex-installed-only
+codex instructions-money on codex-installed-only: 0/3
+[exit 0]
+$ python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/harness_check.py codex <workspace>/harness/claude-for-codex skill-listed 3 <workspace>/harness/results/claude-for-codex
+codex skill-listed on claude-for-codex: 0/3
+[exit 0]
+  PASS: /tmp/raae-ch06-make-skills-portable-across-coding-tools-SqqyI4/harness/results/claude/claude-inventory.json matches /"passed": 3/
+
+## Build the compatibility matrix from the runs
+$ python3 <demo-repo>/ch06-make-skills-portable-across-coding-tools/matrix_tool.py matrix <workspace>/trials <workspace>/hflat compatibility-matrix
+[exit 0]
+  PASS: exit code 0
+  PASS: compatibility-matrix.md matches /^\| claude \| skill, instructions, prompt as command, agent, hook, MCP \|/
+  PASS: compatibility-matrix.md matches /^\| codex \| skill, instructions \(compiled\), agent, hook, MCP \|/
+  PASS: compatibility-matrix.md matches /^\| agent-skills \| skill \(exit 1\) \|/
+  PASS: compatibility-matrix.md matches /^\| gemini \|.*unverified \|$/
+$ cat compatibility-matrix.md
+# Compatibility matrix: meridian-checkout on APM v0.33.0
+
+Generated by matrix_tool.py from the install runs in this evidence folder. Each row is a fresh copy of the fixture installed with `apm install --target <target>` (experimental rows after `apm experimental enable <target>`). `-` means APM wrote nothing for that primitive. Paths starting with `~/` are user-level files written into the run's isolated HOME.
+
+## Summary: APM deploys vs runtime verified
+
+| Target | APM deploys | Runtime verified |
+|---|---|---|
+| copilot | skill, instructions, prompt, agent, hook, MCP | unverified |
+| vscode | skill, instructions, prompt, agent, hook, MCP | unverified |
+| intellij | skill, instructions, prompt, agent, hook, MCP | unverified |
+| claude | skill, instructions, prompt as command, agent, hook, MCP | Claude Code 2.1.301: follows always-on instructions 3/3; follows them after reading src/*.ts 1/3; follows file-scoped money rules 0/3; skill listed at start-up 3/3; answers from the skill 3/3 |
+| cursor | skill, instructions, prompt as command, agent, hook, MCP | unverified |
+| codex | skill, instructions (compiled), agent, hook, MCP | Codex CLI 0.163.0: follows file-scoped money rules 3/3; names the skill 3/3; answers from the skill 3/3 |
+| gemini | skill, instructions (compiled), prompt as TOML, hook, MCP | unverified |
+| antigravity | skill, instructions, hook, MCP | unverified |
+| opencode | skill, instructions (compiled), prompt as command, agent, MCP | unverified |
+| windsurf | skill, instructions, prompt as workflow, hook, MCP | unverified |
+| kiro | skill, instructions, agent, hook, MCP | unverified |
+| grok-build | skill, instructions, prompt as command, agent (exit 1) | unverified |
+| hermes | skill, instructions (compiled), MCP | unverified |
+| agent-skills | skill (exit 1) | unverified |
+| grok-cloud | skill (exit 1) | unverified |
+| openclaw | skill (exit 1) | unverified |
+
+## Where each primitive landed
+
+| Target | Skill | Instructions | Prompt | Agent | Hook | MCP server | Tool notes | Exit | APM says |
+|---|---|---|---|---|---|---|---|---|---|
+| copilot | .agents/skills/ | .github/instructions/money-handling.instructions.md | .github/prompts/review-checkout-change.prompt.md (prompt) | .github/agents/payments-reviewer.agent.md | .github/hooks/meridian-checkout-money-rules-reminder.json | .github/mcp.json | - | 0 | - |
+| vscode | .agents/skills/ | .github/instructions/money-handling.instructions.md | .github/prompts/review-checkout-change.prompt.md (prompt) | .github/agents/payments-reviewer.agent.md | .github/hooks/meridian-checkout-money-rules-reminder.json | .vscode/mcp.json | - | 0 | - |
+| intellij | .agents/skills/ | .github/instructions/money-handling.instructions.md | .github/prompts/review-checkout-change.prompt.md (prompt) | .github/agents/payments-reviewer.agent.md | .github/hooks/meridian-checkout-money-rules-reminder.json | ~/.config/github-copilot/intellij/mcp.json | - | 0 | - |
+| claude | .claude/skills/ | .claude/rules/money-handling.md | .claude/commands/review-checkout-change.md (command) | .claude/agents/payments-reviewer.md | .claude/settings.json | .mcp.json | claude notes | 0 | - |
+| cursor | .agents/skills/ | .cursor/rules/money-handling.mdc | .cursor/commands/review-checkout-change.md (command) | .cursor/agents/payments-reviewer.md | .cursor/hooks.json | .cursor/mcp.json | cursor notes | 0 | - |
+| codex | .agents/skills/ | compiled into AGENTS.md | - | .codex/agents/payments-reviewer.toml | .codex/hooks.json | .codex/config.toml | - | 0 | asks for apm compile |
+| gemini | .agents/skills/ | compiled into AGENTS.md | .gemini/commands/review-checkout-change.toml (command (TOML)) | - | .gemini/settings.json | .gemini/settings.json | - | 0 | asks for apm compile |
+| antigravity | .agents/skills/ | .agents/rules/money-handling.md | - | - | .agents/hooks.json | .agents/mcp_config.json | - | 0 | - |
+| opencode | .agents/skills/ | compiled into AGENTS.md | .opencode/commands/review-checkout-change.md (command) | .opencode/agents/payments-reviewer.md | - | opencode.json | - | 0 | asks for apm compile |
+| windsurf | .agents/skills/ | .windsurf/rules/money-handling.md | .windsurf/workflows/review-checkout-change.md (workflow) | - | .windsurf/hooks.json | ~/.codeium/windsurf/mcp_config.json | - | 0 | - |
+| kiro | .kiro/skills/ | .kiro/steering/money-handling.md | - | .kiro/agents/payments-reviewer.md | .kiro/hooks/meridian-checkout-money-rules-reminder-posttooluse-1.json | .kiro/settings/mcp.json | - | 0 | - |
+| grok-build | .grok/skills/ | .grok/rules/money-handling.instructions.md | .grok/commands/review-checkout-change.md (command) | .grok/agents/payments-reviewer.md | - | no MCP client: install fails | - | 1 | asks for apm compile |
+| hermes | .agents/skills/ | compiled into AGENTS.md | - | - | - | ~/.hermes/config.yaml | - | 0 | asks for apm compile |
+| agent-skills | .agents/skills/ | - | - | - | - | no MCP client: install fails | - | 1 | - |
+| grok-cloud | .grok/skills/ | - | - | - | - | no MCP client: install fails | - | 1 | - |
+| openclaw | .agents/skills/ | - | - | - | - | no MCP client: install fails | - | 1 | - |
+
+## Runtime checks
+
+| Harness | Workspace (installed for) | Check | Result |
+|---|---|---|---|
+| claude | claude | follows always-on instructions | 3/3 |
+| claude | claude | follows them after reading src/*.ts | 1/3 |
+| claude | claude | follows file-scoped money rules | 0/3 |
+| claude | claude | skill listed at start-up | 3/3 |
+| claude | claude | answers from the skill | 3/3 |
+| codex | claude-for-codex | names the skill | 0/3 |
+| codex | codex | follows file-scoped money rules | 3/3 |
+| codex | codex | names the skill | 3/3 |
+| codex | codex | answers from the skill | 3/3 |
+| codex | codex-installed-only | follows file-scoped money rules | 0/3 |
+| claude | copilot-for-claude | skill listed at start-up | 0/1 |
+[exit 0]
+== ch06-make-skills-portable-across-coding-tools: passed (93 passed, 0 failed) ==

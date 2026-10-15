@@ -1,0 +1,37 @@
+{
+  "harness": "codex",
+  "version": "codex-cli 0.163.0",
+  "case": "instructions-money",
+  "workspace": "codex-installed-only",
+  "prompt": "Without using any tools and without reading files: what do the instructions you were given for this project say about logging card data? Quote the sentence exactly, or reply UNKNOWN.",
+  "pass_pattern": "not even partially",
+  "runs": 3,
+  "passed": 0,
+  "status": "ran",
+  "results": [
+    {
+      "rc": 0,
+      "answer": "\u201cReview a code change in a payment service against Meridian's money rules: amounts as integer minor units (never floating point), an idempotency key on every call that creates a payment, charge or refund, no card data or other PII in logs, and ISO 4217 currency codes.\u201d",
+      "model": "gpt-6-sol",
+      "commands_run": [],
+      "stderr_tail": "",
+      "passed": false
+    },
+    {
+      "rc": 0,
+      "answer": "UNKNOWN",
+      "model": "gpt-6-sol",
+      "commands_run": [],
+      "stderr_tail": "",
+      "passed": false
+    },
+    {
+      "rc": 0,
+      "answer": "UNKNOWN",
+      "model": "gpt-6-sol",
+      "commands_run": [],
+      "stderr_tail": "",
+      "passed": false
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+[>] Installing dependencies from apm.yml...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[i] Targets: opencode  (source: --target flag)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .agents/skills/
+  [+] <project root> (local)
+  |-- 1 agents integrated -> .opencode/agents/
+  |-- 1 commands integrated -> .opencode/commands/
+[i] Instructions installed for opencode. Run 'apm compile' to update AGENTS.md.
++- MCP Servers (1)
+[i] Targeting specific runtime: opencode
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Opencode...
+Successfully configured MCP server 'ledger' for OpenCode
+  + ledger
+|  [+]  ledger -> Opencode (configured)
+[*] Configured 1 server
+  [!] [../agent-packages/meridian-claude-notes] Package targets [claude] do not overlap authorized active targets; 
+skipping
+  [!] [../agent-packages/meridian-cursor-notes] Per-dependency targets [cursor] do not overlap active install targets; 
+skipping
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 4 APM dependencies and 1 MCP server in 3.9s.

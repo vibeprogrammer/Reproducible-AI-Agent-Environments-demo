@@ -1,0 +1,38 @@
+name: meridian-checkout
+version: 1.0.0
+description: Agent environment for Meridian's checkout payment service
+author: meridian-finance
+license: UNLICENSED
+
+# The tools Meridian's developers use: Copilot (Priya), Cursor (Lena),
+# Claude Code (Anika). vscode adds the MCP config VS Code reads.
+targets:
+  - copilot
+  - vscode
+  - claude
+  - cursor
+
+dependencies:
+  apm:
+    # Chapter 2's skill, from a Git subdirectory, pinned to its release tag.
+    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0
+    # Tool-specific notes live in their own packages (sibling folders in
+    # this demo; Meridian keeps them in its shared capabilities repository).
+    # This package restricts itself to Claude Code in its own apm.yml.
+    - ../agent-packages/meridian-claude-notes
+    # This one does not; the consumer narrows it to Cursor here.
+    - path: ../agent-packages/meridian-cursor-notes
+      targets: [cursor]
+  mcp:
+    # Meridian's own ledger server, pinned. The key is referenced, never
+    # written: each developer exports LEDGER_API_KEY.
+    - name: ledger
+      registry: false
+      transport: stdio
+      command: npx
+      args: ["-y", "@meridian-finance/ledger-mcp@1.4.2"]
+      env:
+        LEDGER_API_KEY: ${LEDGER_API_KEY}
+
+# Consent to deploy the repo's own primitives under .apm/.
+includes: auto

@@ -1,0 +1,4 @@
+./.agents/skills/meridian-code-review/SKILL.md
+./.claude/skills/meridian-code-review/SKILL.md
+./.grok/skills/meridian-code-review/SKILL.md
+./.kiro/skills/meridian-code-review/SKILL.md

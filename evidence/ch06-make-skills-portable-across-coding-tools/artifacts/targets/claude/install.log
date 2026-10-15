@@ -1,0 +1,33 @@
+[>] Installing dependencies from apm.yml...
+[>] Resolving ../agent-packages/meridian-cursor-notes...
+[>] Resolving ../agent-packages/meridian-claude-notes...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Targets: claude  (source: --target flag)
+  [+] ../agent-packages/meridian-claude-notes (local)
+  [+] ../agent-packages/meridian-cursor-notes (local)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- 1 rule(s) integrated -> .claude/rules/
+  |-- Skill integrated -> .claude/skills/
+  [+] <project root> (local)
+  |-- 1 agents integrated -> .claude/agents/
+  |-- 1 commands integrated -> .claude/commands/
+  |-- 1 rule(s) integrated -> .claude/rules/
+  |-- 1 hook(s) integrated -> .claude/settings.json
+  |   PostToolUse: runs ${CLAUDE_PROJECT_DIR}/.claude/hooks/meridian-checkout/scripts/money-rules-reminder.sh 
+(money-rules-reminder.json)
++- MCP Servers (1)
+[i] Targeting specific runtime: claude
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Claude...
+Successfully configured MCP server 'ledger' for Claude Code
+  + ledger
+|  [+]  ledger -> Claude (configured)
+[*] Configured 1 server
+  [!] [../agent-packages/meridian-cursor-notes] Per-dependency targets [cursor] do not overlap active install targets; 
+skipping
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 4 APM dependencies and 1 MCP server in 3.8s.
