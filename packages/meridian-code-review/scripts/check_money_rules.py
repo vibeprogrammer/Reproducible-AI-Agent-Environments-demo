@@ -11,12 +11,18 @@ Rules:
   MR004  currency code that is not an upper-case ISO 4217 alphabetic code
 
 Usage:
-  check_money_rules.py --diff change.diff        # only added lines
+  check_money_rules.py --diff change.diff        # what the change touched
   check_money_rules.py --diff -                  # diff on stdin
   check_money_rules.py --files src/a.ts src/b.ts
   add --format json for machine-readable output
 
-Exit codes: 0 no findings, 1 findings, 2 usage or input error.
+Diff mode: MR001, MR003 and MR004 report only on added lines. MR002
+reports a create call when the change added or deleted a line in the call
+or in the eight lines after it (so deleting an idempotency key is caught);
+the call line itself may be unchanged context.
+
+Exit codes: 0 no findings, 1 findings, 2 usage or input error (including
+input that is not UTF-8).
 """
 import argparse
 import json
@@ -65,11 +71,11 @@ ISO_4217 = re.compile(r"^[A-Z]{3}$")
 
 
 def lines_from_diff(text):
-    """Yield (path, line_number, text, touched) for the new side of a diff.
+    """Yield (path, line_number, text, added, after_delete) for the new side.
 
-    Context lines are yielded too (touched=False) so that a rule can look
-    at the code around a change; findings are only reported on lines the
-    change touched. A deletion marks the next new-side line as touched.
+    Context lines are yielded too (added=False) so that MR002 can look at
+    the code around a change. after_delete is True for the new-side line
+    that follows one or more deleted lines; only MR002 uses it.
     """
     path, new_line, pending_delete = None, 0, False
     hunk = re.compile(r"^@@ -\d+(?:,\d+)? \+(\d+)(?:,\d+)? @@")
@@ -87,13 +93,13 @@ def lines_from_diff(text):
         if path is None:
             continue
         if raw.startswith("+"):
-            yield path, new_line, raw[1:], True
+            yield path, new_line, raw[1:], True, pending_delete
             new_line += 1
             pending_delete = False
         elif raw.startswith("-"):
             pending_delete = True
         elif raw.startswith(" ") or raw == "":
-            yield path, new_line, raw[1:], pending_delete
+            yield path, new_line, raw[1:], False, pending_delete
             new_line += 1
             pending_delete = False
 
@@ -102,7 +108,7 @@ def lines_from_files(paths):
     for p in paths:
         with open(p, encoding="utf-8") as fh:
             for i, line in enumerate(fh, 1):
-                yield p, i, line.rstrip("\n"), True
+                yield p, i, line.rstrip("\n"), True, False
 
 
 def check(lines):
@@ -113,20 +119,21 @@ def check(lines):
         findings.append({"rule": rule, "file": path, "line": n,
                          "message": msg, "code": text.strip()[:120]})
 
-    for idx, (path, n, text, touched) in enumerate(lines):
+    for idx, (path, n, text, added, after_delete) in enumerate(lines):
         stripped = text.strip()
         if stripped.startswith(("//", "*", "#")):
             continue
         if CREATE_CALL.search(text):
-            span = [(t, tt) for (p, _, t, tt) in lines[idx:idx + WINDOW + 1]
-                    if p == path]
-            # Report when the change touched the call or its options object.
+            span = [(t, a or d) for (p, _, t, a, d)
+                    in lines[idx:idx + WINDOW + 1] if p == path]
+            # Report when the change added or deleted a line in the call or
+            # its options object (a deleted idempotency key counts).
             if any(tt for _, tt in span) and \
                     not any(IDEMPOTENCY.search(t) for t, _ in span):
                 add("MR002", path, n,
                     "payment/charge/refund created without an idempotency key",
                     text)
-        if not touched:
+        if not added:
             continue
         for pattern, msg in FLOAT_PATTERNS:
             if pattern.search(text) and not MINOR_OK.search(text):
@@ -150,7 +157,8 @@ def main(argv=None):
     src = ap.add_mutually_exclusive_group(required=True)
     src.add_argument("--diff", metavar="FILE",
                      help="unified diff to check ('-' reads stdin); "
-                          "only added lines are checked")
+                          "MR001/MR003/MR004 check added lines only; MR002 "
+                          "also counts deleted lines near a create call")
     src.add_argument("--files", nargs="+", metavar="PATH",
                      help="source files to check in full")
     ap.add_argument("--format", choices=["text", "json"], default="text")
@@ -165,6 +173,9 @@ def main(argv=None):
             findings = check(lines_from_files(args.files))
     except OSError as exc:
         print("error: cannot read input: %s" % exc, file=sys.stderr)
+        return 2
+    except UnicodeDecodeError as exc:
+        print("error: input is not UTF-8: %s" % exc, file=sys.stderr)
         return 2
 
     if args.format == "json":

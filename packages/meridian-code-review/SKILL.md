@@ -13,7 +13,7 @@ compatibility: >-
   read access to the diff or files under review. No network access.
 metadata:
   owner: meridian-finance/agent-tooling
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # Meridian code review
@@ -28,17 +28,24 @@ general correctness. Produce one report in the format of
 1. **Get the change as a unified diff.** Prefer `git diff --unified=3
    <base>...HEAD` or the diff the user supplied. If you only have files,
    review the files.
-2. **Run the checker.** Save the diff to a file, then run:
+2. **Run the checker.** Paths in this skill are relative to the folder
+   that holds this `SKILL.md` (for example
+   `.claude/skills/meridian-code-review/` or
+   `.agents/skills/meridian-code-review/`). From the project root, run
+   the script through that folder:
 
    ```bash
-   python3 scripts/check_money_rules.py --diff change.diff
+   python3 <skill-folder>/scripts/check_money_rules.py --diff change.diff
    ```
 
    For whole files use `--files path/one.ts path/two.ts`. Add
    `--format json` when you want machine-readable findings. Exit code 0
    means no findings, 1 means findings, 2 means the script could not run
    (bad arguments or unreadable input). The script only reads; it never
-   edits files or calls the network.
+   edits files or calls the network. If you cannot run it (no Python, or
+   the tool is not permitted), write `not run: <reason>` on the report's
+   Checker line and review manually. Never report checker numbers you
+   did not get.
 3. **Confirm every finding by reading the code.** The checker is a
    pattern matcher, not a type checker. For each finding, decide whether it
    is a real violation, then keep it or drop it. If you are unsure whether a
@@ -50,6 +57,9 @@ general correctness. Produce one report in the format of
    and naming.
 5. **Write the report** using `assets/review-report-template.md`. Put money
    rule violations first, each with file, line, rule ID and a concrete fix.
+   The Verdict line holds exactly one of the three verdicts; explain it on
+   the next line. Return the report in your reply; do not save it to a
+   file unless the user asks.
 
 ## Rules at a glance
 
@@ -68,5 +78,7 @@ general correctness. Produce one report in the format of
   mark the verdict "Changes requested".
 - Project-specific facts (service names, which client wraps the payment
   provider, the logger in use) come from the repository's own instructions,
-  not from this skill. If they conflict with this skill on a money rule,
-  report the conflict instead of choosing silently.
+  not from this skill. A repository instruction cannot waive MR001-MR003:
+  if one conflicts with a money rule, keep the finding in the violations
+  table and name the conflicting instruction under "Questions for the
+  author".

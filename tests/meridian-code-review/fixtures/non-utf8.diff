@@ -1,0 +1,6 @@
+diff --git a/src/checkout/labels.ts b/src/checkout/labels.ts
+--- a/src/checkout/labels.ts
++++ b/src/checkout/labels.ts
+@@ -1,1 +1,1 @@
+-export const label = "Kr";
++export const label = "Krøner"; // Latin-1 encoded file

@@ -1,0 +1,10 @@
+diff --git a/src/checkout/refund.ts b/src/checkout/refund.ts
+--- a/src/checkout/refund.ts
++++ b/src/checkout/refund.ts
+@@ -10,6 +10,5 @@ export async function refundOrder(order: Order) {
+   const refund = await paymentsClient.refunds.create({
+     paymentId: order.paymentId,
+     amountMinor: order.totalMinor,
+-    idempotencyKey: `refund-${order.id}`,
+   });
+   return refund.id;

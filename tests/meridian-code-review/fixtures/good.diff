@@ -1,0 +1,22 @@
+diff --git a/src/checkout/charge.ts b/src/checkout/charge.ts
+index 3f1c2a0..5c0a7e2 100644
+--- a/src/checkout/charge.ts
++++ b/src/checkout/charge.ts
+@@ -1,13 +1,16 @@
+ import { paymentsClient } from "../clients/payments";
+ import { logger } from "../logging";
+ 
+ export async function chargeOrder(order: Order, card: CardInput) {
+   const amountMinor = order.totalMinor;
++  const shippingFeeMinor = 499;
++  logger.info("charging card", { orderId: order.id, last4: card.last4 });
+   const payment = await paymentsClient.payments.create({
+-    amountMinor,
++    amountMinor: amountMinor + shippingFeeMinor,
+     currency: "EUR",
+     source: card.token,
+     idempotencyKey: order.id,
+   });
++  logger.info("charged", { paymentId: payment.id });
+   return payment;
+ }

@@ -1,0 +1,7 @@
+diff --git a/src/checkout/debug.ts b/src/checkout/debug.ts
+--- a/src/checkout/debug.ts
++++ b/src/checkout/debug.ts
+@@ -1,2 +1,3 @@
+ export function onFailure(req: ChargeRequest) {
++  logger.info({ req });
+ }

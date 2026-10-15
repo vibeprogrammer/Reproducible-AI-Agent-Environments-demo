@@ -1,0 +1,8 @@
+diff --git a/src/checkout/fees.ts b/src/checkout/fees.ts
+--- a/src/checkout/fees.ts
++++ b/src/checkout/fees.ts
+@@ -1,4 +1,3 @@
+-// TODO: remove legacy fee table
+ const legacyFee = 0.35;
+ export function fee(order: Order): number {
+   return order.feeMinor;

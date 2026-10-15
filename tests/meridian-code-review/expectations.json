@@ -1,0 +1,67 @@
+{
+ "checker": "scripts/check_money_rules.py",
+ "cases": [
+  {
+   "id": "bad-diff-six-findings",
+   "diff": "bad.diff",
+   "exit": 1,
+   "rules": [
+    "MR001",
+    "MR001",
+    "MR001",
+    "MR002",
+    "MR003",
+    "MR004"
+   ],
+   "why": "the Chapter 2 fixture: one of every rule, three MR001"
+  },
+  {
+   "id": "good-diff-clean",
+   "diff": "good.diff",
+   "exit": 0,
+   "rules": [],
+   "why": "the compliant version of the same change"
+  },
+  {
+   "id": "deleted-idempotency-key",
+   "diff": "deleted-key.diff",
+   "exit": 1,
+   "rules": [
+    "MR002"
+   ],
+   "why": "deleting the key from an unchanged create call must be reported"
+  },
+  {
+   "id": "unchanged-line-after-deletion",
+   "diff": "context-after-deletion.diff",
+   "exit": 0,
+   "rules": [],
+   "why": "documented contract: MR001/MR003/MR004 report added lines only; an unchanged line after a deletion is not part of the change"
+  },
+  {
+   "id": "non-utf8-input-is-input-error",
+   "diff": "non-utf8.diff",
+   "exit": 2,
+   "rules": null,
+   "why": "exit 1 means findings; unreadable input must be exit 2, never a traceback"
+  },
+  {
+   "id": "known-false-positive-fee-rate",
+   "diff": "fee-rate.diff",
+   "exit": 1,
+   "rules": [
+    "MR001"
+   ],
+   "known": "false positive, see references/false-positives.md",
+   "why": "pins current behaviour so a change to it is a decision, not an accident"
+  },
+  {
+   "id": "known-gap-whole-object-log",
+   "diff": "whole-object-log.diff",
+   "exit": 0,
+   "rules": [],
+   "known": "false negative, see references/money-rules.md (MR003)",
+   "why": "pins current behaviour; the agent, not the script, must catch this"
+  }
+ ]
+}
