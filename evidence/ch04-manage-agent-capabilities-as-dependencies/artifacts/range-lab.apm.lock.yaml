@@ -20,7 +20,7 @@ dependencies:
   content_hash: sha256:99f30af2deabe503620dfdb31d5f9c9d475b6649933d0e9acca5f1a2b3cc31dd
   constraint: ~0.32.0
   resolved_tag: v0.32.0
-  resolved_at: '2026-10-15T23:02:09+00:00'
+  resolved_at: '2026-10-15T23:13:24+00:00'
   declared_license: MIT
 - repo_url: vibeprogrammer/reproducible-ai-agent-environments-demo
   materialization_repo_url: vibeprogrammer/Reproducible-AI-Agent-Environments-demo
@@ -50,7 +50,7 @@ dependencies:
   content_hash: sha256:8824bbd9afa499377d9796b018c7bea5f795327c30b9e8ae21380482d491b6f5
   constraint: ^1.0.0
   resolved_tag: meridian-code-review-v1.0.0
-  resolved_at: '2026-10-15T23:02:09+00:00'
+  resolved_at: '2026-10-15T23:13:24+00:00'
   declared_license: MIT
 deployments:
 - kind: project-relative

@@ -1,5 +1,33 @@
 == ch04-manage-agent-capabilities-as-dependencies == workspace: <workspace> (fresh mktemp dir, isolated HOME)
 
+## 0. Without a target or harness marker, APM refuses to guess
+$ apm install
+[>] Installing dependencies from apm.yml...
+[!] Install interrupted after 0.0s.
+Usage: apm install [OPTIONS] [PACKAGES]...
+Try 'apm install --help' for help.
+
+Error: [x] No harness detected
+
+APM scanned for harness markers (.claude/, CLAUDE.md, .cursor/, .cursorrules, .github/copilot-instructions.md, .github/instructions/, .github/agents/, .github/prompts/, .github/hooks/, .codex/, .gemini/, GEMINI.md, .opencode/, .windsurf/, .kiro/) but found none in this project.
+
+Previously APM defaulted to copilot; this is now explicit.
+
+Fix with one of:
+
+  apm targets                            # see all supported harnesses
+  apm install <pkg> --target claude      # deploy to a specific harness
+  apm install <pkg> --target copilot     # or any supported target
+
+Or declare in apm.yml:
+
+  targets:
+    - claude
+[exit 2]
+  PASS: non-zero exit (2) (install stops)
+  PASS: output matches /No harness detected/
+  PASS: absent: apm.lock.yaml
+
 ## 1. A manifest with two direct dependencies (graph-lab)
 $ cat apm.yml
 # Chapter 4 demo: a real public dependency graph.
@@ -27,8 +55,8 @@ $ apm install
 [>] Installing dependencies from apm.yml...
 [>] Resolving microsoft/apm-sample-package...
 [>] Resolving apm-autopilot-pr-review-scheduler...
-[>] Resolving awesome-copilot-review-and-refactor...
 [>] Resolving apm-autopilot-pr-review-worker...
+[>] Resolving awesome-copilot-review-and-refactor...
 [>] Resolving apm-autopilot-comment...
 [i] Targets: copilot  (source: apm.yml)
   [+] microsoft/apm-sample-package #v1.0.0 @fb285168
@@ -57,7 +85,7 @@ prevent drift
 lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during 
 lockfile reconciliation.
-[*] Installed 5 APM dependencies in 8.9s.
+[*] Installed 5 APM dependencies in 14.0s.
 [exit 0]
   PASS: exit code 0 (install succeeds)
   PASS: output matches /1 dependency unpinned: github/awesome-copilot/
@@ -215,8 +243,8 @@ $ apm install --frozen
 [>] Installing dependencies from apm.yml...
 [>] Resolving microsoft/apm-sample-package...
 [>] Resolving apm-autopilot-pr-review-scheduler...
-[>] Resolving awesome-copilot-review-and-refactor...
 [>] Resolving apm-autopilot-pr-review-worker...
+[>] Resolving awesome-copilot-review-and-refactor...
 [>] Resolving apm-autopilot-comment...
 [i] Targets: copilot  (source: apm.yml)
   [+] microsoft/apm-sample-package #fb2851683be0e0e7711421d518bd8dba23b0b1f6 
@@ -285,7 +313,7 @@ microsoft/apm/packages/autopilot/autopilot-comment@v0.33.0 (commit
 Align the requested refs in the root or parent manifests to the same commit, 
 then run 'apm install' to regenerate apm.lock.yaml.
 [i] Run with --verbose for detailed diagnostics
-[x] Install failed after 1.1s.
+[x] Install failed after 4.3s.
 [exit 1]
   PASS: non-zero exit (1) (install refuses the conflict)
   PASS: output matches /incompatible immutable requirements/
@@ -296,8 +324,8 @@ then run 'apm install' to regenerate apm.lock.yaml.
 ## 11. Semver ranges on Git sources (range-lab)
 $ apm install
 [>] Installing dependencies from apm.yml...
-[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
 [>] Resolving apm-autopilot-comment...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
 [i] Targets: copilot  (source: apm.yml)
   [+] github.com/microsoft/apm/packages/autopilot/autopilot-comment#v0.32.0 
 #v0.32.0 @f0509d75
@@ -312,7 +340,7 @@ ian-code-review#meridian-code-review-v1.0.0 #meridian-code-review-v1.0.0
 lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during 
 lockfile reconciliation.
-[*] Installed 2 APM dependencies in 1.1s.
+[*] Installed 2 APM dependencies in 4.4s.
 [exit 0]
   PASS: exit code 0
 $ summarize_lock
@@ -331,4 +359,4 @@ $ bash -c grep -E '^lockfile_version' apm.lock.yaml
 lockfile_version: '2'
 [exit 0]
   PASS: output matches /lockfile_version: '2'/
-== ch04-manage-agent-capabilities-as-dependencies: passed (45 passed, 0 failed) ==
+== ch04-manage-agent-capabilities-as-dependencies: passed (48 passed, 0 failed) ==

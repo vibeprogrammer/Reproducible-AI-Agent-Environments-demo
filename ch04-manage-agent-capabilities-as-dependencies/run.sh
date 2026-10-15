@@ -11,6 +11,15 @@ export CI=true TERM=dumb
 summarize_lock() { python3 "$HERE/lock_summary.py" "${1:-apm.lock.yaml}"; }
 
 # ---------------------------------------------------------------------------
+step "0. Without a target or harness marker, APM refuses to guess"
+mkdir no-target && cd no-target && git init -q .
+grep -v -e '^targets:' -e '^  - copilot' "$HERE/fixtures/graph-lab/apm.yml" > apm.yml
+run apm install
+expect_rc_nonzero "install stops"
+expect_out "No harness detected"
+expect_no_file apm.lock.yaml
+cd "$WORK"
+
 step "1. A manifest with two direct dependencies (graph-lab)"
 mkdir graph-lab && cd graph-lab && git init -q .
 cp "$HERE/fixtures/graph-lab/apm.yml" apm.yml

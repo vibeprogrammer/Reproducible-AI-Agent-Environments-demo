@@ -1,5 +1,5 @@
 demo: ch04-manage-agent-capabilities-as-dependencies
-started_utc: 2026-10-15T23:01:53Z
+started_utc: 2026-10-15T23:12:59Z
 apm_version: 0.33.0
 apm_pinned: 0.33.0
 git: git version 2.39.5

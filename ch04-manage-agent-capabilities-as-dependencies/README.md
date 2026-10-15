@@ -23,7 +23,7 @@ shows the per-package tag convention Meridian decides on in this chapter.
 
 | File | Purpose |
 |---|---|
-| `run.sh` | The whole demo, fully automated, run through `../scripts/lib.sh`. |
+| `run.sh` | The whole demo (48 checks), fully automated, run through `../scripts/lib.sh`. |
 | `fixtures/graph-lab/apm.yml` | Two direct dependencies with transitive dependencies of their own. |
 | `fixtures/diamond-lab/apm.yml` | A direct pin that disagrees with a transitive requirement. |
 | `fixtures/range-lab/apm.yml` | Semver ranges on two Git sub-packages. |
@@ -55,6 +55,9 @@ environment, the result and two lockfiles to
 
 ## Expected observations (APM 0.33.0)
 
+0. In a folder with no harness marker and no `targets:` in `apm.yml`,
+   `apm install` stops with `No harness detected` (exit 2) and writes no
+   lockfile.
 1. `apm install` in `graph-lab` installs **5** packages (2 direct, 3
    transitive) and warns `1 dependency unpinned: github/awesome-copilot`.
 2. The lockfile records a full `resolved_commit` for every package, the
