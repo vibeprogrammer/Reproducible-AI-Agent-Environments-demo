@@ -226,6 +226,20 @@ check_money_rules.py: error: one of the arguments --diff --files is required
   PASS: exit code 2 (no input given)
   PASS: identical: before.sha256 == after.sha256
 
+## 4b. Check the Python 3.9 floor stated in compatibility (optional, needs uv)
+$ ./python3.9 --version
+Python 3.9.25
+[exit 0]
+  PASS: output matches /^Python 3\.9\./
+$ bash -c ./python3.9 review/meridian-code-review/scripts/check_money_rules.py --diff review/bad.diff | tail -1
+6 finding(s)
+[exit 0]
+  PASS: output matches /^6 finding\(s\)$/
+$ bash -c ./python3.9 review/meridian-code-review/scripts/check_money_rules.py --diff review/good.diff
+0 finding(s)
+[exit 0]
+  PASS: exit code 0 (clean change on Python 3.9)
+
 ## 5. Install the published package with APM (project scope)
 $ apm install vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0 --target claude,copilot
 [*] Created apm.yml
@@ -243,7 +257,7 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
 [i] Added apm_modules/ to .gitignore
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 1 APM dependency in 1.1s.
+[*] Installed 1 APM dependency in 1.8s.
 [exit 0]
   PASS: exit code 0 (apm install from tag)
   PASS: output matches /Skill integrated -> \.agents/skills/, \.claude/skills//
@@ -323,7 +337,7 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
   |-- (files unchanged)
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 1 APM dependency in 0.2s.
+[*] Installed 1 APM dependency in 1.0s.
 [exit 0]
   PASS: exit code 0 (user-scope install)
   PASS: absent: .claude
@@ -344,4 +358,4 @@ dependencies:
   mcp: []
 [exit 0]
   PASS: output matches /meridian-code-review#meridian-code-review-v1.0.0/
-== ch02-build-a-reusable-agent-skill: passed (52 passed, 0 failed) ==
+== ch02-build-a-reusable-agent-skill: passed (55 passed, 0 failed) ==

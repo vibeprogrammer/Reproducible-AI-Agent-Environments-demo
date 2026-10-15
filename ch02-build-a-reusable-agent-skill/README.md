@@ -13,7 +13,7 @@ stands in for Meridian's internal `meridian-finance` repositories.
 
 ## Prerequisites
 
-- Linux or macOS with `bash`, `git`, and Python 3.11+ (`python3 -m venv` must
+- Linux or macOS with `bash`, `git`, and Python 3.11+ (optional: `uv` with a Python 3.9 interpreter, for step 4b) (`python3 -m venv` must
   work; the skill's own script needs only Python 3.9+ and the standard
   library).
 - APM **0.33.0** on `PATH` (`apm --version`). The harness refuses any other
@@ -57,6 +57,9 @@ Evidence lands in `evidence/ch02-build-a-reusable-agent-skill/`
    JSON output reports `"count": 6`; stdin and whole-file modes work; bad
    input exits 2. SHA-256 snapshots of the folder before and after are
    identical, so the script wrote nothing.
+   **4b (optional).** If `uv` can find a Python 3.9 interpreter, the checker
+   runs under it with the same results, which checks the floor stated in the
+   skill's `compatibility` field. Without `uv` the step prints `SKIP`.
 5. **Install** `vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0`
    with `--target claude,copilot` into an empty project. The skill lands in
    `.claude/skills/meridian-code-review/` and

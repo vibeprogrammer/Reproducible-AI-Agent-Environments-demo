@@ -117,6 +117,23 @@ snapshot > ../after.sha256
 cd ..
 expect_same before.sha256 after.sha256
 
+step "4b. Check the Python 3.9 floor stated in compatibility (optional, needs uv)"
+PY39=""
+if command -v uv >/dev/null 2>&1; then
+  PY39="$(HOME="$REAL_HOME" uv python find 3.9 2>/dev/null || true)"
+fi
+if [ -n "$PY39" ]; then
+  ln -s "$PY39" python3.9 && PY39=./python3.9
+  run "$PY39" --version
+  expect_out '^Python 3\.9\.'
+  run_sh "$PY39 review/meridian-code-review/scripts/check_money_rules.py --diff review/bad.diff | tail -1"
+  expect_out '^6 finding\(s\)$'
+  run_sh "$PY39 review/meridian-code-review/scripts/check_money_rules.py --diff review/good.diff"
+  expect_rc 0 "clean change on Python 3.9"
+else
+  echo "SKIP: no Python 3.9 found via uv; the 3.9 floor is not checked in this run" | tee -a "$TRANSCRIPT"
+fi
+
 # ---------------------------------------------------------------------------
 step "5. Install the published package with APM (project scope)"
 mkdir -p meridian-checkout && cd meridian-checkout && git init -q
