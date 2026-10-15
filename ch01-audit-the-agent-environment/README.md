@@ -68,7 +68,8 @@ Evidence lands in `evidence/ch01-audit-the-agent-environment/`
   mention `~/.claude.json` or Priya's `~/.copilot/` files.
 - `apm audit` scans the 6 prompt-like files for hidden Unicode (all
   untracked, no findings). The MCP JSON files aren't part of that scan.
-- `apm find` can't trace any file, because there is no `apm.lock.yaml` yet.
+- `apm find` can't trace any file, because there is no `apm.lock.yaml` yet
+  (it exits non-zero; exit code 2 in the recorded run).
 
 ## Limitations (what this demo does NOT verify)
 
@@ -80,5 +81,3 @@ Evidence lands in `evidence/ch01-audit-the-agent-environment/`
   global user rules) are invisible to any file-based audit.
 - The simulated home directories contain only agent files. A real home holds
   much more state, and a real `~/.claude.json` holds more than `mcpServers`.
-- `apm find` printed `[x] No lockfile found` but exited 0 in our run. The
-  transcript records the exit code; the demo doesn't assert it.

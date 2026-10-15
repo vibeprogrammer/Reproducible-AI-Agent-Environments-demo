@@ -96,6 +96,7 @@ keep_artifact audit-project.json
 
 step "APM v0.33.0: provenance lookup needs a lockfile (apm find)"
 run apm find .github/prompts/review.prompt.md
+expect_rc_nonzero "nothing to trace without apm.lock.yaml"
 expect_out "No lockfile found at apm\.lock\.yaml"
 
 demo_end

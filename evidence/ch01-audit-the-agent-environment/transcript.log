@@ -270,5 +270,6 @@ rc=0
 $ apm find .github/prompts/review.prompt.md
 [x] No lockfile found at apm.lock.yaml. Run 'apm install' first.
 [exit 2]
+  PASS: non-zero exit (2) (nothing to trace without apm.lock.yaml)
   PASS: output matches /No lockfile found at apm\.lock\.yaml/
-== ch01-audit-the-agent-environment: passed (45 passed, 0 failed) ==
+== ch01-audit-the-agent-environment: passed (46 passed, 0 failed) ==
