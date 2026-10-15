@@ -1,0 +1,47 @@
+{
+  "findings": [
+    {
+      "rule": "MR001",
+      "file": "src/checkout/charge.ts",
+      "line": 5,
+      "message": "parseFloat() on a money value",
+      "code": "const amount = parseFloat(order.total);"
+    },
+    {
+      "rule": "MR001",
+      "file": "src/checkout/charge.ts",
+      "line": 6,
+      "message": "decimal literal assigned to a money field",
+      "code": "const shippingFee = 4.99;"
+    },
+    {
+      "rule": "MR003",
+      "file": "src/checkout/charge.ts",
+      "line": 7,
+      "message": "card or personal data passed to a logger",
+      "code": "logger.info(\"charging card\", { cardNumber: card.number, orderId: order.id });"
+    },
+    {
+      "rule": "MR002",
+      "file": "src/checkout/charge.ts",
+      "line": 8,
+      "message": "payment/charge/refund created without an idempotency key",
+      "code": "const payment = await paymentsClient.payments.create({"
+    },
+    {
+      "rule": "MR004",
+      "file": "src/checkout/charge.ts",
+      "line": 10,
+      "message": "currency 'eur' is not an upper-case ISO 4217 code",
+      "code": "currency: \"eur\","
+    },
+    {
+      "rule": "MR001",
+      "file": "src/checkout/charge.ts",
+      "line": 13,
+      "message": "toFixed() on a money value (formatting as arithmetic)",
+      "code": "const display = amount.toFixed(2);"
+    }
+  ],
+  "count": 6
+}

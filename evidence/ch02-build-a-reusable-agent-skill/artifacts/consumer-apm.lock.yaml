@@ -1,0 +1,170 @@
+lockfile_version: '1'
+apm_version: 0.33.0
+dependencies:
+- repo_url: vibeprogrammer/reproducible-ai-agent-environments-demo
+  materialization_repo_url: vibeprogrammer/Reproducible-AI-Agent-Environments-demo
+  name: meridian-code-review
+  host: github.com
+  resolved_commit: d77ad927023f2b227bd130c2f436866cc07b2e9e
+  resolved_ref: meridian-code-review-v1.0.0
+  version: 1.0.0
+  virtual_path: packages/meridian-code-review
+  is_virtual: true
+  package_type: hybrid
+  deployed_files:
+  - .agents/skills/meridian-code-review
+  - .agents/skills/meridian-code-review/SKILL.md
+  - .agents/skills/meridian-code-review/apm.yml
+  - .agents/skills/meridian-code-review/assets/review-report-template.md
+  - .agents/skills/meridian-code-review/references/false-positives.md
+  - .agents/skills/meridian-code-review/references/money-rules.md
+  - .agents/skills/meridian-code-review/scripts/check_money_rules.py
+  - .claude/skills/meridian-code-review
+  - .claude/skills/meridian-code-review/SKILL.md
+  - .claude/skills/meridian-code-review/apm.yml
+  - .claude/skills/meridian-code-review/assets/review-report-template.md
+  - .claude/skills/meridian-code-review/references/false-positives.md
+  - .claude/skills/meridian-code-review/references/money-rules.md
+  - .claude/skills/meridian-code-review/scripts/check_money_rules.py
+  deployed_file_hashes:
+    .agents/skills/meridian-code-review/SKILL.md: sha256:16673c19ce70fa37630b5d6f96932d4f01bde1fd5ae833d9893d0bb5438f5b6c
+    .agents/skills/meridian-code-review/apm.yml: sha256:7e926a1a50d80f726aed49d34ff15daf4d5cde8d3fcb0e7f2856434cbbaf85b3
+    .agents/skills/meridian-code-review/assets/review-report-template.md: sha256:732f5df1f4cf8975247be0fb0990dfb868df3aa9c5f6b1eeb324838960c91860
+    .agents/skills/meridian-code-review/references/false-positives.md: sha256:cd293eea3684535dc5b4f5e0b647ce92e2e325f5abf5d9f4acf2321a5a4ebd77
+    .agents/skills/meridian-code-review/references/money-rules.md: sha256:3c3eef184dd96d20af57072ecdd2a2a1d11d3842a7a2d92f7c3e70764cb770ff
+    .agents/skills/meridian-code-review/scripts/check_money_rules.py: sha256:6fa49c89e541537eed17f83944fa4c7c0a3220fd915b63298166932dc762d9ca
+    .claude/skills/meridian-code-review/SKILL.md: sha256:16673c19ce70fa37630b5d6f96932d4f01bde1fd5ae833d9893d0bb5438f5b6c
+    .claude/skills/meridian-code-review/apm.yml: sha256:7e926a1a50d80f726aed49d34ff15daf4d5cde8d3fcb0e7f2856434cbbaf85b3
+    .claude/skills/meridian-code-review/assets/review-report-template.md: sha256:732f5df1f4cf8975247be0fb0990dfb868df3aa9c5f6b1eeb324838960c91860
+    .claude/skills/meridian-code-review/references/false-positives.md: sha256:cd293eea3684535dc5b4f5e0b647ce92e2e325f5abf5d9f4acf2321a5a4ebd77
+    .claude/skills/meridian-code-review/references/money-rules.md: sha256:3c3eef184dd96d20af57072ecdd2a2a1d11d3842a7a2d92f7c3e70764cb770ff
+    .claude/skills/meridian-code-review/scripts/check_money_rules.py: sha256:6fa49c89e541537eed17f83944fa4c7c0a3220fd915b63298166932dc762d9ca
+  content_hash: sha256:8824bbd9afa499377d9796b018c7bea5f795327c30b9e8ae21380482d491b6f5
+  declared_license: MIT
+deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/skills/meridian-code-review
+  runtime: null
+  scope: project
+  owners:
+  - vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  active_owner: vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  content_hash: null
+- kind: project-relative
+  target: claude
+  value: .claude/skills/meridian-code-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  active_owner: vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  content_hash: sha256:16673c19ce70fa37630b5d6f96932d4f01bde1fd5ae833d9893d0bb5438f5b6c
+- kind: project-relative
+  target: claude
+  value: .claude/skills/meridian-code-review/apm.yml
+  runtime: null
+  scope: project
+  owners:
+  - vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  active_owner: vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  content_hash: sha256:7e926a1a50d80f726aed49d34ff15daf4d5cde8d3fcb0e7f2856434cbbaf85b3
+- kind: project-relative
+  target: claude
+  value: .claude/skills/meridian-code-review/assets/review-report-template.md
+  runtime: null
+  scope: project
+  owners:
+  - vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  active_owner: vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  content_hash: sha256:732f5df1f4cf8975247be0fb0990dfb868df3aa9c5f6b1eeb324838960c91860
+- kind: project-relative
+  target: claude
+  value: .claude/skills/meridian-code-review/references/false-positives.md
+  runtime: null
+  scope: project
+  owners:
+  - vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  active_owner: vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  content_hash: sha256:cd293eea3684535dc5b4f5e0b647ce92e2e325f5abf5d9f4acf2321a5a4ebd77
+- kind: project-relative
+  target: claude
+  value: .claude/skills/meridian-code-review/references/money-rules.md
+  runtime: null
+  scope: project
+  owners:
+  - vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  active_owner: vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  content_hash: sha256:3c3eef184dd96d20af57072ecdd2a2a1d11d3842a7a2d92f7c3e70764cb770ff
+- kind: project-relative
+  target: claude
+  value: .claude/skills/meridian-code-review/scripts/check_money_rules.py
+  runtime: null
+  scope: project
+  owners:
+  - vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  active_owner: vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  content_hash: sha256:6fa49c89e541537eed17f83944fa4c7c0a3220fd915b63298166932dc762d9ca
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/meridian-code-review
+  runtime: null
+  scope: project
+  owners:
+  - vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  active_owner: vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/meridian-code-review/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  active_owner: vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  content_hash: sha256:16673c19ce70fa37630b5d6f96932d4f01bde1fd5ae833d9893d0bb5438f5b6c
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/meridian-code-review/apm.yml
+  runtime: null
+  scope: project
+  owners:
+  - vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  active_owner: vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  content_hash: sha256:7e926a1a50d80f726aed49d34ff15daf4d5cde8d3fcb0e7f2856434cbbaf85b3
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/meridian-code-review/assets/review-report-template.md
+  runtime: null
+  scope: project
+  owners:
+  - vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  active_owner: vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  content_hash: sha256:732f5df1f4cf8975247be0fb0990dfb868df3aa9c5f6b1eeb324838960c91860
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/meridian-code-review/references/false-positives.md
+  runtime: null
+  scope: project
+  owners:
+  - vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  active_owner: vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  content_hash: sha256:cd293eea3684535dc5b4f5e0b647ce92e2e325f5abf5d9f4acf2321a5a4ebd77
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/meridian-code-review/references/money-rules.md
+  runtime: null
+  scope: project
+  owners:
+  - vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  active_owner: vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  content_hash: sha256:3c3eef184dd96d20af57072ecdd2a2a1d11d3842a7a2d92f7c3e70764cb770ff
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/meridian-code-review/scripts/check_money_rules.py
+  runtime: null
+  scope: project
+  owners:
+  - vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  active_owner: vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+  content_hash: sha256:6fa49c89e541537eed17f83944fa4c7c0a3220fd915b63298166932dc762d9ca

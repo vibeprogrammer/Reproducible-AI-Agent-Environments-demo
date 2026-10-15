@@ -1,0 +1,13 @@
+<available_skills>
+<skill>
+<name>
+meridian-code-review
+</name>
+<description>
+Review a code change in a payment service against Meridian&#x27;s money rules: amounts as integer minor units (never floating point), an idempotency key on every call that creates a payment, charge or refund, no card data or other PII in logs, and ISO 4217 currency codes. Use when the user asks for a code review, PR or diff feedback, or a pre-merge check on TypeScript or JavaScript code that handles money, payments, refunds or checkout.
+</description>
+<location>
+<workspace>/meridian-code-review/SKILL.md
+</location>
+</skill>
+</available_skills>

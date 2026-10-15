@@ -1,0 +1,347 @@
+== ch02-build-a-reusable-agent-skill == workspace: <workspace> (fresh mktemp dir, isolated HOME)
+
+## 1. Build the skill folder from scratch
+$ bash -c find meridian-code-review -type f | sort
+meridian-code-review/SKILL.md
+meridian-code-review/apm.yml
+meridian-code-review/assets/review-report-template.md
+meridian-code-review/references/false-positives.md
+meridian-code-review/references/money-rules.md
+meridian-code-review/scripts/check_money_rules.py
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /meridian-code-review/SKILL.md/
+$ bash -c wc -l meridian-code-review/SKILL.md
+72 meridian-code-review/SKILL.md
+[exit 0]
+  PASS: output matches /^[0-9]+ /
+$ bash -c sed -n "1,/^# /p" meridian-code-review/SKILL.md
+---
+name: meridian-code-review
+description: >-
+  Review a code change in a payment service against Meridian's money rules:
+  amounts as integer minor units (never floating point), an idempotency key
+  on every call that creates a payment, charge or refund, no card data or
+  other PII in logs, and ISO 4217 currency codes. Use when the user asks for
+  a code review, PR or diff feedback, or a pre-merge check on TypeScript or
+  JavaScript code that handles money, payments, refunds or checkout.
+license: MIT
+compatibility: >-
+  The checker script needs Python 3.9 or newer (standard library only) and
+  read access to the diff or files under review. No network access.
+metadata:
+  owner: meridian-finance/agent-tooling
+  version: "1.0.0"
+---
+
+# Meridian code review
+[exit 0]
+  PASS: output matches /^name: meridian-code-review$/
+
+## 2. Validate against the spec with the reference validator (skills-ref)
+$ ./.venv/bin/skills-ref validate meridian-code-review
+Valid skill: meridian-code-review
+[exit 0]
+  PASS: exit code 0 (skills-ref validate)
+  PASS: output matches /Valid skill/
+$ ./.venv/bin/skills-ref read-properties meridian-code-review
+{
+  "name": "meridian-code-review",
+  "description": "Review a code change in a payment service against Meridian's money rules: amounts as integer minor units (never floating point), an idempotency key on every call that creates a payment, charge or refund, no card data or other PII in logs, and ISO 4217 currency codes. Use when the user asks for a code review, PR or diff feedback, or a pre-merge check on TypeScript or JavaScript code that handles money, payments, refunds or checkout.",
+  "license": "MIT",
+  "compatibility": "The checker script needs Python 3.9 or newer (standard library only) and read access to the diff or files under review. No network access.",
+  "metadata": {
+    "owner": "meridian-finance/agent-tooling",
+    "version": "1.0.0"
+  }
+}
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /"name": "meridian-code-review"/
+$ ./.venv/bin/skills-ref to-prompt meridian-code-review
+<available_skills>
+<skill>
+<name>
+meridian-code-review
+</name>
+<description>
+Review a code change in a payment service against Meridian&#x27;s money rules: amounts as integer minor units (never floating point), an idempotency key on every call that creates a payment, charge or refund, no card data or other PII in logs, and ISO 4217 currency codes. Use when the user asks for a code review, PR or diff feedback, or a pre-merge check on TypeScript or JavaScript code that handles money, payments, refunds or checkout.
+</description>
+<location>
+<workspace>/meridian-code-review/SKILL.md
+</location>
+</skill>
+</available_skills>
+[exit 0]
+  PASS: output matches /<name>/
+
+## 2b. The validator rejects broken copies
+$ ./.venv/bin/skills-ref validate code-review
+Validation failed for code-review:
+  - Directory name 'code-review' must match skill name 'meridian-code-review'
+[exit 1]
+  PASS: non-zero exit (1) (name/directory mismatch)
+  PASS: output matches /must match skill name/
+$ ./.venv/bin/skills-ref validate no-description
+Validation failed for no-description:
+  - Missing required field in frontmatter: description
+[exit 1]
+  PASS: non-zero exit (1) (missing description)
+  PASS: output matches /description/
+
+## 3. Scan the skill for hidden Unicode with APM
+$ apm audit --file meridian-code-review/SKILL.md
+
+[*] 1 file(s) scanned -- no issues found
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /no issues found/
+$ apm audit --file meridian-code-review/references/money-rules.md
+
+[*] 1 file(s) scanned -- no issues found
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /no issues found/
+
+## 4. Run the checker script on sample diffs
+$ bash -c python3 meridian-code-review/scripts/check_money_rules.py --diff bad.diff
+src/checkout/charge.ts:5: MR001 parseFloat() on a money value
+    const amount = parseFloat(order.total);
+src/checkout/charge.ts:6: MR001 decimal literal assigned to a money field
+    const shippingFee = 4.99;
+src/checkout/charge.ts:7: MR003 card or personal data passed to a logger
+    logger.info("charging card", { cardNumber: card.number, orderId: order.id });
+src/checkout/charge.ts:8: MR002 payment/charge/refund created without an idempotency key
+    const payment = await paymentsClient.payments.create({
+src/checkout/charge.ts:10: MR004 currency 'eur' is not an upper-case ISO 4217 code
+    currency: "eur",
+src/checkout/charge.ts:13: MR001 toFixed() on a money value (formatting as arithmetic)
+    const display = amount.toFixed(2);
+6 finding(s)
+[exit 1]
+  PASS: exit code 1 (findings present)
+  PASS: output matches /MR001 parseFloat/
+  PASS: output matches /MR001 decimal literal/
+  PASS: output matches /MR002 /
+  PASS: output matches /MR003 /
+  PASS: output matches /MR004 currency 'eur'/
+  PASS: output matches /^6 finding\(s\)$/
+$ bash -c python3 meridian-code-review/scripts/check_money_rules.py --diff good.diff
+0 finding(s)
+[exit 0]
+  PASS: exit code 0 (clean change)
+  PASS: output matches /^0 finding\(s\)$/
+$ bash -c python3 meridian-code-review/scripts/check_money_rules.py --diff bad.diff --format json
+{
+  "findings": [
+    {
+      "rule": "MR001",
+      "file": "src/checkout/charge.ts",
+      "line": 5,
+      "message": "parseFloat() on a money value",
+      "code": "const amount = parseFloat(order.total);"
+    },
+    {
+      "rule": "MR001",
+      "file": "src/checkout/charge.ts",
+      "line": 6,
+      "message": "decimal literal assigned to a money field",
+      "code": "const shippingFee = 4.99;"
+    },
+    {
+      "rule": "MR003",
+      "file": "src/checkout/charge.ts",
+      "line": 7,
+      "message": "card or personal data passed to a logger",
+      "code": "logger.info(\"charging card\", { cardNumber: card.number, orderId: order.id });"
+    },
+    {
+      "rule": "MR002",
+      "file": "src/checkout/charge.ts",
+      "line": 8,
+      "message": "payment/charge/refund created without an idempotency key",
+      "code": "const payment = await paymentsClient.payments.create({"
+    },
+    {
+      "rule": "MR004",
+      "file": "src/checkout/charge.ts",
+      "line": 10,
+      "message": "currency 'eur' is not an upper-case ISO 4217 code",
+      "code": "currency: \"eur\","
+    },
+    {
+      "rule": "MR001",
+      "file": "src/checkout/charge.ts",
+      "line": 13,
+      "message": "toFixed() on a money value (formatting as arithmetic)",
+      "code": "const display = amount.toFixed(2);"
+    }
+  ],
+  "count": 6
+}
+[exit 1]
+  PASS: exit code 1
+  PASS: output matches /"count": 6/
+$ bash -c cat bad.diff | python3 meridian-code-review/scripts/check_money_rules.py --diff -
+src/checkout/charge.ts:5: MR001 parseFloat() on a money value
+    const amount = parseFloat(order.total);
+src/checkout/charge.ts:6: MR001 decimal literal assigned to a money field
+    const shippingFee = 4.99;
+src/checkout/charge.ts:7: MR003 card or personal data passed to a logger
+    logger.info("charging card", { cardNumber: card.number, orderId: order.id });
+src/checkout/charge.ts:8: MR002 payment/charge/refund created without an idempotency key
+    const payment = await paymentsClient.payments.create({
+src/checkout/charge.ts:10: MR004 currency 'eur' is not an upper-case ISO 4217 code
+    currency: "eur",
+src/checkout/charge.ts:13: MR001 toFixed() on a money value (formatting as arithmetic)
+    const display = amount.toFixed(2);
+6 finding(s)
+[exit 1]
+  PASS: exit code 1 (diff on stdin)
+$ bash -c python3 meridian-code-review/scripts/check_money_rules.py --files patched/src/checkout/charge.ts
+patched/src/checkout/charge.ts:5: MR001 parseFloat() on a money value
+    const amount = parseFloat(order.total);
+patched/src/checkout/charge.ts:6: MR001 decimal literal assigned to a money field
+    const shippingFee = 4.99;
+patched/src/checkout/charge.ts:7: MR003 card or personal data passed to a logger
+    logger.info("charging card", { cardNumber: card.number, orderId: order.id });
+patched/src/checkout/charge.ts:8: MR002 payment/charge/refund created without an idempotency key
+    const payment = await paymentsClient.payments.create({
+patched/src/checkout/charge.ts:10: MR004 currency 'eur' is not an upper-case ISO 4217 code
+    currency: "eur",
+patched/src/checkout/charge.ts:13: MR001 toFixed() on a money value (formatting as arithmetic)
+    const display = amount.toFixed(2);
+6 finding(s)
+[exit 1]
+  PASS: exit code 1 (whole-file mode)
+  PASS: output matches /MR002 /
+$ bash -c python3 meridian-code-review/scripts/check_money_rules.py --files does-not-exist.ts
+error: cannot read input: [Errno 2] No such file or directory: 'does-not-exist.ts'
+[exit 2]
+  PASS: exit code 2 (unreadable input)
+$ bash -c python3 meridian-code-review/scripts/check_money_rules.py
+usage: check_money_rules.py [-h] (--diff FILE | --files PATH [PATH ...]) [--format {text,json}]
+check_money_rules.py: error: one of the arguments --diff --files is required
+[exit 2]
+  PASS: exit code 2 (no input given)
+  PASS: identical: before.sha256 == after.sha256
+
+## 5. Install the published package with APM (project scope)
+$ apm install vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0 --target claude,copilot
+[*] Created apm.yml
+[i] Targets set: claude, copilot (persisted to apm.yml)
+[*] Validating 1 package...
+[+] vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0
+[*] Updated apm.yml with 1 new package(s)
+[>] Installing 1 new package...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Targets: claude, copilot  (source: --target flag)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .agents/skills/, .claude/skills/
+[i] Added apm_modules/ to .gitignore
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 1 APM dependency in 1.1s.
+[exit 0]
+  PASS: exit code 0 (apm install from tag)
+  PASS: output matches /Skill integrated -> \.agents/skills/, \.claude/skills//
+$ bash -c find .claude .agents -type f | sort
+.agents/skills/meridian-code-review/SKILL.md
+.agents/skills/meridian-code-review/apm.yml
+.agents/skills/meridian-code-review/assets/review-report-template.md
+.agents/skills/meridian-code-review/references/false-positives.md
+.agents/skills/meridian-code-review/references/money-rules.md
+.agents/skills/meridian-code-review/scripts/check_money_rules.py
+.claude/skills/meridian-code-review/SKILL.md
+.claude/skills/meridian-code-review/apm.yml
+.claude/skills/meridian-code-review/assets/review-report-template.md
+.claude/skills/meridian-code-review/references/false-positives.md
+.claude/skills/meridian-code-review/references/money-rules.md
+.claude/skills/meridian-code-review/scripts/check_money_rules.py
+[exit 0]
+  PASS: exists: .claude/skills/meridian-code-review/SKILL.md
+  PASS: exists: .claude/skills/meridian-code-review/scripts/check_money_rules.py
+  PASS: exists: .agents/skills/meridian-code-review/SKILL.md
+  PASS: exists: .agents/skills/meridian-code-review/references/money-rules.md
+  PASS: identical: .claude/skills/meridian-code-review/SKILL.md == ../meridian-code-review/SKILL.md
+  PASS: identical: .agents/skills/meridian-code-review/SKILL.md == ../meridian-code-review/SKILL.md
+  PASS: identical: .claude/skills/meridian-code-review/scripts/check_money_rules.py == ../meridian-code-review/scripts/check_money_rules.py
+$ cat apm.yml
+name: meridian-checkout
+version: 1.0.0
+description: APM project for meridian-checkout
+author: Developer
+# Which agent platforms to deploy to.
+# Resolution order: --target flag > this field > auto-detect from filesystem.
+# Accepted values: agent-skills, antigravity, claude, codex, copilot, cursor, gemini, grok-build, hermes, kiro, opencode, vscode, windsurf
+targets:
+  - claude
+  - copilot
+dependencies:
+  apm:
+    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0
+  mcp: []
+includes: auto
+scripts: {}
+[exit 0]
+  PASS: output matches /meridian-code-review#meridian-code-review-v1.0.0/
+$ bash -c grep -E "repo_url|virtual_path|resolved_ref|resolved_commit" apm.lock.yaml
+- repo_url: vibeprogrammer/reproducible-ai-agent-environments-demo
+  materialization_repo_url: vibeprogrammer/Reproducible-AI-Agent-Environments-demo
+  resolved_commit: d77ad927023f2b227bd130c2f436866cc07b2e9e
+  resolved_ref: meridian-code-review-v1.0.0
+  virtual_path: packages/meridian-code-review
+[exit 0]
+  PASS: output matches /resolved_ref: meridian-code-review-v1.0.0/
+  PASS: output matches /resolved_commit: [0-9a-f]{40}/
+$ bash -c python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff ../review/bad.diff | tail -1
+6 finding(s)
+[exit 0]
+  PASS: output matches /^6 finding\(s\)$/
+
+## 6. Install at user scope (-g) for Claude Code
+$ apm install -g vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0 --target claude
+[i] Installing to user scope (~/.apm/)
+[!] User-scope primitives are fully supported by claude, kiro, gemini, grok-build, grok-cloud, agent-skills, openclaw, 
+hermes, copilot-cowork, copilot-app. Partially supported: copilot, cursor, opencode, antigravity, codex, windsurf.
+Some primitives are not supported: cursor (instructions); opencode (hooks); antigravity (instructions, hooks); windsurf 
+(instructions)
+[*] Created <workspace>/home/.apm/apm.yml
+[i] Targets set: claude (persisted to <workspace>/home/.apm/apm.yml)
+[*] Validating 1 package...
+[+] vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0
+[*] Updated apm.yml with 1 new package(s)
+[>] Installing 1 new package...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .claude/skills/
+  [+] <project root> (local)
+  |-- (files unchanged)
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 1 APM dependency in 0.2s.
+[exit 0]
+  PASS: exit code 0 (user-scope install)
+  PASS: absent: .claude
+$ bash -c find .claude -type f | sort
+.claude/skills/meridian-code-review/SKILL.md
+.claude/skills/meridian-code-review/apm.yml
+.claude/skills/meridian-code-review/assets/review-report-template.md
+.claude/skills/meridian-code-review/references/false-positives.md
+.claude/skills/meridian-code-review/references/money-rules.md
+.claude/skills/meridian-code-review/scripts/check_money_rules.py
+[exit 0]
+  PASS: exists: .claude/skills/meridian-code-review/SKILL.md
+  PASS: exists: .apm/apm.yml
+$ bash -c grep -A3 "^dependencies" .apm/apm.yml
+dependencies:
+  apm:
+    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0
+  mcp: []
+[exit 0]
+  PASS: output matches /meridian-code-review#meridian-code-review-v1.0.0/
+== ch02-build-a-reusable-agent-skill: passed (52 passed, 0 failed) ==

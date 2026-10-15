@@ -1,0 +1,13 @@
+src/checkout/charge.ts:5: MR001 parseFloat() on a money value
+    const amount = parseFloat(order.total);
+src/checkout/charge.ts:6: MR001 decimal literal assigned to a money field
+    const shippingFee = 4.99;
+src/checkout/charge.ts:7: MR003 card or personal data passed to a logger
+    logger.info("charging card", { cardNumber: card.number, orderId: order.id });
+src/checkout/charge.ts:8: MR002 payment/charge/refund created without an idempotency key
+    const payment = await paymentsClient.payments.create({
+src/checkout/charge.ts:10: MR004 currency 'eur' is not an upper-case ISO 4217 code
+    currency: "eur",
+src/checkout/charge.ts:13: MR001 toFixed() on a money value (formatting as arithmetic)
+    const display = amount.toFixed(2);
+6 finding(s)
