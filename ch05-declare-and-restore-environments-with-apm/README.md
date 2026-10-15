@@ -1,6 +1,7 @@
 # Chapter 5 demo: Declare and Restore Environments with APM
 
-Companion demo for Chapter 5 of *Reproducible AI Agent Environments*.
+Companion demo for Chapter 5 of *Reproducible AI Agent Environments*
+([manuscript](https://github.com/vibeprogrammer/Reproducible-AI-Agent-Environments/blob/main/manuscript/05-declare-and-restore-environments-with-apm.md)).
 Priya declares the agent environment of Meridian's `meridian-checkout`
 service in `apm.yml`, installs it for GitHub Copilot, Claude Code and Cursor,
 and commits the declaration. Anika then clones the repository on a "fresh
@@ -44,6 +45,33 @@ bash ch05-declare-and-restore-environments-with-apm/run.sh
 
 Evidence lands in `evidence/ch05-declare-and-restore-environments-with-apm/`
 (`transcript.log`, `environment.txt`, `result.json`, `artifacts/`).
+
+### The core steps by hand
+
+`run.sh` automates all of this in a disposable workspace. To walk through
+the main path yourself (the same commands, without the side labs):
+
+```bash
+# Priya: declare and install
+cp -R ch05-declare-and-restore-environments-with-apm/fixture/meridian-checkout /tmp/
+cd /tmp/meridian-checkout && mv gitignore.txt .gitignore && git init -q
+export LEDGER_API_KEY=demo-value-not-a-real-key   # dummy; shows the .mcp.json behaviour
+apm install                       # skill + 3 local primitives + 2 MCP servers
+git add -A && git commit -qm "Declare the agent environment with APM"
+unset LEDGER_API_KEY
+
+# Anika: a fresh clone (ideally with a fresh HOME), restore and verify
+git clone -q /tmp/meridian-checkout /tmp/anika-checkout && cd /tmp/anika-checkout
+apm install
+git status --porcelain            # expect no output
+apm deps tree
+apm audit                         # expect "No drift detected"
+apm audit --ci                    # expect exit code 0
+apm install --frozen
+```
+
+Expected results are listed below; the evidence transcript holds the full
+output of the recorded run.
 
 ## What it checks (expected observations)
 
@@ -136,3 +164,12 @@ Evidence lands in `evidence/ch05-declare-and-restore-environments-with-apm/`
   usable agent or skill in Copilot.
 - Windows and macOS installs, and the official release binaries (the run used
   the PyPI build of the same version).
+
+## Verification record
+
+- Committed evidence: APM 0.33.0 (PyPI build), Linux x86_64, Debian 12,
+  15 October 2026: 119 checks passed, 0 failed (`result.json`).
+- Rerun from a fresh clone of this repository on 15 October 2026
+  (23:34 UTC): 119 passed, 0 failed. Its regenerated evidence differed
+  from the committed files in 15 lines across six files; the committed
+  evidence was kept because Chapter 5 quotes it.
