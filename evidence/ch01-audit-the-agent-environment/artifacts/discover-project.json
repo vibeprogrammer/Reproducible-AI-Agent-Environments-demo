@@ -1,0 +1,58 @@
+{
+  "scope": "project",
+  "root": "<workspace>/meridian-checkout",
+  "manifest": "<workspace>/meridian-checkout/apm.yml",
+  "findings": [
+    {
+      "path": ".claude/commands/review.md",
+      "kind": "commands",
+      "status": "unsupported",
+      "reason": "Loose native content is not a package. Prepare a supported package manually.",
+      "dependency": null
+    },
+    {
+      "path": ".cursor/commands/review.md",
+      "kind": "commands",
+      "status": "unsupported",
+      "reason": "Loose native content is not a package. Prepare a supported package manually.",
+      "dependency": null
+    },
+    {
+      "path": ".cursor/mcp.json",
+      "kind": "native",
+      "status": "unsupported",
+      "reason": "Loose native content is not a package. Prepare a supported package manually.",
+      "dependency": null
+    },
+    {
+      "path": ".cursor/rules/checkout.mdc",
+      "kind": "instructions",
+      "status": "unsupported",
+      "reason": "Loose native content is not a package. Prepare a supported package manually.",
+      "dependency": null
+    },
+    {
+      "path": ".github/copilot-instructions.md",
+      "kind": "native",
+      "status": "unsupported",
+      "reason": "Loose native content is not a package. Prepare a supported package manually.",
+      "dependency": null
+    },
+    {
+      "path": ".github/prompts/review.prompt.md",
+      "kind": "prompts",
+      "status": "unsupported",
+      "reason": "Loose native content is not a package. Prepare a supported package manually.",
+      "dependency": null
+    },
+    {
+      "path": "CLAUDE.md",
+      "kind": "native",
+      "status": "unsupported",
+      "reason": "Loose native content is not a package. Prepare a supported package manually.",
+      "dependency": null
+    }
+  ],
+  "additions": [],
+  "applied": false
+}

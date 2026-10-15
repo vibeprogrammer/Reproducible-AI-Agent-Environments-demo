@@ -1,0 +1,78 @@
+{
+  "version": "1",
+  "passed": true,
+  "exit_code": 0,
+  "summary": {
+    "files_scanned": 6,
+    "files_affected": 0,
+    "critical": 0,
+    "warning": 0,
+    "info": 0
+  },
+  "findings": [],
+  "coverage": {
+    "complete": true,
+    "primitives": [
+      {
+        "file": ".github/prompts/review.prompt.md",
+        "target": "copilot",
+        "kind": "prompts",
+        "pointer": "",
+        "tracked": false,
+        "status": "checked",
+        "diagnostic": null,
+        "strippable": true
+      },
+      {
+        "file": ".github/copilot-instructions.md",
+        "target": "copilot",
+        "kind": "context",
+        "pointer": "",
+        "tracked": false,
+        "status": "checked",
+        "diagnostic": null,
+        "strippable": true
+      },
+      {
+        "file": ".claude/commands/review.md",
+        "target": "claude",
+        "kind": "commands",
+        "pointer": "",
+        "tracked": false,
+        "status": "checked",
+        "diagnostic": null,
+        "strippable": true
+      },
+      {
+        "file": "CLAUDE.md",
+        "target": "claude",
+        "kind": "context",
+        "pointer": "",
+        "tracked": false,
+        "status": "checked",
+        "diagnostic": null,
+        "strippable": true
+      },
+      {
+        "file": ".cursor/rules/checkout.mdc",
+        "target": "cursor",
+        "kind": "instructions",
+        "pointer": "",
+        "tracked": false,
+        "status": "checked",
+        "diagnostic": null,
+        "strippable": true
+      },
+      {
+        "file": ".cursor/commands/review.md",
+        "target": "cursor",
+        "kind": "commands",
+        "pointer": "",
+        "tracked": false,
+        "status": "checked",
+        "diagnostic": null,
+        "strippable": true
+      }
+    ]
+  }
+}

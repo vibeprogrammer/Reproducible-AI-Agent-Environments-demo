@@ -1,0 +1,15 @@
+{
+  "description": "Meridian's four domain rules, as keyword probes. A probe is a heuristic, not proof that an agent follows the rule.",
+  "rules": [
+    {"id": "minor-units", "label": "Money as integer minor units",
+     "present": "minor units|integer number of minor|amountMinor",
+     "contradicts": "decimal\\.js|decimal library|floating[- ]point amounts are fine"},
+    {"id": "idempotency", "label": "Idempotency key on payment calls",
+     "present": "idempotency"},
+    {"id": "no-pii-logs", "label": "No card data or PII in logs",
+     "present": "never log card|no card data|not log card|do not log card",
+     "contradicts": "log the full request( payload)?"},
+    {"id": "iso-4217", "label": "ISO 4217 currency codes",
+     "present": "ISO 4217"}
+  ]
+}

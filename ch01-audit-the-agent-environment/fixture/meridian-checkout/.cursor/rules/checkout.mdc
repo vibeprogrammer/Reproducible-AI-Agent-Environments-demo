@@ -1,0 +1,10 @@
+---
+description: Conventions for the checkout payment service
+globs: src/**/*.ts
+alwaysApply: false
+---
+
+- Money is an integer number of minor units; do not use floats.
+- Currency codes follow ISO 4217.
+- Do not log card numbers.
+- Keep React components accessible (labels on every input).

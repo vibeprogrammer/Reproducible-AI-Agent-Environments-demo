@@ -1,0 +1,10 @@
+{
+  "servers": {
+    "ledger": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@meridian-finance/ledger-mcp"],
+      "env": { "LEDGER_API_KEY": "${input:ledger-api-key}" }
+    }
+  }
+}

@@ -1,0 +1,254 @@
+{
+  "items": [
+    {
+      "scope": "project",
+      "path": "CLAUDE.md",
+      "type": "instructions",
+      "harness": "claude",
+      "sha256": "e10b57b70170429d70bb274ddb829b78f5f90aaa02937584035e6ef8d006a626",
+      "bytes": 333
+    },
+    {
+      "scope": "project",
+      "path": ".claude/commands/review.md",
+      "type": "command",
+      "harness": "claude",
+      "sha256": "74adae27fc23fa4c370495afad0d1dea2b9a0c06d34087c6f4cc2fbd62804237",
+      "bytes": 414
+    },
+    {
+      "scope": "project",
+      "path": ".cursor/mcp.json",
+      "type": "mcp",
+      "harness": "cursor",
+      "sha256": "6161b98adcaa1c79b834fd67a9d5398961fee2348265c19c4d9d5b7d7778d6f5",
+      "bytes": 191
+    },
+    {
+      "scope": "project",
+      "path": ".cursor/commands/review.md",
+      "type": "command",
+      "harness": "cursor",
+      "sha256": "981594c4ce72851d45eeb0afe0298d4acc6e25926b4a5ac3f20d89310b1eb016",
+      "bytes": 514
+    },
+    {
+      "scope": "project",
+      "path": ".cursor/rules/checkout.mdc",
+      "type": "instructions",
+      "harness": "cursor",
+      "sha256": "f78762647c6ee60deb8c5ce7ce6f8c7f876696a9b57d5999700e07617cb61970",
+      "bytes": 290
+    },
+    {
+      "scope": "project",
+      "path": ".github/copilot-instructions.md",
+      "type": "instructions",
+      "harness": "copilot",
+      "sha256": "a4969d8e32eeab27e060bf789e3a5c3c628a518e7a5496107ce22795d8b08654",
+      "bytes": 514
+    },
+    {
+      "scope": "project",
+      "path": ".github/prompts/review.prompt.md",
+      "type": "prompt",
+      "harness": "copilot",
+      "sha256": "7ab1c6f56970ebf3e3d9be88209ff106d890eb145e2f29c3f4f3735f464efd57",
+      "bytes": 675
+    },
+    {
+      "scope": "project",
+      "path": ".vscode/mcp.json",
+      "type": "mcp",
+      "harness": "copilot (VS Code)",
+      "sha256": "9880b6d18c77ef0365ebcc3aaa1daec90fb98fe38e50b918bae64b66fac8cc85",
+      "bytes": 207
+    },
+    {
+      "scope": "user:priya",
+      "path": ".copilot/instructions/typescript-style.instructions.md",
+      "type": "instructions",
+      "harness": "copilot",
+      "sha256": "d9a37173db628bced0bd176f55816961c709720218c43372978701f0caed2b4c",
+      "bytes": 109
+    },
+    {
+      "scope": "user:priya",
+      "path": ".copilot/prompts/review.prompt.md",
+      "type": "prompt",
+      "harness": "copilot",
+      "sha256": "7ab1c6f56970ebf3e3d9be88209ff106d890eb145e2f29c3f4f3735f464efd57",
+      "bytes": 675
+    },
+    {
+      "scope": "user:lena",
+      "path": ".agents/skills/sql-migrations/SKILL.md",
+      "type": "skill",
+      "harness": "shared (.agents)",
+      "sha256": "7d80cbdd33a010013dfcfe155d1e5876950ef536dd170449cd699fc585349d55",
+      "bytes": 375
+    },
+    {
+      "scope": "user:anika",
+      "path": ".claude.json",
+      "type": "mcp",
+      "harness": "claude",
+      "sha256": "7980481dd64ab2f54fe7b5d94c9e93ec1a7dfe1aa8f31dee9b65831f1fe3aa9c",
+      "bytes": 136
+    },
+    {
+      "scope": "user:anika",
+      "path": ".claude/CLAUDE.md",
+      "type": "instructions",
+      "harness": "claude",
+      "sha256": "624052f7f2339d2cf0f01d6afaf3d0c4a1eef96bf1b9e12e9e8b61f45b3d073c",
+      "bytes": 160
+    },
+    {
+      "scope": "user:anika",
+      "path": ".claude/skills/pr-summary/SKILL.md",
+      "type": "skill",
+      "harness": "claude",
+      "sha256": "e6b71be3291c1dc87816e69db662e0e0c589ffa3841b811f9d0a4eac4db960cd",
+      "bytes": 257
+    }
+  ],
+  "unclassified": [],
+  "drift": [
+    {
+      "name": "prompt/command:review",
+      "copies": 4,
+      "variants": [
+        {
+          "sha256": "74adae27fc23",
+          "files": [
+            "project .claude/commands/review.md"
+          ]
+        },
+        {
+          "sha256": "7ab1c6f56970",
+          "files": [
+            "project .github/prompts/review.prompt.md",
+            "user:priya .copilot/prompts/review.prompt.md"
+          ]
+        },
+        {
+          "sha256": "981594c4ce72",
+          "files": [
+            "project .cursor/commands/review.md"
+          ]
+        }
+      ]
+    }
+  ],
+  "duplicates": [],
+  "rule_coverage": [
+    {
+      "file": "project CLAUDE.md",
+      "rules": {
+        "minor-units": "yes",
+        "idempotency": "yes",
+        "no-pii-logs": "CONTRADICTS",
+        "iso-4217": "yes"
+      }
+    },
+    {
+      "file": "project .claude/commands/review.md",
+      "rules": {
+        "minor-units": "yes",
+        "idempotency": "-",
+        "no-pii-logs": "yes",
+        "iso-4217": "-"
+      }
+    },
+    {
+      "file": "project .cursor/commands/review.md",
+      "rules": {
+        "minor-units": "CONTRADICTS",
+        "idempotency": "yes",
+        "no-pii-logs": "-",
+        "iso-4217": "yes"
+      }
+    },
+    {
+      "file": "project .cursor/rules/checkout.mdc",
+      "rules": {
+        "minor-units": "yes",
+        "idempotency": "-",
+        "no-pii-logs": "yes",
+        "iso-4217": "yes"
+      }
+    },
+    {
+      "file": "project .github/copilot-instructions.md",
+      "rules": {
+        "minor-units": "yes",
+        "idempotency": "yes",
+        "no-pii-logs": "yes",
+        "iso-4217": "yes"
+      }
+    },
+    {
+      "file": "project .github/prompts/review.prompt.md",
+      "rules": {
+        "minor-units": "yes",
+        "idempotency": "yes",
+        "no-pii-logs": "yes",
+        "iso-4217": "yes"
+      }
+    },
+    {
+      "file": "user:priya .copilot/instructions/typescript-style.instructions.md",
+      "rules": {
+        "minor-units": "-",
+        "idempotency": "-",
+        "no-pii-logs": "-",
+        "iso-4217": "-"
+      }
+    },
+    {
+      "file": "user:priya .copilot/prompts/review.prompt.md",
+      "rules": {
+        "minor-units": "yes",
+        "idempotency": "yes",
+        "no-pii-logs": "yes",
+        "iso-4217": "yes"
+      }
+    },
+    {
+      "file": "user:anika .claude/CLAUDE.md",
+      "rules": {
+        "minor-units": "-",
+        "idempotency": "-",
+        "no-pii-logs": "-",
+        "iso-4217": "-"
+      }
+    }
+  ],
+  "mcp": [
+    {
+      "server": "ledger",
+      "status": "pinned",
+      "detail": "npx @meridian-finance/ledger-mcp@1.4.2",
+      "file": "project .cursor/mcp.json",
+      "harness": "cursor"
+    },
+    {
+      "server": "ledger",
+      "status": "UNPINNED",
+      "detail": "npx @meridian-finance/ledger-mcp",
+      "file": "project .vscode/mcp.json",
+      "harness": "copilot (VS Code)"
+    },
+    {
+      "server": "payments-sandbox",
+      "status": "remote",
+      "detail": "https://mcp.payments-sandbox.example/mcp",
+      "file": "user:anika .claude.json",
+      "harness": "claude"
+    }
+  ],
+  "mcp_drift": [
+    "ledger"
+  ]
+}

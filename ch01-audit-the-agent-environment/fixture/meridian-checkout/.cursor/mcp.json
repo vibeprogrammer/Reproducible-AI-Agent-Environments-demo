@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "ledger": {
+      "command": "npx",
+      "args": ["-y", "@meridian-finance/ledger-mcp@1.4.2"],
+      "env": { "LEDGER_API_KEY": "${env:LEDGER_API_KEY}" }
+    }
+  }
+}

@@ -1,0 +1,274 @@
+== ch01-audit-the-agent-environment == workspace: <workspace> (fresh mktemp dir, isolated HOME)
+
+## Set up: copy the meridian-checkout fixture and three simulated home directories
+$ bash -c cd meridian-checkout && find . -path ./.git -prune -o -type f -print | sort
+./.claude/commands/review.md
+./.cursor/commands/review.md
+./.cursor/mcp.json
+./.cursor/rules/checkout.mdc
+./.github/copilot-instructions.md
+./.github/prompts/review.prompt.md
+./.vscode/mcp.json
+./CLAUDE.md
+./README.md
+./package.json
+./src/money.ts
+./src/payments/create-payment.ts
+./tsconfig.json
+[exit 0]
+  PASS: exit code 0
+$ bash -c cd homes && find . -type f | sort
+./anika/.claude.json
+./anika/.claude/CLAUDE.md
+./anika/.claude/skills/pr-summary/SKILL.md
+./lena/.agents/skills/sql-migrations/SKILL.md
+./priya/.copilot/instructions/typescript-style.instructions.md
+./priya/.copilot/prompts/review.prompt.md
+[exit 0]
+  PASS: exit code 0
+
+## Inventory: classify, hash and compare every agent-context file
+$ python3 audit_inventory.py --project meridian-checkout --home priya=homes/priya --home lena=homes/lena --home anika=homes/anika --rules meridian-rules.json --out-md inventory.md --out-json inventory.json
+items=14 drift=1 duplicates=0 unpinned_mcp=1 remote_mcp=1 mcp_drift=1 unclassified=0
+[exit 0]
+  PASS: exit code 0 (inventory script)
+  PASS: output matches /items=14 drift=1 duplicates=0 unpinned_mcp=1 remote_mcp=1 mcp_drift=1 unclassified=0/
+  PASS: exists: inventory.md
+  PASS: inventory.md matches /prompt/command:review\*\*: 4 copies, 3 variants/
+  PASS: inventory.md matches /project CLAUDE.md` \| yes \| yes \| CONTRADICTS \| yes/
+  PASS: inventory.md matches /project .cursor/commands/review.md` \| CONTRADICTS/
+  PASS: inventory.md matches /ledger \| UNPINNED \| `npx @meridian-finance/ledger-mcp`/
+  PASS: inventory.md matches /payments-sandbox \| remote/
+$ cat inventory.md
+# Agent environment inventory
+
+Scanned: project, user:priya, user:lena, user:anika
+
+| Scope | Path | Type | Harness | SHA-256 (12) |
+| --- | --- | --- | --- | --- |
+| project | `CLAUDE.md` | instructions | claude | `e10b57b70170` |
+| project | `.claude/commands/review.md` | command | claude | `74adae27fc23` |
+| project | `.cursor/mcp.json` | mcp | cursor | `6161b98adcaa` |
+| project | `.cursor/commands/review.md` | command | cursor | `981594c4ce72` |
+| project | `.cursor/rules/checkout.mdc` | instructions | cursor | `f78762647c6e` |
+| project | `.github/copilot-instructions.md` | instructions | copilot | `a4969d8e32ee` |
+| project | `.github/prompts/review.prompt.md` | prompt | copilot | `7ab1c6f56970` |
+| project | `.vscode/mcp.json` | mcp | copilot (VS Code) | `9880b6d18c77` |
+| user:priya | `.copilot/instructions/typescript-style.instructions.md` | instructions | copilot | `d9a37173db62` |
+| user:priya | `.copilot/prompts/review.prompt.md` | prompt | copilot | `7ab1c6f56970` |
+| user:lena | `.agents/skills/sql-migrations/SKILL.md` | skill | shared (.agents) | `7d80cbdd33a0` |
+| user:anika | `.claude.json` | mcp | claude | `7980481dd64a` |
+| user:anika | `.claude/CLAUDE.md` | instructions | claude | `624052f7f233` |
+| user:anika | `.claude/skills/pr-summary/SKILL.md` | skill | claude | `e6b71be3291c` |
+
+## Drift (same name, different content)
+
+- **prompt/command:review**: 4 copies, 3 variants
+  - `74adae27fc23`: project .claude/commands/review.md
+  - `7ab1c6f56970`: project .github/prompts/review.prompt.md; user:priya .copilot/prompts/review.prompt.md
+  - `981594c4ce72`: project .cursor/commands/review.md
+
+## Duplicates (same name, identical content)
+
+None found.
+
+## Team-rule coverage (keyword probes, heuristic)
+
+| File | minor-units | idempotency | no-pii-logs | iso-4217 |
+| --- | --- | --- | --- | --- |
+| `project CLAUDE.md` | yes | yes | CONTRADICTS | yes |
+| `project .claude/commands/review.md` | yes | - | yes | - |
+| `project .cursor/commands/review.md` | CONTRADICTS | yes | - | yes |
+| `project .cursor/rules/checkout.mdc` | yes | - | yes | yes |
+| `project .github/copilot-instructions.md` | yes | yes | yes | yes |
+| `project .github/prompts/review.prompt.md` | yes | yes | yes | yes |
+| `user:priya .copilot/instructions/typescript-style.instructions.md` | - | - | - | - |
+| `user:priya .copilot/prompts/review.prompt.md` | yes | yes | yes | yes |
+| `user:anika .claude/CLAUDE.md` | - | - | - | - |
+
+## MCP servers
+
+| File | Server | Status | Detail |
+| --- | --- | --- | --- |
+| `project .cursor/mcp.json` | ledger | pinned | `npx @meridian-finance/ledger-mcp@1.4.2` |
+| `project .vscode/mcp.json` | ledger | UNPINNED | `npx @meridian-finance/ledger-mcp` |
+| `user:anika .claude.json` | payments-sandbox | remote | `https://mcp.payments-sandbox.example/mcp` |
+
+Servers configured differently across files: ledger
+
+## Unclassified files under harness directories
+
+None.
+
+## Not visible to this audit
+
+- Settings stored only in a harness UI or cloud account.
+- Model versions, harness versions and runtime permissions.
+- What a remote MCP server does when called.
+- Secrets referenced by placeholders (values are never read).
+[exit 0]
+
+## Drift, line by line: the three variants of the review prompt
+$ diff -u --label copilot/review.prompt.md --label cursor/review.md meridian-checkout/.github/prompts/review.prompt.md meridian-checkout/.cursor/commands/review.md
+--- copilot/review.prompt.md
++++ cursor/review.md
+@@ -1,17 +1,12 @@
+----
+-description: Review a change to meridian-checkout before it is merged
+----
+-
+ Review the current change as a senior engineer on Meridian's checkout team.
+ 
+ Check, in this order:
+ 
+-1. Money: amounts are integer minor units. Flag any float arithmetic on
+-   amounts.
++1. Money: amounts must be precise. Prefer a decimal library such as
++   decimal.js for arithmetic on amounts.
+ 2. Idempotency: every payment-creating call passes an idempotency key.
+-3. Logging: no card data or PII reaches logs, errors or analytics events.
+-4. Currency: currency codes are validated as ISO 4217.
+-5. Tests: new behaviour has a test; changed behaviour updates its test.
++3. Currency: currency codes are validated as ISO 4217.
++4. Tests: new behaviour has a test; changed behaviour updates its test.
++5. Accessibility: form inputs have labels.
+ 
+ Report findings as a list: file, line, problem, suggested fix.
+-End with a one-line verdict: APPROVE, APPROVE WITH NITS, or CHANGES NEEDED.
+[exit 1]
+  PASS: exit code 1 (Copilot copy and Cursor copy differ)
+$ diff -u --label copilot/review.prompt.md --label claude/review.md meridian-checkout/.github/prompts/review.prompt.md meridian-checkout/.claude/commands/review.md
+--- copilot/review.prompt.md
++++ claude/review.md
+@@ -1,17 +1,11 @@
+----
+-description: Review a change to meridian-checkout before it is merged
+----
+-
+ Review the current change as a senior engineer on Meridian's checkout team.
+ 
+ Check, in this order:
+ 
+ 1. Money: amounts are integer minor units. Flag any float arithmetic on
+    amounts.
+-2. Idempotency: every payment-creating call passes an idempotency key.
+-3. Logging: no card data or PII reaches logs, errors or analytics events.
+-4. Currency: currency codes are validated as ISO 4217.
+-5. Tests: new behaviour has a test; changed behaviour updates its test.
++2. Logging: no card data or PII reaches logs, errors or analytics events.
++3. Tests: new behaviour has a test.
+ 
+ Report findings as a list: file, line, problem, suggested fix.
+-End with a one-line verdict: APPROVE, APPROVE WITH NITS, or CHANGES NEEDED.
++End with a one-line verdict: APPROVE or CHANGES NEEDED.
+[exit 1]
+  PASS: exit code 1 (Copilot copy and Claude copy differ)
+  PASS: identical: meridian-checkout/.github/prompts/review.prompt.md == homes/priya/.copilot/prompts/review.prompt.md
+
+## APM v0.33.0: which harnesses does it detect in this project?
+$ apm --version
+Agent Package Manager (APM) CLI version 0.33.0
+[exit 0]
+  PASS: output matches /0\.33\.0/
+$ apm targets
+  TARGET       STATUS     SOURCE                                   DEPLOY DIR
+  ------------ ---------- ---------------------------------------- ----------
+  claude       active     .claude/                                 .claude/
+  copilot      active     .github/copilot-instructions.md          .github/
+  cursor       active     .cursor/                                 .cursor/
+  codex        inactive   needs .codex/                            .codex/
+  gemini       inactive   needs GEMINI.md                          .gemini/
+  grok-build   inactive   needs .grok/                             .grok/
+  opencode     inactive   needs .opencode/                         .opencode/
+  windsurf     inactive   needs .windsurf/                         .windsurf/
+  kiro         inactive   needs .kiro/                             .kiro/
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /claude +active +\.claude//
+  PASS: output matches /copilot +active +\.github/copilot-instructions\.md/
+  PASS: output matches /cursor +active +\.cursor//
+  PASS: output matches /codex +inactive/
+
+## APM v0.33.0: read-only discovery of the project (apm init --discover)
+$ apm init --discover
+[i] Discovery (project): <workspace>/meridian-checkout
+[i] unsupported: .claude/commands/review.md -- Loose native content is not a package. Prepare a supported package 
+manually.
+[i] unsupported: .cursor/commands/review.md -- Loose native content is not a package. Prepare a supported package 
+manually.
+[i] unsupported: .cursor/mcp.json -- Loose native content is not a package. Prepare a supported package manually.
+[i] unsupported: .cursor/rules/checkout.mdc -- Loose native content is not a package. Prepare a supported package 
+manually.
+[i] unsupported: .github/copilot-instructions.md -- Loose native content is not a package. Prepare a supported package 
+manually.
+[i] unsupported: .github/prompts/review.prompt.md -- Loose native content is not a package. Prepare a supported package 
+manually.
+[i] unsupported: CLAUDE.md -- Loose native content is not a package. Prepare a supported package manually.
+[i] No missing supported package dependencies; no manifest changes.
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /unsupported: \.github/prompts/review\.prompt\.md/
+  PASS: output matches /unsupported: \.cursor/mcp\.json/
+  PASS: output matches /unsupported: CLAUDE\.md/
+  PASS: output does not match /vscode/mcp\.json/
+  PASS: output matches /no manifest changes/
+  PASS: absent: apm.yml
+$ bash -c apm init --discover --format json > discover-project.json; echo rc=$?
+rc=0
+[exit 0]
+  PASS: output matches /rc=0/
+  PASS: discover-project.json matches /"status": "unsupported"/
+
+## APM v0.33.0: read-only discovery of each simulated home (apm init --discover -g)
+$ env HOME=<workspace>/homes/anika apm init --discover -g
+[i] Discovery (global): <workspace>/homes/anika
+[i] unsupported: .claude/CLAUDE.md -- Loose native content is not a package. Prepare a supported package manually.
+[i] supported: .claude/skills/pr-summary -- Existing local package; only a dependency will be added.
+[i] apm.yml dependencies.apm: path: 
+<workspace>/homes/anika/.claude/skills/pr-summary
+[i] Read-only preview. Use --apply to add these dependencies after confirmation.
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /supported: \.claude/skills/pr-summary/
+  PASS: output matches /unsupported: \.claude/CLAUDE\.md/
+  PASS: output does not match /claude\.json/
+$ env HOME=<workspace>/homes/lena apm init --discover -g
+[i] Discovery (global): <workspace>/homes/lena
+[i] supported: .agents/skills/sql-migrations -- Existing local package; only a dependency will be added.
+[i] apm.yml dependencies.apm: path: 
+<workspace>/homes/lena/.agents/skills/sql-migrations
+[i] Read-only preview. Use --apply to add these dependencies after confirmation.
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /supported: \.agents/skills/sql-migrations/
+$ env HOME=<workspace>/homes/priya apm init --discover -g
+[i] Discovery (global): <workspace>/homes/priya
+[i] No missing supported package dependencies; no manifest changes.
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /No missing supported package dependencies/
+  PASS: output does not match /copilot/prompts/
+  PASS: absent: ../homes/anika/.apm/apm.yml
+
+## APM v0.33.0: content scan of untracked primitives (apm audit)
+$ apm audit
+[>] Scanning installed packages and deployed files...
+
+[*] 6 file(s) scanned -- no issues found
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /6 file\(s\) scanned -- no issues found/
+$ bash -c apm audit -f json > audit-project.json; echo rc=$?
+rc=0
+[exit 0]
+  PASS: output matches /rc=0/
+  PASS: audit-project.json matches /"files_scanned": 6/
+  PASS: audit-project.json matches /"tracked": false/
+  PASS: audit-project.json does not match /mcp\.json/
+
+## APM v0.33.0: provenance lookup needs a lockfile (apm find)
+$ apm find .github/prompts/review.prompt.md
+[x] No lockfile found at apm.lock.yaml. Run 'apm install' first.
+[exit 2]
+  PASS: output matches /No lockfile found at apm\.lock\.yaml/
+== ch01-audit-the-agent-environment: passed (45 passed, 0 failed) ==
