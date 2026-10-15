@@ -1,0 +1,28 @@
+# Runs the deterministic regression suite for meridian-code-review on every
+# change to the skill or its tests (Chapter 3). Harness tests that call
+# models are not run here; see ch03-test-and-harden-agent-skills/README.md.
+name: meridian-code-review tests
+on:
+  push:
+    paths:
+      - "packages/meridian-code-review/**"
+      - "tests/meridian-code-review/**"
+  pull_request:
+    paths:
+      - "packages/meridian-code-review/**"
+      - "tests/meridian-code-review/**"
+permissions:
+  contents: read
+jobs:
+  suite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+      - name: Deterministic suite on the working tree
+        run: >
+          python3 tests/meridian-code-review/run_suite.py
+          --skill-dir packages/meridian-code-review
+          --expect-version "$(sed -n 's/^version: //p' packages/meridian-code-review/apm.yml)"
