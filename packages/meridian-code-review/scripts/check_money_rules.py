@@ -6,7 +6,8 @@ uses the network.
 
 Rules:
   MR001  money held as a floating-point value
-  MR002  payment, charge or refund created without an idempotency key
+  MR002  payment, charge or refund created, captured or authorized
+         without an idempotency key
   MR003  card data or personal data passed to a logger
   MR004  currency code that is not an upper-case ISO 4217 alphabetic code
 
@@ -17,7 +18,7 @@ Usage:
   add --format json for machine-readable output
 
 Diff mode: MR001, MR003 and MR004 report only on added lines. MR002
-reports a create call when the change added or deleted a line in the call
+reports a create, capture or authorize call when the change added or deleted a line in the call
 or in the eight lines after it (so deleting an idempotency key is caught);
 the call line itself may be unchanged context.
 
@@ -53,8 +54,9 @@ FLOAT_PATTERNS = [
 ]
 
 CREATE_CALL = re.compile(
-    r"(?i)\b(?:payments?|charges?|refunds?|paymentIntents?)\s*\.\s*create\s*\(|"
-    r"\bcreate(?:Payment|Charge|Refund)\w*\s*\(")
+    r"(?i)\b(?:payments?|charges?|refunds?|paymentIntents?)\s*\.\s*"
+    r"(create|capture|authorize)\s*\(|"
+    r"\b(create|capture|authorize)(?:Payment|Charge|Refund)\w*\s*\(")
 IDEMPOTENCY = re.compile(r"(?i)idempotency[-_]?key|idempotencyKey")
 WINDOW = 8  # lines after the call that may carry its options object
 
@@ -123,15 +125,20 @@ def check(lines):
         stripped = text.strip()
         if stripped.startswith(("//", "*", "#")):
             continue
-        if CREATE_CALL.search(text):
+        call = CREATE_CALL.search(text)
+        if call:
             span = [(t, a or d) for (p, _, t, a, d)
                     in lines[idx:idx + WINDOW + 1] if p == path]
             # Report when the change added or deleted a line in the call or
             # its options object (a deleted idempotency key counts).
             if any(tt for _, tt in span) and \
                     not any(IDEMPOTENCY.search(t) for t, _ in span):
+                verb = (call.group(1) or call.group(2) or "").lower()
                 add("MR002", path, n,
-                    "payment/charge/refund created without an idempotency key",
+                    "payment/charge/refund created without an idempotency key"
+                    if verb == "create" else
+                    "payment %s call without an idempotency key"
+                    % ("capture" if verb == "capture" else "authorization"),
                     text)
         if not added:
             continue
@@ -158,7 +165,8 @@ def main(argv=None):
     src.add_argument("--diff", metavar="FILE",
                      help="unified diff to check ('-' reads stdin); "
                           "MR001/MR003/MR004 check added lines only; MR002 "
-                          "also counts deleted lines near a create call")
+                          "also counts deleted lines near a create, capture "
+                          "or authorize call")
     src.add_argument("--files", nargs="+", metavar="PATH",
                      help="source files to check in full")
     ap.add_argument("--format", choices=["text", "json"], default="text")

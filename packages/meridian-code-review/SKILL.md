@@ -3,7 +3,8 @@ name: meridian-code-review
 description: >-
   Review a code change in a payment service against Meridian's money rules:
   amounts as integer minor units (never floating point), an idempotency key
-  on every call that creates a payment, charge or refund, no card data or
+  on every call that creates, captures or authorizes a payment, charge or
+  refund, no card data or
   other PII in logs, and ISO 4217 currency codes. Use when the user asks for
   a code review, PR or diff feedback, or a pre-merge check on TypeScript or
   JavaScript code that handles money, payments, refunds or checkout.
@@ -13,7 +14,7 @@ compatibility: >-
   read access to the diff or files under review. No network access.
 metadata:
   owner: meridian-finance/agent-tooling
-  version: "1.0.1"
+  version: "1.1.0"
 ---
 
 # Meridian code review
@@ -66,7 +67,7 @@ general correctness. Produce one report in the format of
 | ID | Rule | Typical fix |
 |----|------|-------------|
 | MR001 | Money is an integer count of minor units (cents, ore) | `amountMinor: 1999` instead of `amount: 19.99` |
-| MR002 | Every payment, charge or refund creation sends an idempotency key | pass `idempotencyKey` derived from the order or request |
+| MR002 | Every call that creates, captures or authorizes a payment, charge or refund sends an idempotency key | pass `idempotencyKey` derived from the order or request |
 | MR003 | Never log card data or personal data | log a payment ID or a masked last-4 |
 | MR004 | Currency codes are ISO 4217 alphabetic codes in upper case | `"EUR"`, not `"eur"` or `"€"` |
 

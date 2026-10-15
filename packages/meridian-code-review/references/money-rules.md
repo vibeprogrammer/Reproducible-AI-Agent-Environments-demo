@@ -27,14 +27,17 @@ Do not hard-code `100` as the minor-unit factor for every currency.
 
 ## MR002: every creating call carries an idempotency key
 
-Any call that can create a payment, charge, refund or payout must send an
-idempotency key, so a retry after a timeout cannot create a second payment.
+Any call that can create, capture or authorize a payment, charge, refund or
+payout must send an idempotency key, so a retry after a timeout cannot move
+money twice.
 The key must be stable for the logical operation (derived from the order ID
 or the incoming request's key), not generated fresh on every retry.
 
 Violations to look for:
 
 - a create call with no key;
+- a capture or authorize call with no key (the checker looks for these
+  since 1.1.0);
 - a key built from `Date.now()`, `Math.random()` or a new UUID inside a
   retry loop;
 - a retry wrapper that re-issues the call without passing the key through.

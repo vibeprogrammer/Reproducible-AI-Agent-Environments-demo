@@ -3,6 +3,23 @@
 Versions follow the per-package tag convention `meridian-code-review-vX.Y.Z`.
 Published tags never move; fixes ship as new versions.
 
+## 1.1.0 (2026-10-16)
+
+Minor release (Chapter 7). Builds on 1.0.1, so it includes every 1.0.1 fix.
+
+### Added
+- MR002 also covers payment-mutating `capture` and `authorize` calls
+  (`payments.capture(...)`, `charges.authorize(...)`, `capturePayment(...)`,
+  `authorizeCharge(...)`), not only create calls. A capture retried after a
+  timeout without an idempotency key can capture twice. Findings on these
+  calls say "payment capture call" or "payment authorization call"; the
+  message for create calls is unchanged.
+
+### Changed
+- SKILL.md description, rules table and references/money-rules.md describe
+  the wider MR002. Consumers may see new MR002 findings on capture and
+  authorize calls that 1.0.x did not report.
+
 ## 1.0.1 (2026-10-16)
 
 Patch release. Every change below was found by the Chapter 3 regression
