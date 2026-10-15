@@ -32,7 +32,8 @@ exist), and nothing in the fixture is ever executed.
 | `run.sh` | The automated demo |
 
 The user-level paths follow where APM v0.33.0's targets matrix and MCP
-installation docs say each harness keeps user-scope files.
+installation docs say each harness keeps user-scope files, plus Claude Code's
+own memory docs for `~/.claude/CLAUDE.md`.
 
 ## Run it
 
