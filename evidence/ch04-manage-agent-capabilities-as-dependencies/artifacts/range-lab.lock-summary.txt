@@ -1,0 +1,2 @@
+depth=1  microsoft/apm/packages/autopilot/autopilot-comment  ref=v0.32.0  commit=f0509d75f2b3  version=0.32.0  type=hybrid  constraint=~0.32.0
+depth=1  vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review  ref=meridian-code-review-v1.0.0  commit=d77ad927023f  version=1.0.0  type=hybrid  constraint=^1.0.0

@@ -1,0 +1,5 @@
+depth=1  microsoft/apm/packages/autopilot/autopilot-pr-review-scheduler  ref=v0.33.0  commit=18c4c43c924c  version=0.1.0  type=apm_package
+depth=1  microsoft/apm-sample-package  ref=v1.0.0  commit=fb2851683be0  version=1.0.0  type=apm_package
+depth=2  github/awesome-copilot/skills/review-and-refactor  ref=(none)  commit=bebb02d4c3c8  version=unknown  type=claude_skill  resolved_by=microsoft/apm-sample-package
+depth=2  microsoft/apm/packages/autopilot/autopilot-pr-review-worker  ref=v0.33.0  commit=18c4c43c924c  version=0.1.0  type=hybrid  resolved_by=microsoft/apm
+depth=3  microsoft/apm/packages/autopilot/autopilot-comment  ref=v0.33.0  commit=18c4c43c924c  version=0.1.0  type=hybrid  resolved_by=microsoft/apm

@@ -1,0 +1,17 @@
+# Chapter 4 demo: a real public dependency graph.
+# Two direct dependencies, each with transitive dependencies of its own.
+name: graph-lab
+version: 0.1.0
+description: Inspect direct and transitive agent-capability dependencies
+targets:
+  - copilot
+dependencies:
+  apm:
+    # Pinned to a tag. Its own apm.yml pulls one skill from
+    # github/awesome-copilot WITHOUT a ref (it follows the default branch).
+    - microsoft/apm-sample-package#v1.0.0
+    # A virtual sub-directory package inside the microsoft/apm monorepo,
+    # pinned to the v0.33.0 release tag. It pulls two more packages from
+    # the same repo through relative paths (../autopilot-pr-review-worker).
+    - microsoft/apm/packages/autopilot/autopilot-pr-review-scheduler#v0.33.0
+  mcp: []

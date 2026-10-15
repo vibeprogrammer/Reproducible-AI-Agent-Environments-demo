@@ -1,0 +1,395 @@
+lockfile_version: '1'
+apm_version: 0.33.0
+dependencies:
+- repo_url: microsoft/apm
+  name: autopilot-pr-review-scheduler
+  host: github.com
+  resolved_commit: 18c4c43c924ceae890fe0f2038806690e5b2d6c8
+  resolved_ref: v0.33.0
+  version: 0.1.0
+  virtual_path: packages/autopilot/autopilot-pr-review-scheduler
+  is_virtual: true
+  package_type: apm_package
+  deployed_files:
+  - .agents/skills/autopilot-pr-review-scheduler
+  - .agents/skills/autopilot-pr-review-scheduler/SKILL.md
+  - .agents/skills/autopilot-pr-review-scheduler/assets/fan-out-pool.md
+  deployed_file_hashes:
+    .agents/skills/autopilot-pr-review-scheduler/SKILL.md: sha256:2f3d2e905f2e38e8551a03918aedc68a78ce8a620a75630c52fc298d430d9cb9
+    .agents/skills/autopilot-pr-review-scheduler/assets/fan-out-pool.md: sha256:6c4c5802109cbbb76ecf28ab2299410f4f6f3f9dd9cb2586624c1783538d20a5
+  content_hash: sha256:38c718b08b4a26f91e02ddff26913d2007ab139c33047da62cf8c7dfcafac4bd
+  declared_license: MIT
+- repo_url: microsoft/apm-sample-package
+  name: apm-sample-package
+  host: github.com
+  resolved_commit: fb2851683be0e0e7711421d518bd8dba23b0b1f6
+  resolved_ref: v1.0.0
+  version: 1.0.0
+  package_type: apm_package
+  deployed_files:
+  - .agents/skills/style-checker
+  - .agents/skills/style-checker/SKILL.md
+  - .github/agents/design-reviewer.agent.md
+  - .github/instructions/design-standards.instructions.md
+  - .github/prompts/accessibility-audit.prompt.md
+  - .github/prompts/design-review.prompt.md
+  deployed_file_hashes:
+    .agents/skills/style-checker/SKILL.md: sha256:1142700284d253c15e561434362ae6203db08e41ef07e7082386df3651738829
+    .github/agents/design-reviewer.agent.md: sha256:616988766ebc7d42cc6f599a17d1ad3ab8164e139fad82e111af5441fe3986cb
+    .github/instructions/design-standards.instructions.md: sha256:6f5d994d6437416e14e4ca5540f4d1cf06fad079728a1419acfb1dd7038ec38d
+    .github/prompts/accessibility-audit.prompt.md: sha256:c3382c6b7ac6ba38cf66d345923be79c5a46b8783a0d33aac457ff60f1b6597a
+    .github/prompts/design-review.prompt.md: sha256:f10919f07eec83c62c7912e318382b472ad27eb1c22c11525b813522960e8e06
+  content_hash: sha256:744cca54cc8ff7ca90aa1dd621c2f98c6291cd793815afe8518001cc94b8aba9
+- repo_url: github/awesome-copilot
+  name: review-and-refactor
+  host: github.com
+  resolved_commit: bebb02d4c3c845b9c4cef398568a1084e4129e57
+  version: unknown
+  virtual_path: skills/review-and-refactor
+  is_virtual: true
+  depth: 2
+  resolved_by: microsoft/apm-sample-package
+  package_type: claude_skill
+  deployed_files:
+  - .agents/skills/review-and-refactor
+  - .agents/skills/review-and-refactor/SKILL.md
+  deployed_file_hashes:
+    .agents/skills/review-and-refactor/SKILL.md: sha256:95b48ed4b137777ddc87b77cb0873ed7f485141a517825e71af1a984cf5a6cd6
+  content_hash: sha256:9236d06a1500089ddb46975b866e9a63478e502afe7095b1980c618678a7c7fe
+- repo_url: microsoft/apm
+  name: autopilot-pr-review-worker
+  host: github.com
+  resolved_commit: 18c4c43c924ceae890fe0f2038806690e5b2d6c8
+  resolved_ref: v0.33.0
+  version: 0.1.0
+  virtual_path: packages/autopilot/autopilot-pr-review-worker
+  is_virtual: true
+  depth: 2
+  resolved_by: microsoft/apm
+  package_type: hybrid
+  deployed_files:
+  - .agents/skills/autopilot-pr-review-worker
+  - .agents/skills/autopilot-pr-review-worker/SKILL.md
+  - .agents/skills/autopilot-pr-review-worker/apm.yml
+  - .agents/skills/autopilot-pr-review-worker/assets/ceo-return-schema.json
+  - .agents/skills/autopilot-pr-review-worker/assets/panel-mode.md
+  - .agents/skills/autopilot-pr-review-worker/assets/panelist-return-schema.json
+  - .agents/skills/autopilot-pr-review-worker/assets/recommendation-template.md
+  - .agents/skills/autopilot-pr-review-worker/assets/shared-brief.example.json
+  - .agents/skills/autopilot-pr-review-worker/evals/README.md
+  - .agents/skills/autopilot-pr-review-worker/evals/fixtures/01-ship-now-pr1084-shape.json
+  - .agents/skills/autopilot-pr-review-worker/evals/fixtures/01-ship-now-pr1084-shape.rendered.md
+  - .agents/skills/autopilot-pr-review-worker/evals/fixtures/02-needs-rework-shape.json
+  - .agents/skills/autopilot-pr-review-worker/evals/fixtures/02-needs-rework-shape.rendered.md
+  - .agents/skills/autopilot-pr-review-worker/evals/fixtures/03-panel-mode-walkthrough.md
+  - .agents/skills/autopilot-pr-review-worker/evals/render_eval.py
+  - .agents/skills/autopilot-pr-review-worker/evals/trigger-evals.json
+  deployed_file_hashes:
+    .agents/skills/autopilot-pr-review-worker/SKILL.md: sha256:9f648dd0bc893b1368ecd858480a8e2f5425b5a05ca3d94e9187ca43a1693258
+    .agents/skills/autopilot-pr-review-worker/apm.yml: sha256:140ac5ad227d28c8f7ed26b8e9ba7c262ce8abc598497fcbfb228258018d468f
+    .agents/skills/autopilot-pr-review-worker/assets/ceo-return-schema.json: sha256:30e38bcb18cfdca8d5d56b384febf84e726e7376872d75e194277d3e1cb12293
+    .agents/skills/autopilot-pr-review-worker/assets/panel-mode.md: sha256:2d535e4ee141fcb865df7689f2be100d636e3dfa0410054d610cf9a1d9623c8d
+    .agents/skills/autopilot-pr-review-worker/assets/panelist-return-schema.json: sha256:959a9e744cf3a062c906ca7ec716731cfc440561c8ef6c1b57f3c7fc108c8c44
+    .agents/skills/autopilot-pr-review-worker/assets/recommendation-template.md: sha256:b757b09997a900f0f1e07b47c7815736b33f6824fa13bfabd5192491c4664321
+    .agents/skills/autopilot-pr-review-worker/assets/shared-brief.example.json: sha256:ed29ab0264be660d1796d19b2c51aa974879743d1b5617afb86e1b7705a241f8
+    .agents/skills/autopilot-pr-review-worker/evals/README.md: sha256:3f458fad235db5750336a9cb7622fc2331562364de7728251f023bee35e57108
+    .agents/skills/autopilot-pr-review-worker/evals/fixtures/01-ship-now-pr1084-shape.json: sha256:108fc261680f17bdade3e2bdf8e64fc908d16a37ec9c29c53169b394530bdd67
+    .agents/skills/autopilot-pr-review-worker/evals/fixtures/01-ship-now-pr1084-shape.rendered.md: sha256:ca1fdd3cd24e0fd8ec15b37690c597921ebf1c872270166edb2727d54ee155d8
+    .agents/skills/autopilot-pr-review-worker/evals/fixtures/02-needs-rework-shape.json: sha256:faa41c6c83c4a7955447bcb8fc0ad5a3b8afb4235db257462f649ba0a901913e
+    .agents/skills/autopilot-pr-review-worker/evals/fixtures/02-needs-rework-shape.rendered.md: sha256:b69cd113a428b61d8bbb9381a85261b3ee3acd3f101c08d06419e26aab03bba8
+    .agents/skills/autopilot-pr-review-worker/evals/fixtures/03-panel-mode-walkthrough.md: sha256:42388926b5147daedc5a4205778f8b4edac1beec650f15b5e70008e81116c660
+    .agents/skills/autopilot-pr-review-worker/evals/render_eval.py: sha256:690baf6267775077ad011b98839eda1001e207bbae78a7a8454c4d39bb8a2864
+    .agents/skills/autopilot-pr-review-worker/evals/trigger-evals.json: sha256:76d6da23bde1c6b6f0b0bf883ba8b5bf065f0db73f69182cfd98449716bc0d84
+  content_hash: sha256:154423a450bd1a75727f7cf373344998542ee38310ec038b0f41f741e67206b1
+  declared_license: MIT
+- repo_url: microsoft/apm
+  name: autopilot-comment
+  host: github.com
+  resolved_commit: 18c4c43c924ceae890fe0f2038806690e5b2d6c8
+  resolved_ref: v0.33.0
+  version: 0.1.0
+  virtual_path: packages/autopilot/autopilot-comment
+  is_virtual: true
+  depth: 3
+  resolved_by: microsoft/apm
+  package_type: hybrid
+  deployed_files:
+  - .agents/skills/autopilot-comment
+  - .agents/skills/autopilot-comment/SKILL.md
+  - .agents/skills/autopilot-comment/apm.yml
+  deployed_file_hashes:
+    .agents/skills/autopilot-comment/SKILL.md: sha256:8707dbc45d8327dceab976f12008fe8384854c9fddf1b399c175d87e74041339
+    .agents/skills/autopilot-comment/apm.yml: sha256:4db657c42507061d9bfbd795a498e32f2492817b91343e4ff158886619c17fd0
+  content_hash: sha256:99f30af2deabe503620dfdb31d5f9c9d475b6649933d0e9acca5f1a2b3cc31dd
+  declared_license: MIT
+deployments:
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-comment
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-comment
+  active_owner: microsoft/apm/packages/autopilot/autopilot-comment
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-comment/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-comment
+  active_owner: microsoft/apm/packages/autopilot/autopilot-comment
+  content_hash: sha256:8707dbc45d8327dceab976f12008fe8384854c9fddf1b399c175d87e74041339
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-comment/apm.yml
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-comment
+  active_owner: microsoft/apm/packages/autopilot/autopilot-comment
+  content_hash: sha256:4db657c42507061d9bfbd795a498e32f2492817b91343e4ff158886619c17fd0
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-pr-review-scheduler
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-pr-review-scheduler
+  active_owner: microsoft/apm/packages/autopilot/autopilot-pr-review-scheduler
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-pr-review-scheduler/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-pr-review-scheduler
+  active_owner: microsoft/apm/packages/autopilot/autopilot-pr-review-scheduler
+  content_hash: sha256:2f3d2e905f2e38e8551a03918aedc68a78ce8a620a75630c52fc298d430d9cb9
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-pr-review-scheduler/assets/fan-out-pool.md
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-pr-review-scheduler
+  active_owner: microsoft/apm/packages/autopilot/autopilot-pr-review-scheduler
+  content_hash: sha256:6c4c5802109cbbb76ecf28ab2299410f4f6f3f9dd9cb2586624c1783538d20a5
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-pr-review-worker
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  active_owner: microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-pr-review-worker/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  active_owner: microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  content_hash: sha256:9f648dd0bc893b1368ecd858480a8e2f5425b5a05ca3d94e9187ca43a1693258
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-pr-review-worker/apm.yml
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  active_owner: microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  content_hash: sha256:140ac5ad227d28c8f7ed26b8e9ba7c262ce8abc598497fcbfb228258018d468f
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-pr-review-worker/assets/ceo-return-schema.json
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  active_owner: microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  content_hash: sha256:30e38bcb18cfdca8d5d56b384febf84e726e7376872d75e194277d3e1cb12293
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-pr-review-worker/assets/panel-mode.md
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  active_owner: microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  content_hash: sha256:2d535e4ee141fcb865df7689f2be100d636e3dfa0410054d610cf9a1d9623c8d
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-pr-review-worker/assets/panelist-return-schema.json
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  active_owner: microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  content_hash: sha256:959a9e744cf3a062c906ca7ec716731cfc440561c8ef6c1b57f3c7fc108c8c44
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-pr-review-worker/assets/recommendation-template.md
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  active_owner: microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  content_hash: sha256:b757b09997a900f0f1e07b47c7815736b33f6824fa13bfabd5192491c4664321
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-pr-review-worker/assets/shared-brief.example.json
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  active_owner: microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  content_hash: sha256:ed29ab0264be660d1796d19b2c51aa974879743d1b5617afb86e1b7705a241f8
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-pr-review-worker/evals/README.md
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  active_owner: microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  content_hash: sha256:3f458fad235db5750336a9cb7622fc2331562364de7728251f023bee35e57108
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-pr-review-worker/evals/fixtures/01-ship-now-pr1084-shape.json
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  active_owner: microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  content_hash: sha256:108fc261680f17bdade3e2bdf8e64fc908d16a37ec9c29c53169b394530bdd67
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-pr-review-worker/evals/fixtures/01-ship-now-pr1084-shape.rendered.md
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  active_owner: microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  content_hash: sha256:ca1fdd3cd24e0fd8ec15b37690c597921ebf1c872270166edb2727d54ee155d8
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-pr-review-worker/evals/fixtures/02-needs-rework-shape.json
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  active_owner: microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  content_hash: sha256:faa41c6c83c4a7955447bcb8fc0ad5a3b8afb4235db257462f649ba0a901913e
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-pr-review-worker/evals/fixtures/02-needs-rework-shape.rendered.md
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  active_owner: microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  content_hash: sha256:b69cd113a428b61d8bbb9381a85261b3ee3acd3f101c08d06419e26aab03bba8
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-pr-review-worker/evals/fixtures/03-panel-mode-walkthrough.md
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  active_owner: microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  content_hash: sha256:42388926b5147daedc5a4205778f8b4edac1beec650f15b5e70008e81116c660
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-pr-review-worker/evals/render_eval.py
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  active_owner: microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  content_hash: sha256:690baf6267775077ad011b98839eda1001e207bbae78a7a8454c4d39bb8a2864
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/autopilot-pr-review-worker/evals/trigger-evals.json
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  active_owner: microsoft/apm/packages/autopilot/autopilot-pr-review-worker
+  content_hash: sha256:76d6da23bde1c6b6f0b0bf883ba8b5bf065f0db73f69182cfd98449716bc0d84
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/review-and-refactor
+  runtime: null
+  scope: project
+  owners:
+  - github/awesome-copilot/skills/review-and-refactor
+  active_owner: github/awesome-copilot/skills/review-and-refactor
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/review-and-refactor/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - github/awesome-copilot/skills/review-and-refactor
+  active_owner: github/awesome-copilot/skills/review-and-refactor
+  content_hash: sha256:95b48ed4b137777ddc87b77cb0873ed7f485141a517825e71af1a984cf5a6cd6
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/style-checker
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm-sample-package
+  active_owner: microsoft/apm-sample-package
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/style-checker/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm-sample-package
+  active_owner: microsoft/apm-sample-package
+  content_hash: sha256:1142700284d253c15e561434362ae6203db08e41ef07e7082386df3651738829
+- kind: project-relative
+  target: copilot
+  value: .github/agents/design-reviewer.agent.md
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm-sample-package
+  active_owner: microsoft/apm-sample-package
+  content_hash: sha256:616988766ebc7d42cc6f599a17d1ad3ab8164e139fad82e111af5441fe3986cb
+- kind: project-relative
+  target: copilot
+  value: .github/instructions/design-standards.instructions.md
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm-sample-package
+  active_owner: microsoft/apm-sample-package
+  content_hash: sha256:6f5d994d6437416e14e4ca5540f4d1cf06fad079728a1419acfb1dd7038ec38d
+- kind: project-relative
+  target: copilot
+  value: .github/prompts/accessibility-audit.prompt.md
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm-sample-package
+  active_owner: microsoft/apm-sample-package
+  content_hash: sha256:c3382c6b7ac6ba38cf66d345923be79c5a46b8783a0d33aac457ff60f1b6597a
+- kind: project-relative
+  target: copilot
+  value: .github/prompts/design-review.prompt.md
+  runtime: null
+  scope: project
+  owners:
+  - microsoft/apm-sample-package
+  active_owner: microsoft/apm-sample-package
+  content_hash: sha256:f10919f07eec83c62c7912e318382b472ad27eb1c22c11525b813522960e8e06

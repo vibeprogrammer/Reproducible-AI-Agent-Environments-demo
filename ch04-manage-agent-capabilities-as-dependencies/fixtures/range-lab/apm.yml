@@ -1,0 +1,13 @@
+# Chapter 4 demo: semver ranges on Git sources resolve against tags.
+name: range-lab
+version: 0.1.0
+description: How a range on a monorepo sub-package picks a tag
+targets:
+  - copilot
+dependencies:
+  apm:
+    # Meridian's per-package tag convention: meridian-code-review-vX.Y.Z
+    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#^1.0.0
+    # A sub-package in a repo that only has repo-wide vX.Y.Z release tags.
+    - microsoft/apm/packages/autopilot/autopilot-comment#~0.32.0
+  mcp: []
