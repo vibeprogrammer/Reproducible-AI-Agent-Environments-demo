@@ -1,5 +1,5 @@
 name: meridian-code-review
-version: 1.1.0
+version: 1.2.0
 description: Meridian's payment-code review skill (money, idempotency, PII)
 author: Meridian (fictional demo team)
 license: MIT

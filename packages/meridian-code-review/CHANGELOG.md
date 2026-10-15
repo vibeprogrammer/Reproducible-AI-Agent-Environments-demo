@@ -3,6 +3,15 @@
 Versions follow the per-package tag convention `meridian-code-review-vX.Y.Z`.
 Published tags never move; fixes ship as new versions.
 
+## 1.2.0 (2026-10-16)
+
+Minor release (Chapter 7).
+
+### Changed
+- MR001 no longer flags fee rates such as `feeRate = 0.029`, the false
+  positive documented in references/false-positives.md since 1.0.0. The
+  checker stops treating identifiers that contain `fee` as money names.
+
 ## 1.1.0 (2026-10-16)
 
 Minor release (Chapter 7). Builds on 1.0.1, so it includes every 1.0.1 fix.

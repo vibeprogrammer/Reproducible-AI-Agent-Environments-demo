@@ -31,9 +31,10 @@ import re
 import sys
 
 # A money-looking identifier: amount, totalPrice, shippingFee, unit_price ...
-MONEY_NAME = (r"(?:\b(?:amount|price|total|subtotal|fee|balance|cost)\w*"
-              r"|\b[a-z]\w*(?:Amount|Price|Total|Fee|Balance|Cost)\w*"
-              r"|\b\w+_(?:amount|price|total|fee|balance|cost)\w*)")
+# 1.2.0: "fee" removed so that rates such as feeRate are not treated as money.
+MONEY_NAME = (r"(?:\b(?:amount|price|total|subtotal|balance|cost)\w*"
+              r"|\b[a-z]\w*(?:Amount|Price|Total|Balance|Cost)\w*"
+              r"|\b\w+_(?:amount|price|total|balance|cost)\w*)")
 # Names that already say "minor units" are fine even with Number().
 MINOR_OK = re.compile(r"(?i)(minor|cents|_ore\b|ore[A-Z])")
 

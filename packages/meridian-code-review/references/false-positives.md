@@ -7,9 +7,10 @@ dropping a finding.
   formats an integer-derived value for a receipt is display, not
   arithmetic. Drop it only if the value came from minor units and is not
   fed back into a calculation.
-- **MR001 on names that are not money.** `feeRate = 0.029` is a rate, not
-  an amount. Drop it, and suggest a name that does not look like money if
-  the confusion is likely to recur.
+- **MR001 on names that are not money.** A rate or ratio such as
+  `taxRatio = 0.25` is not an amount. Drop it, and suggest a name that does
+  not look like money if the confusion is likely to recur. (Since 1.2.0 the
+  checker no longer flags `feeRate = 0.029`.)
 - **MR002 when the key is set elsewhere.** The key may be added by a
   wrapper (for example a payment client that injects it from request
   context) or passed more than eight lines below the call. Find the code

@@ -14,7 +14,7 @@ compatibility: >-
   read access to the diff or files under review. No network access.
 metadata:
   owner: meridian-finance/agent-tooling
-  version: "1.1.0"
+  version: "1.2.0"
 ---
 
 # Meridian code review
