@@ -1,0 +1,35 @@
+[>] Replaying install (cache-only)...
+[+] Replayed 2 package(s)
+[>] Diffing scratch vs working tree...
+[!] Drift detected: 1 file(s)
+
+                                            [>] APM Policy Compliance                                            
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Status   ┃ Check                    ┃ Message                                                                 ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ [+]      │ lockfile-exists          │ Lockfile present                                                        │
+│ [+]      │ ref-consistency          │ All dependency refs match lockfile                                      │
+│ [+]      │ deployment-ledger-owners │ All deployment ledger owners are valid                                  │
+│ [+]      │ deployed-files-present   │ All deployed files present on disk                                      │
+│ [+]      │ no-orphaned-packages     │ No orphaned packages in lockfile                                        │
+│ [+]      │ skill-subset-consistency │ Skill subset selections match lockfile                                  │
+│ [+]      │ config-consistency       │ MCP configs match lockfile baseline                                     │
+│          │ content-integrity        │ 1 file(s) with hash drift -- run 'apm install' to restore drifted files │
+│          │ drift                    │ drift detected: 1 file(s): .claude/rules/money-handling.md              │
+└──────────┴──────────────────────────┴─────────────────────────────────────────────────────────────────────────┘
+
+  content-integrity details:
+    - hash-drift: .claude/rules/money-handling.md (dep=<self>, expected=9990a0125da2..., actual=0f02b7b3f4f6...)
+
+  drift details:
+    - modified: .claude/rules/money-handling.md
+
+[x] 2 of 9 check(s) failed
+
+[x] Drift detected: 1 file(s)
+
+  modified (1):
+    - .claude/rules/money-handling.md  [.]
+
+  [i] Run 'apm install' to re-sync deployed files with the lockfile.
+

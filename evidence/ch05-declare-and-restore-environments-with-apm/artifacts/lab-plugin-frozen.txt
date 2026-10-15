@@ -1,0 +1,8 @@
+[>] Installing dependencies from apm.yml...
+[x] --frozen: apm.lock.yaml is out of sync with apm.yml.
+  - github/awesome-copilot/plugins/context-engineering: package manifest not found at 
+<workspace>/lab-plugin/apm_modules/github/awesome-copilot/plugins/co
+ntext-engineering/apm.yml; re-run 'apm install' to restore it
+[i] Tip: rerun 'apm install' without --frozen to create or repair package lock state, retaining the original options, 
+including --root DIR or --global if specified.
+[x] Install failed after 0.0s.

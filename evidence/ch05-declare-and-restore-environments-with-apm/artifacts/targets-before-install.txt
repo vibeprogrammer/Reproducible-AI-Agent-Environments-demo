@@ -1,0 +1,14 @@
+  TARGET       STATUS     SOURCE                                   DEPLOY DIR
+  ------------ ---------- ---------------------------------------- ----------
+  claude       inactive   needs CLAUDE.md                          .claude/
+  copilot      inactive   needs .github/copilot-instructions.md    .github/
+  cursor       inactive   needs .cursor/                           .cursor/
+  codex        inactive   needs .codex/                            .codex/
+  gemini       inactive   needs GEMINI.md                          .gemini/
+  grok-build   inactive   needs .grok/                             .grok/
+  opencode     inactive   needs .opencode/                         .opencode/
+  windsurf     inactive   needs .windsurf/                         .windsurf/
+  kiro         inactive   needs .kiro/                             .kiro/
+
+[i] Create a harness config (e.g. CLAUDE.md, .cursor/, .github/copilot-instructions.md) or declare `targets:` in 
+apm.yml.

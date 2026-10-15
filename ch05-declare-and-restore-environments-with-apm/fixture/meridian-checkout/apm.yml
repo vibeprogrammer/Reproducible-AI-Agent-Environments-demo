@@ -1,0 +1,25 @@
+name: meridian-checkout
+version: 1.0.0
+description: Agent environment for Meridian's checkout payment service
+author: meridian-finance
+license: UNLICENSED
+
+# Pin the tools Meridian supports instead of relying on auto-detection.
+targets:
+  - copilot
+  - claude
+  - cursor
+
+dependencies:
+  apm:
+    # Chapter 2's skill, from a Git subdirectory, pinned to its release tag.
+    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0
+  mcp:
+    # Self-defined remote server; it needs no credentials.
+    - name: microsoft-learn
+      registry: false
+      transport: http
+      url: https://learn.microsoft.com/api/mcp
+
+# Consent to deploy the repo's own primitives under .apm/.
+includes: auto

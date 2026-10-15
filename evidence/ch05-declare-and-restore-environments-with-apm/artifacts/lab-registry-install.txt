@@ -1,0 +1,9 @@
+[>] Installing dependencies from apm.yml...
++- MCP Servers (1)
+[i] Targeting declared target from apm.yml: claude
+[>] Looking up 1 MCP server in registry...
+Environment variables needed:
+  CONTEXT7_API_KEY (API key for authentication): Warning: Password input may be echoed.
+[x] Error installing dependencies: 
+[i] Run with --verbose for detailed diagnostics
+[x] Install failed after 0.4s.

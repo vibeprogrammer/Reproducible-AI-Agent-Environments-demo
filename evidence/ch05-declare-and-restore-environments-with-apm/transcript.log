@@ -1,0 +1,748 @@
+== ch05-declare-and-restore-environments-with-apm == workspace: <workspace> (fresh mktemp dir, isolated HOME)
+
+## 1. The pinned CLI
+$ apm --version
+Agent Package Manager (APM) CLI version 0.33.0
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /version 0\.33\.0/
+
+## 2. What apm init scaffolds (empty scratch project)
+$ apm init -y
+[>] Initializing APM project: scaffold
+[*] APM project initialized successfully!
+    Created Files     
+┏━━━━━━┳━━━━━━━━━━━━━┓
+┃ File ┃ Description ┃
+┡━━━━━━╇━━━━━━━━━━━━━┩
+│ *    │ apm.yml     │
+└──────┴─────────────┘
+
+╭────────────────────────────────────────────────────  Next Steps ─────────────────────────────────────────────────────╮
+│ * Install a package:               apm install <owner>/<repo>                                                        │
+│ * Run a script:                    apm run <script>                                                                  │
+│ * Build a plugin? Scaffold one:    apm plugin init                                                                   │
+│ * Publishing a marketplace?:       apm marketplace init                                                              │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+[i] Tip: Use agentrc to generate tailored agent instructions from your codebase. https://github.com/microsoft/agentrc
+  Docs: https://microsoft.github.io/apm  |  Star: https://github.com/microsoft/apm
+[exit 0]
+  PASS: exit code 0
+  PASS: exists: apm.yml
+$ cat apm.yml
+name: scaffold
+version: 1.0.0
+description: APM project for scaffold
+author: Developer
+# Which agent platforms to deploy to (uncomment to pin):
+# targets:
+#   - copilot
+#   - claude
+
+dependencies:
+  apm: []
+  mcp: []
+includes: auto
+scripts: {}
+[exit 0]
+  PASS: output matches /^includes: auto$/
+  PASS: output matches /^# targets:$/
+
+## 3. Priya: meridian-checkout with its own primitives and apm.yml
+$ bash -c find . -path ./.git -prune -o -type f -print | LC_ALL=C sort
+./.apm/agents/payments-reviewer.agent.md
+./.apm/instructions/money-handling.instructions.md
+./.apm/prompts/review-checkout-change.prompt.md
+./.gitignore
+./README.md
+./apm.yml
+./package.json
+./src/money.ts
+./src/payments/create-payment.ts
+./tsconfig.json
+[exit 0]
+  PASS: output matches /\./\.apm/agents/payments-reviewer\.agent\.md/
+  PASS: output matches /\./\.apm/instructions/money-handling\.instructions\.md/
+  PASS: output matches /\./\.apm/prompts/review-checkout-change\.prompt\.md/
+$ cat apm.yml
+name: meridian-checkout
+version: 1.0.0
+description: Agent environment for Meridian's checkout payment service
+author: meridian-finance
+license: UNLICENSED
+
+# Pin the tools Meridian supports instead of relying on auto-detection.
+targets:
+  - copilot
+  - claude
+  - cursor
+
+dependencies:
+  apm:
+    # Chapter 2's skill, from a Git subdirectory, pinned to its release tag.
+    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0
+  mcp:
+    # Self-defined remote server; it needs no credentials.
+    - name: microsoft-learn
+      registry: false
+      transport: http
+      url: https://learn.microsoft.com/api/mcp
+
+# Consent to deploy the repo's own primitives under .apm/.
+includes: auto
+[exit 0]
+  PASS: output matches /meridian-code-review#meridian-code-review-v1\.0\.0/
+
+## 3a. apm targets before the first install (targets are pinned in apm.yml)
+$ apm targets
+  TARGET       STATUS     SOURCE                                   DEPLOY DIR
+  ------------ ---------- ---------------------------------------- ----------
+  claude       inactive   needs CLAUDE.md                          .claude/
+  copilot      inactive   needs .github/copilot-instructions.md    .github/
+  cursor       inactive   needs .cursor/                           .cursor/
+  codex        inactive   needs .codex/                            .codex/
+  gemini       inactive   needs GEMINI.md                          .gemini/
+  grok-build   inactive   needs .grok/                             .grok/
+  opencode     inactive   needs .opencode/                         .opencode/
+  windsurf     inactive   needs .windsurf/                         .windsurf/
+  kiro         inactive   needs .kiro/                             .kiro/
+
+[i] Create a harness config (e.g. CLAUDE.md, .cursor/, .github/copilot-instructions.md) or declare `targets:` in 
+apm.yml.
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /^ +claude +inactive/
+
+## 4. Priya: apm install
+$ apm install
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .agents/skills/, .claude/skills/
+  [+] <project root> (local)
+  |-- 1 prompts integrated -> .github/prompts/
+  |-- 3 agents integrated -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) integrated -> 3 targets
++- MCP Servers (1)
+[i] Targeting declared targets from apm.yml: copilot, claude, cursor
+|  [>]  microsoft-learn (self-defined, http)
+|     +- Configuring for Copilot, Claude, Cursor...
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for Claude Code
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for Cursor
+  + microsoft-learn
+|  [+]  microsoft-learn -> Copilot, Claude, Cursor (configured)
+[*] Configured 1 server
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 2 APM dependencies and 1 MCP server in 3.0s.
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /Targets: claude, copilot, cursor +\(source: apm\.yml\)/
+  PASS: output matches /meridian-code-review-v1\.0\.0 @d77ad927/
+  PASS: output matches /microsoft-learn/
+  PASS: output matches /Installed 2 APM dependencies and 1 MCP server/
+
+## 4a. What landed where
+$ bash -c find .agents .claude .cursor .github .mcp.json -type f | LC_ALL=C sort
+.agents/skills/meridian-code-review/SKILL.md
+.agents/skills/meridian-code-review/apm.yml
+.agents/skills/meridian-code-review/assets/review-report-template.md
+.agents/skills/meridian-code-review/references/false-positives.md
+.agents/skills/meridian-code-review/references/money-rules.md
+.agents/skills/meridian-code-review/scripts/check_money_rules.py
+.claude/agents/payments-reviewer.md
+.claude/commands/review-checkout-change.md
+.claude/rules/money-handling.md
+.claude/skills/meridian-code-review/SKILL.md
+.claude/skills/meridian-code-review/apm.yml
+.claude/skills/meridian-code-review/assets/review-report-template.md
+.claude/skills/meridian-code-review/references/false-positives.md
+.claude/skills/meridian-code-review/references/money-rules.md
+.claude/skills/meridian-code-review/scripts/check_money_rules.py
+.cursor/agents/payments-reviewer.md
+.cursor/commands/review-checkout-change.md
+.cursor/mcp.json
+.cursor/rules/money-handling.mdc
+.github/agents/payments-reviewer.agent.md
+.github/instructions/money-handling.instructions.md
+.github/mcp.json
+.github/prompts/review-checkout-change.prompt.md
+.mcp.json
+[exit 0]
+  PASS: exit code 0
+  PASS: identical: ../generated-files.txt == ../expected-generated-files.txt
+  PASS: exists: .claude/skills/meridian-code-review/scripts/check_money_rules.py
+  PASS: exists: .agents/skills/meridian-code-review/SKILL.md
+  PASS: absent: .cursor/skills
+  PASS: .github/instructions/money-handling.instructions.md matches /^applyTo: "src/\*\*/\*\.ts"/
+  PASS: .claude/rules/money-handling.md matches /^paths:/
+  PASS: .cursor/rules/money-handling.mdc matches /^globs: /
+$ bash -c head -6 .claude/rules/money-handling.md; echo ---; head -6 .cursor/rules/money-handling.mdc
+---
+paths:
+  - "src/**/*.ts"
+---
+
+- Represent money as integer minor units (`amountMinor: number`), never floats.
+---
+---
+description: Money and payment rules for the meridian-checkout service
+globs: src/**/*.ts
+---
+
+- Represent money as integer minor units (`amountMinor: number`), never floats.
+[exit 0]
+  PASS: exists: .github/prompts/review-checkout-change.prompt.md
+  PASS: exists: .claude/commands/review-checkout-change.md
+  PASS: exists: .cursor/commands/review-checkout-change.md
+  PASS: exists: .github/agents/payments-reviewer.agent.md
+  PASS: exists: .claude/agents/payments-reviewer.md
+  PASS: exists: .cursor/agents/payments-reviewer.md
+$ bash -c for f in .github/mcp.json .mcp.json .cursor/mcp.json; do echo "== $f"; cat "$f"; echo; done
+== .github/mcp.json
+{
+  "mcpServers": {
+    "microsoft-learn": {
+      "type": "http",
+      "url": "https://learn.microsoft.com/api/mcp",
+      "tools": [
+        "*"
+      ],
+      "id": ""
+    }
+  }
+}
+== .mcp.json
+{
+  "mcpServers": {
+    "microsoft-learn": {
+      "type": "http",
+      "url": "https://learn.microsoft.com/api/mcp"
+    }
+  }
+}
+
+== .cursor/mcp.json
+{
+  "mcpServers": {
+    "microsoft-learn": {
+      "type": "http",
+      "url": "https://learn.microsoft.com/api/mcp"
+    }
+  }
+}
+[exit 0]
+  PASS: .github/mcp.json matches /https://learn\.microsoft\.com/api/mcp/
+  PASS: .mcp.json matches /https://learn\.microsoft\.com/api/mcp/
+  PASS: .cursor/mcp.json matches /https://learn\.microsoft\.com/api/mcp/
+  PASS: .mcp.json does not match /(token|secret|Authorization|api[_-]?key)/
+
+## 4b. The lockfile (introduced here; Chapter 7 covers it in depth)
+  PASS: exists: apm.lock.yaml
+  PASS: apm.lock.yaml matches /^apm_version: 0\.33\.0$/
+  PASS: apm.lock.yaml matches /resolved_commit: d77ad927023f2b227bd130c2f436866cc07b2e9e/
+  PASS: apm.lock.yaml matches /resolved_ref: meridian-code-review-v1\.0\.0/
+  PASS: apm.lock.yaml matches /name: microsoft-learn/
+$ bash -c sed -n "1,16p" apm.lock.yaml
+lockfile_version: '1'
+apm_version: 0.33.0
+dependencies:
+- repo_url: vibeprogrammer/reproducible-ai-agent-environments-demo
+  materialization_repo_url: vibeprogrammer/Reproducible-AI-Agent-Environments-demo
+  name: meridian-code-review
+  host: github.com
+  resolved_commit: d77ad927023f2b227bd130c2f436866cc07b2e9e
+  resolved_ref: meridian-code-review-v1.0.0
+  version: 1.0.0
+  virtual_path: packages/meridian-code-review
+  is_virtual: true
+  package_type: hybrid
+  deployed_files:
+  - .agents/skills/meridian-code-review
+  - .agents/skills/meridian-code-review/SKILL.md
+[exit 0]
+  PASS: .gitignore matches /^apm_modules/$/
+
+## 4c. Priya commits the declaration, not the generated files
+$ bash -c git add -A && git status --porcelain
+A  .apm/agents/payments-reviewer.agent.md
+A  .apm/instructions/money-handling.instructions.md
+A  .apm/prompts/review-checkout-change.prompt.md
+A  .gitignore
+A  README.md
+A  apm.lock.yaml
+A  apm.yml
+A  package.json
+A  src/money.ts
+A  src/payments/create-payment.ts
+A  tsconfig.json
+[exit 0]
+  PASS: output does not match /\.claude/|\.cursor/|\.mcp\.json|\.agents//
+$ bash -c git commit -q -m "Declare the agent environment with APM" && git ls-files
+.apm/agents/payments-reviewer.agent.md
+.apm/instructions/money-handling.instructions.md
+.apm/prompts/review-checkout-change.prompt.md
+.gitignore
+README.md
+apm.lock.yaml
+apm.yml
+package.json
+src/money.ts
+src/payments/create-payment.ts
+tsconfig.json
+[exit 0]
+  PASS: output matches /^apm\.yml$/
+  PASS: output matches /^apm\.lock\.yaml$/
+  PASS: output matches /^\.apm/instructions/money-handling\.instructions\.md$/
+  PASS: output does not match /^\.claude//
+
+## 5. Anika: a fresh laptop (new, empty HOME) clones the repository
+$ bash -c ls -A "$HOME" | grep -v "^\.gitconfig$" | wc -l
+0
+[exit 0]
+  PASS: output matches /^0$/
+$ bash -c ls -A
+.apm
+.git
+.gitignore
+README.md
+apm.lock.yaml
+apm.yml
+package.json
+src
+tsconfig.json
+[exit 0]
+  PASS: absent: .claude
+  PASS: absent: .agents
+  PASS: absent: apm_modules
+  PASS: exists: apm.lock.yaml
+
+## 5a. Anika: apm install
+$ apm install
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #d77ad927023f2b227bd130c2f436866cc07b2e9e @d77ad927
+  |-- Skill integrated -> .agents/skills/, .claude/skills/
+  [+] <project root> (local)
+  |-- 1 prompts integrated -> .github/prompts/
+  |-- 3 agents integrated -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) integrated -> 3 targets
++- MCP Servers (1)
+[i] Targeting declared targets from apm.yml: copilot, claude, cursor
+|  [>]  microsoft-learn (self-defined, http)
+|     +- Configuring for Copilot, Claude, Cursor...
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for Claude Code
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for Cursor
+  + microsoft-learn
+|  [+]  microsoft-learn -> Copilot, Claude, Cursor (configured)
+[*] Configured 1 server
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 2 APM dependencies and 1 MCP server in 0.9s.
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /Targets: claude, copilot, cursor +\(source: apm\.yml\)/
+  PASS: output matches /@d77ad927/
+
+## 6. Anika: verify the restored environment
+
+## 6a. Same files, same bytes as Priya's machine
+$ bash -c wc -l < ../../anika.sha256
+24
+[exit 0]
+  PASS: identical: ../../priya.sha256 == ../../anika.sha256
+$ bash -c git status --porcelain; echo "status-lines: $(git status --porcelain | wc -l)"
+status-lines: 0
+[exit 0]
+  PASS: output matches /^status-lines: 0$/
+
+## 6b. apm targets
+$ apm targets
+  TARGET       STATUS     SOURCE                                   DEPLOY DIR
+  ------------ ---------- ---------------------------------------- ----------
+  claude       active     .claude/                                 .claude/
+  copilot      active     .github/mcp.json                         .github/
+  cursor       active     .cursor/                                 .cursor/
+  codex        inactive   needs .codex/                            .codex/
+  gemini       inactive   needs GEMINI.md                          .gemini/
+  grok-build   inactive   needs .grok/                             .grok/
+  opencode     inactive   needs .opencode/                         .opencode/
+  windsurf     inactive   needs .windsurf/                         .windsurf/
+  kiro         inactive   needs .kiro/                             .kiro/
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /^ +claude +active/
+  PASS: output matches /^ +copilot +active/
+  PASS: output matches /^ +cursor +active/
+
+## 6c. apm deps tree
+$ apm deps tree
+meridian-checkout (local)
+└── vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review@1.0.0
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /meridian-checkout \(local\)/
+  PASS: output matches /meridian-code-review@1\.0\.0/
+
+## 6d. apm deps list (observed in 0.33.0: fails once the project has local .apm/ content)
+$ apm deps list
+[x] Error listing dependencies: Invalid local package path '': path segments must not be empty
+[exit 1]
+  PASS: exit code 1
+  PASS: output matches /Invalid local package path ''/
+
+## 6e. apm audit (content scan + drift replay)
+$ apm audit
+[>] Scanning installed packages and deployed files...
+[>] Replaying install (cache-only)...
+[+] Replayed 2 package(s)
+[>] Diffing scratch vs working tree...
+[+] No drift detected
+
+[*] 17 file(s) scanned -- no issues found
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /No drift detected/
+  PASS: output matches /no issues found/
+
+## 6e2. apm audit --ci (lockfile consistency gate)
+$ apm audit --ci
+[!] Could not determine org from git remote; enforcement skipped (set policy.fetch_failure_default=block in apm.yml to fail closed)
+[>] Replaying install (cache-only)...
+[+] Replayed 2 package(s)
+[>] Diffing scratch vs working tree...
+[+] No drift detected
+
+                                            [>] APM Policy Compliance                                             
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Status   ┃ Check                    ┃ Message                                                                  ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ [+]      │ lockfile-exists          │ Lockfile present                                                         │
+│ [+]      │ ref-consistency          │ All dependency refs match lockfile                                       │
+│ [+]      │ deployment-ledger-owners │ All deployment ledger owners are valid                                   │
+│ [+]      │ deployed-files-present   │ All deployed files present on disk                                       │
+│ [+]      │ no-orphaned-packages     │ No orphaned packages in lockfile                                         │
+│ [+]      │ skill-subset-consistency │ Skill subset selections match lockfile                                   │
+│ [+]      │ config-consistency       │ MCP configs match lockfile baseline                                      │
+│ [+]      │ content-integrity        │ No critical hidden Unicode or hash drift detected                        │
+│ [+]      │ includes-consent         │ 'includes:' declared -- local content deployment is explicitly consented │
+│ [+]      │ drift                    │ no drift detected against lockfile                                       │
+└──────────┴──────────────────────────┴──────────────────────────────────────────────────────────────────────────┘
+
+[*] All 10 check(s) passed
+[exit 0]
+  PASS: exit code 0
+
+## 6f. apm install --frozen (lockfile and manifest agree)
+$ apm install --frozen
+[>] Installing dependencies from apm.yml...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927 (cached)
+  |-- (files unchanged)
+  [+] <project root> (local)
+  |-- 1 prompts adopted -> .github/prompts/
+  |-- 3 agents adopted -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) adopted -> 3 targets
++- MCP Servers (1)
+[i] Targeting declared targets from apm.yml: copilot, claude, cursor
+|  [+] microsoft-learn (already configured)
+[*] All servers up to date
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 1 APM dependency in 0.3s.
+[i] Lockfile presence verified. Run 'apm audit' for on-disk content integrity.
+[exit 0]
+  PASS: exit code 0
+
+## 6g. apm doctor
+$ apm doctor
+
+                               Environment Diagnostics                                
+┏━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Check              ┃ Status ┃ Detail                                               ┃
+┡━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ git                │ [+]    │ git version 2.39.5                                   │
+│ network            │ [+]    │ github.com reachable                                 │
+│ auth               │ [i]    │ No token; unauthenticated rate limits apply          │
+│ marketplace config │ [i]    │ No marketplace authoring config in current directory │
+│ executable trust   │ [i]    │ Gate disabled (no executables: block in apm.yml)     │
+└────────────────────┴────────┴──────────────────────────────────────────────────────┘
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /git/
+
+## 6h. Local edit to a generated file: audit reports drift
+$ apm audit
+[>] Scanning installed packages and deployed files...
+[>] Replaying install (cache-only)...
+[+] Replayed 2 package(s)
+[>] Diffing scratch vs working tree...
+[!] Drift detected: 1 file(s)
+
+[*] 17 file(s) scanned -- no issues found
+
+[x] Drift detected: 1 file(s)
+
+  modified (1):
+    - .claude/rules/money-handling.md  [.]
+
+  [i] Run 'apm install' to re-sync deployed files with the lockfile.
+
+[exit 0]
+  PASS: exit code 0 (plain audit reports drift but still exits 0)
+  PASS: output matches /Drift detected: 1 file/
+  PASS: output matches /money-handling\.md/
+$ apm audit --ci
+[>] Replaying install (cache-only)...
+[+] Replayed 2 package(s)
+[>] Diffing scratch vs working tree...
+[!] Drift detected: 1 file(s)
+
+                                            [>] APM Policy Compliance                                            
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Status   ┃ Check                    ┃ Message                                                                 ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ [+]      │ lockfile-exists          │ Lockfile present                                                        │
+│ [+]      │ ref-consistency          │ All dependency refs match lockfile                                      │
+│ [+]      │ deployment-ledger-owners │ All deployment ledger owners are valid                                  │
+│ [+]      │ deployed-files-present   │ All deployed files present on disk                                      │
+│ [+]      │ no-orphaned-packages     │ No orphaned packages in lockfile                                        │
+│ [+]      │ skill-subset-consistency │ Skill subset selections match lockfile                                  │
+│ [+]      │ config-consistency       │ MCP configs match lockfile baseline                                     │
+│          │ content-integrity        │ 1 file(s) with hash drift -- run 'apm install' to restore drifted files │
+│          │ drift                    │ drift detected: 1 file(s): .claude/rules/money-handling.md              │
+└──────────┴──────────────────────────┴─────────────────────────────────────────────────────────────────────────┘
+
+  content-integrity details:
+    - hash-drift: .claude/rules/money-handling.md (dep=<self>, expected=9990a0125da2..., actual=0f02b7b3f4f6...)
+
+  drift details:
+    - modified: .claude/rules/money-handling.md
+
+[x] 2 of 9 check(s) failed
+
+[x] Drift detected: 1 file(s)
+
+  modified (1):
+    - .claude/rules/money-handling.md  [.]
+
+  [i] Run 'apm install' to re-sync deployed files with the lockfile.
+
+[exit 1]
+  PASS: exit code 1 (the CI gate fails on drift)
+  PASS: output matches /content-integrity/
+$ apm install
+[>] Installing dependencies from apm.yml...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927 (cached)
+  |-- (files unchanged)
+  [+] <project root> (local)
+  |-- 1 prompts adopted -> .github/prompts/
+  |-- 3 agents adopted -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 1 rule(s) integrated (2 adopted) -> 3 targets
++- MCP Servers (1)
+[i] Targeting declared targets from apm.yml: copilot, claude, cursor
+|  [+] microsoft-learn (already configured)
+[*] All servers up to date
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 1 APM dependency in 0.2s.
+[exit 0]
+  PASS: exit code 0
+  PASS: identical: ../../priya.sha256 == ../../anika-after.sha256
+
+## 7. Scope: Anika installs the skill for herself at user scope
+$ apm install -g vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0 --target claude
+[i] Installing to user scope (~/.apm/)
+[!] User-scope primitives are fully supported by claude, kiro, gemini, grok-build, grok-cloud, agent-skills, openclaw, 
+hermes, copilot-cowork, copilot-app. Partially supported: copilot, cursor, opencode, antigravity, codex, windsurf.
+Some primitives are not supported: cursor (instructions); opencode (hooks); antigravity (instructions, hooks); windsurf 
+(instructions)
+[*] Created <workspace>/anika-home/.apm/apm.yml
+[i] Targets set: claude (persisted to 
+<workspace>/anika-home/.apm/apm.yml)
+[*] Validating 1 package...
+[+] vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0
+[*] Updated apm.yml with 1 new package(s)
+[>] Installing 1 new package...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .claude/skills/
+  [+] <project root> (local)
+  |-- (files unchanged)
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 1 APM dependency in 0.8s.
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /Installing to user scope/
+  PASS: exists: .apm/apm.yml
+  PASS: exists: .apm/apm.lock.yaml
+  PASS: exists: .claude/skills/meridian-code-review/SKILL.md
+$ bash -c sed -n "/^targets:/,\$p" .apm/apm.yml
+targets:
+  - claude
+dependencies:
+  apm:
+    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0
+  mcp: []
+includes: auto
+scripts: {}
+[exit 0]
+$ bash -c ls -A | wc -l
+0
+[exit 0]
+  PASS: output matches /^0$/
+$ apm deps list -g
+                                                APM Dependencies (Global)                                               
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━┳━━━━━━━┓
+┃ Package                                        ┃ Version ┃ Source ┃ Prompts ┃ Instructions ┃ Agents ┃ Skills ┃ Hooks ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━╇━━━━━━━┩
+│ vibeprogrammer/Reproducible-AI-Agent-Environm… │ 1.0.0   │ github │    -    │      -       │   -    │   1    │   -   │
+└────────────────────────────────────────────────┴─────────┴────────┴─────────┴──────────────┴────────┴────────┴───────┘
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /Dependencies \(Global\)/
+
+## 8. Side lab A: a registry MCP server that asks for a credential
+$ bash -c PYTHONWARNINGS=ignore apm install < /dev/null
+[>] Installing dependencies from apm.yml...
++- MCP Servers (1)
+[i] Targeting declared target from apm.yml: claude
+[>] Looking up 1 MCP server in registry...
+Environment variables needed:
+  CONTEXT7_API_KEY (API key for authentication): Warning: Password input may be echoed.
+[x] Error installing dependencies: 
+[i] Run with --verbose for detailed diagnostics
+[x] Install failed after 0.4s.
+[exit 1]
+  PASS: exit code 1
+  PASS: output matches /CONTEXT7_API_KEY/
+  PASS: absent: .mcp.json
+
+## 9. Side lab B: a third-party Agent Plugin added to Meridian's manifest
+$ bash -c sed -n "/^dependencies:/,/^  mcp:/p" apm.yml
+dependencies:
+  apm:
+    # Chapter 2's skill, from a Git subdirectory, pinned to its release tag.
+    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0
+    - github/awesome-copilot/plugins/context-engineering#bebb02d4c3c845b9c4cef398568a1084e4129e57
+  mcp:
+[exit 0]
+  PASS: output matches /awesome-copilot/plugins/context-engineering#bebb02d4/
+$ apm install
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[>] Resolving awesome-copilot-context-engineering...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] github.com/github/awesome-copilot/plugins/context-engineering#bebb02d4c3c845b9c4cef398568a1084e4129e57 
+#bebb02d4c3c845b9c4cef398568a1084e4129e57 @bebb02d4
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #d77ad927023f2b227bd130c2f436866cc07b2e9e @d77ad927
+  |-- Skill integrated -> .agents/skills/, .claude/skills/
+  [+] <project root> (local)
+  |-- 1 prompts integrated -> .github/prompts/
+  |-- 3 agents integrated -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) integrated -> 3 targets
+[+] Registered 1 Agent Plugin with GitHub Copilot via the 'apm' marketplace (context-engineering)
++- MCP Servers (1)
+[i] Targeting declared targets from apm.yml: copilot, claude, cursor
+|  [>]  microsoft-learn (self-defined, http)
+|     +- Configuring for Copilot, Claude, Cursor...
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for Claude Code
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for Cursor
+  + microsoft-learn
+|  [+]  microsoft-learn -> Copilot, Claude, Cursor (configured)
+[*] Configured 1 server
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 3 APM dependencies and 1 MCP server in 2.1s.
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /Registered 1 Agent Plugin with GitHub Copilot/
+$ cat .github/copilot/settings.local.json
+{
+  "extraKnownMarketplaces": {
+    "apm": {
+      "source": {
+        "source": "directory",
+        "path": "apm_modules"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "context-engineering@apm": true
+  }
+}
+[exit 0]
+  PASS: output matches /context-engineering@apm/
+$ bash -c find apm_modules/github/awesome-copilot/plugins/context-engineering -type f | LC_ALL=C sort
+apm_modules/github/awesome-copilot/plugins/context-engineering/.apm-pin
+apm_modules/github/awesome-copilot/plugins/context-engineering/README.md
+apm_modules/github/awesome-copilot/plugins/context-engineering/plugin.json
+[exit 0]
+  PASS: output matches /plugin\.json/
+$ bash -c grep -o '"\./[a-z/.-]*"' apm_modules/github/awesome-copilot/plugins/context-engineering/plugin.json
+"./agents/context-architect.md"
+"./skills/context-map/"
+"./skills/refactor-plan/"
+"./skills/what-context-needed/"
+[exit 0]
+  PASS: output matches /skills/context-map/
+  PASS: absent: apm_modules/github/awesome-copilot/plugins/context-engineering/skills/context-map
+  PASS: absent: apm_modules/github/awesome-copilot/plugins/context-engineering/agents/context-architect.md
+$ apm audit
+[>] Scanning installed packages and deployed files...
+[>] Replaying install (cache-only)...
+[!] drift check could not run: drift replay blocked: Native Agent Plugin canonical IR is missing, so deployment was blocked. Use 'apm pack --claude-plugin' or ask the publisher for a legacy-compatible package.
+
+[*] 17 file(s) scanned -- no issues found
+[exit 0]
+  PASS: output matches /drift check could not run/
+$ apm install --frozen
+[>] Installing dependencies from apm.yml...
+[x] --frozen: apm.lock.yaml is out of sync with apm.yml.
+  - github/awesome-copilot/plugins/context-engineering: package manifest not found at 
+<workspace>/lab-plugin/apm_modules/github/awesome-copilot/plugins/co
+ntext-engineering/apm.yml; re-run 'apm install' to restore it
+[i] Tip: rerun 'apm install' without --frozen to create or repair package lock state, retaining the original options, 
+including --root DIR or --global if specified.
+[x] Install failed after 0.0s.
+[exit 1]
+  PASS: exit code 1
+  PASS: output matches /out of sync/
+== ch05-declare-and-restore-environments-with-apm: passed (101 passed, 0 failed) ==
