@@ -1,0 +1,89 @@
+Agent Package Manager (APM) CLI version 0.33.0
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #d77ad927023f2b227bd130c2f436866cc07b2e9e @d77ad927
+  |-- Skill integrated -> .agents/skills/, .claude/skills/
+  [+] <project root> (local)
+  |-- 1 prompts integrated -> .github/prompts/
+  |-- 3 agents integrated -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) integrated -> 3 targets
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + ledger
+
+[!] Copilot CLI will resolve 1 environment variable at runtime that is not currently set: LEDGER_API_KEY.
+    Export it in your shell before running 'gh copilot', e.g.:
+      export LEDGER_API_KEY=...
+Successfully configured MCP server 'ledger' for VS Code
+  + ledger
+Successfully configured MCP server 'ledger' for Claude Code
+  + ledger
+Successfully configured MCP server 'ledger' for Cursor
+  + ledger
+|  [+]  ledger -> Copilot, Vscode, Claude, Cursor (configured)
+|  [>]  microsoft-learn (self-defined, http)
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for VS Code
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for Claude Code
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for Cursor
+  + microsoft-learn
+|  [+]  microsoft-learn -> Copilot, Vscode, Claude, Cursor (configured)
+[*] Configured 2 servers
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 2 APM dependencies and 2 MCP servers in 1.2s.
+[>] Installing dependencies from apm.yml...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927 (cached)
+  |-- (files unchanged)
+  [+] <project root> (local)
+  |-- 1 prompts adopted -> .github/prompts/
+  |-- 3 agents adopted -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) adopted -> 3 targets
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [+] ledger (already configured)
+|  [+] microsoft-learn (already configured)
+[*] All servers up to date
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 1 APM dependency in 0.3s.
+[i] Lockfile presence verified. Run 'apm audit' for on-disk content integrity.
+[>] Replaying install (cache-only)...
+[+] Replayed 2 package(s)
+[>] Diffing scratch vs working tree...
+[+] No drift detected
+
+                                            [>] APM Policy Compliance                                             
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Status   ┃ Check                    ┃ Message                                                                  ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ [+]      │ lockfile-exists          │ Lockfile present                                                         │
+│ [+]      │ ref-consistency          │ All dependency refs match lockfile                                       │
+│ [+]      │ deployment-ledger-owners │ All deployment ledger owners are valid                                   │
+│ [+]      │ deployed-files-present   │ All deployed files present on disk                                       │
+│ [+]      │ no-orphaned-packages     │ No orphaned packages in lockfile                                         │
+│ [+]      │ skill-subset-consistency │ Skill subset selections match lockfile                                   │
+│ [+]      │ config-consistency       │ MCP configs match lockfile baseline                                      │
+│ [+]      │ content-integrity        │ No critical hidden Unicode or hash drift detected                        │
+│ [+]      │ includes-consent         │ 'includes:' declared -- local content deployment is explicitly consented │
+│ [+]      │ drift                    │ no drift detected against lockfile                                       │
+└──────────┴──────────────────────────┴──────────────────────────────────────────────────────────────────────────┘
+
+[*] All 10 check(s) passed

@@ -1,0 +1,15 @@
+[>] Scanning installed packages and deployed files...
+[>] Replaying install (cache-only)...
+[+] Replayed 2 package(s)
+[>] Diffing scratch vs working tree...
+[!] Drift detected: 1 file(s)
+
+[*] 17 file(s) scanned -- no issues found
+
+[x] Drift detected: 1 file(s)
+
+  modified (1):
+    - .claude/skills/meridian-code-review/SKILL.md  [vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review]
+
+  [i] Run 'apm install' to re-sync deployed files with the lockfile.
+

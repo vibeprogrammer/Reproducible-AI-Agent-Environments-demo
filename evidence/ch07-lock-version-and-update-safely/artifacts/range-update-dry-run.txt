@@ -1,0 +1,13 @@
+[>] Checking upstream for revision-pin freshness...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Update plan for apm.yml
+
+  [~] vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+      ref: meridian-code-review-v1.0.0 -> meridian-code-review-v1.2.0 (d77ad92 -> dcd8868)
+      files: .agents/skills/meridian-code-review, .agents/skills/meridian-code-review/SKILL.md, 
+.agents/skills/meridian-code-review/apm.yml, +11 more
+
+  1 updated
+  [~] updated
+
+[i] Dry run: no changes applied. Re-run without --dry-run to update.

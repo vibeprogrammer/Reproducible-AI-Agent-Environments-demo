@@ -1,0 +1,15 @@
+diff --git a/src/checkout/capture.ts b/src/checkout/capture.ts
+index 1a2b3c4..5d6e7f8 100644
+--- a/src/checkout/capture.ts
++++ b/src/checkout/capture.ts
+@@ -1,8 +1,9 @@
+ import { paymentsClient } from "../clients/payments";
+
+ export async function captureOrder(order: Order, authorizationId: string) {
+-  return paymentsClient.payments.capture(authorizationId, {
++  const result = await paymentsClient.payments.capture(authorizationId, {
+     amountMinor: order.totalMinor,
+     currency: "EUR",
+   });
++  return result;
+ }

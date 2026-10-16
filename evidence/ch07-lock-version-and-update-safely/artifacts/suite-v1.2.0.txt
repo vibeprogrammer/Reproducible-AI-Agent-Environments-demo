@@ -1,0 +1,32 @@
+== structure and metadata
+  PASS  skill-md-exists                          SKILL.md
+  PASS  frontmatter-present                      
+  PASS  name-matches-spec                        meridian-code-review
+  PASS  name-matches-folder                      meridian-code-review vs meridian-code-review
+  PASS  description-length                       459 chars
+  PASS  description-says-what                    starts with what the skill does
+  PASS  description-says-when                    has a 'Use when' clause
+  PASS  compatibility-length                     
+  PASS  body-under-500-lines                     67 lines
+  PASS  version-consistent                       SKILL.md 1.2.0, apm.yml 1.2.0
+  PASS  version-is-expected                      expected 1.2.0
+== resources referenced from SKILL.md
+  PASS  referenced-files-exist                   4 referenced, missing: none
+  PASS  no-orphan-resources                      unreferenced: none
+== checker: exit-code contract and fixtures
+  PASS  usage-error-exit-2                       no arguments -> 2
+  PASS  missing-input-exit-2                     -> 2
+  PASS  help-documents-diff-semantics            --diff help must describe what diff mode really checks
+  FAIL  fixture:bad-diff-six-findings            exit 1, rules ['MR001', 'MR001', 'MR002', 'MR003', 'MR004']
+  PASS  fixture:good-diff-clean                  the compliant version of the same change
+  PASS  fixture:deleted-idempotency-key          deleting the key from an unchanged create call must be reported
+  PASS  fixture:unchanged-line-after-deletion    documented contract: MR001/MR003/MR004 report added lines only; an unchanged line after a deletion is not part of the change
+  PASS  fixture:non-utf8-input-is-input-error    exit 1 means findings; unreadable input must be exit 2, never a traceback
+  FAIL  fixture:known-false-positive-fee-rate    exit 0, rules []
+  PASS  fixture:known-gap-whole-object-log       known: false negative, see references/money-rules.md (MR003)
+== side effects (read-only, no network, no subprocess)
+  PASS  no-write-network-or-subprocess-events    0 audit events []
+  PASS  audited-run-still-finds-issues           exit 1
+  PASS  skill-folder-unchanged                   
+  PASS  working-dir-unchanged                    
+== 27 checks, 25 passed, 2 failed: fixture:bad-diff-six-findings, fixture:known-false-positive-fee-rate

@@ -1,0 +1,294 @@
+[>] Replaying install (cache-only)...
+[+] Replayed 2 package(s)
+[>] Diffing scratch vs working tree...
+[!] Drift detected: 1 file(s)
+{
+  "passed": false,
+  "checks": [
+    {
+      "name": "lockfile-exists",
+      "passed": true,
+      "message": "Lockfile present",
+      "details": []
+    },
+    {
+      "name": "ref-consistency",
+      "passed": true,
+      "message": "All dependency refs match lockfile",
+      "details": []
+    },
+    {
+      "name": "deployment-ledger-owners",
+      "passed": true,
+      "message": "All deployment ledger owners are valid",
+      "details": []
+    },
+    {
+      "name": "deployed-files-present",
+      "passed": true,
+      "message": "All deployed files present on disk",
+      "details": []
+    },
+    {
+      "name": "no-orphaned-packages",
+      "passed": true,
+      "message": "No orphaned packages in lockfile",
+      "details": []
+    },
+    {
+      "name": "skill-subset-consistency",
+      "passed": true,
+      "message": "Skill subset selections match lockfile",
+      "details": []
+    },
+    {
+      "name": "config-consistency",
+      "passed": true,
+      "message": "MCP configs match lockfile baseline",
+      "details": []
+    },
+    {
+      "name": "content-integrity",
+      "passed": false,
+      "message": "1 file(s) with hash drift -- run 'apm install' to restore drifted files",
+      "details": [
+        "hash-drift: .claude/skills/meridian-code-review/SKILL.md (dep=vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review, expected=16673c19ce70..., actual=18a4ae007efb...)"
+      ],
+      "primitive_coverage": [
+        {
+          "file": ".agents/skills/meridian-code-review/SKILL.md",
+          "target": "copilot",
+          "kind": "skills",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".agents/skills/meridian-code-review/apm.yml",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".agents/skills/meridian-code-review/assets/review-report-template.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".agents/skills/meridian-code-review/references/false-positives.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".agents/skills/meridian-code-review/references/money-rules.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".agents/skills/meridian-code-review/scripts/check_money_rules.py",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/SKILL.md",
+          "target": "claude",
+          "kind": "skills",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/apm.yml",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/assets/review-report-template.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/references/false-positives.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/references/money-rules.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/scripts/check_money_rules.py",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/agents/payments-reviewer.md",
+          "target": "claude",
+          "kind": "agents",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/commands/review-checkout-change.md",
+          "target": "claude",
+          "kind": "commands",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/rules/money-handling.md",
+          "target": "claude",
+          "kind": "instructions",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".cursor/agents/payments-reviewer.md",
+          "target": "cursor",
+          "kind": "agents",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".cursor/commands/review-checkout-change.md",
+          "target": "cursor",
+          "kind": "commands",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".cursor/rules/money-handling.mdc",
+          "target": "cursor",
+          "kind": "instructions",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".github/agents/payments-reviewer.agent.md",
+          "target": "copilot",
+          "kind": "agents",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".github/instructions/money-handling.instructions.md",
+          "target": "copilot",
+          "kind": "instructions",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".github/prompts/review-checkout-change.prompt.md",
+          "target": "copilot",
+          "kind": "prompts",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        }
+      ]
+    },
+    {
+      "name": "drift",
+      "passed": false,
+      "message": "drift detected: 1 file(s): .claude/skills/meridian-code-review/SKILL.md",
+      "details": [
+        "modified: .claude/skills/meridian-code-review/SKILL.md"
+      ]
+    }
+  ],
+  "summary": {
+    "total": 9,
+    "passed": 7,
+    "failed": 2
+  },
+  "drift": {
+    "drift": [
+      {
+        "path": ".claude/skills/meridian-code-review/SKILL.md",
+        "kind": "modified",
+        "package": "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review",
+        "inline_diff": ""
+      }
+    ]
+  }
+}

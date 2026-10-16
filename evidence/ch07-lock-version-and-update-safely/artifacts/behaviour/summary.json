@@ -1,0 +1,41 @@
+{
+  "status": "ran",
+  "claude_code": "2.1.301 (Claude Code)",
+  "model_requested": "claude-sonnet-5",
+  "prompt": "Do a code review of change.diff.",
+  "runs": [
+    {
+      "exit_code": 0,
+      "model_reported": "claude-sonnet-5",
+      "skill_invoked": true,
+      "rules_mentioned": [
+        "MR001",
+        "MR002",
+        "MR003",
+        "MR004"
+      ],
+      "verdict_changes_requested": true,
+      "verdict_approve_only": false,
+      "chars": 3473
+    },
+    {
+      "exit_code": 0,
+      "model_reported": "claude-sonnet-5",
+      "skill_invoked": true,
+      "rules_mentioned": [
+        "MR001",
+        "MR002",
+        "MR003",
+        "MR004"
+      ],
+      "verdict_changes_requested": true,
+      "verdict_approve_only": false,
+      "chars": 3974
+    }
+  ],
+  "texts_identical": false,
+  "checks_passed_per_run": [
+    true,
+    true
+  ]
+}

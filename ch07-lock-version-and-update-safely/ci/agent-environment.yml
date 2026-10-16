@@ -1,0 +1,41 @@
+# .github/workflows/agent-environment.yml -- proposed by Jon (Chapter 7).
+# Copy into meridian-checkout together with ci/ and tools/check_tag_pins.py.
+# NOT executed on GitHub Actions by the book's demo: the demo runs the same
+# commands locally (ci/check-agent-environment.sh, check_tag_pins.py,
+# apm outdated) and records the results in its evidence.
+name: agent-environment
+on:
+  pull_request:
+    paths: ["apm.yml", "apm.lock.yaml", ".apm/**", "ci/**"]
+  push:
+    branches: [main]
+  schedule:
+    - cron: "0 6 * * 1"   # Monday 06:00 UTC: freshness and tag-pin report
+permissions:
+  contents: read
+jobs:
+  gate:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install the pinned APM CLI
+        run: pip install apm-cli==0.33.0
+      - name: Frozen install + audit gate
+        run: bash ci/check-agent-environment.sh
+  freshness:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install apm-cli==0.33.0
+      - name: Newer tags available (report only; exits 0)
+        run: apm outdated --verbose
+      - name: Did any locked tag move upstream?
+        run: python3 tools/check_tag_pins.py apm.lock.yaml

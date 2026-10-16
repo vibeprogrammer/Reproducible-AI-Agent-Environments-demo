@@ -1,0 +1,8 @@
+[>] Installing dependencies from apm.yml...
+[x] --frozen: apm.lock.yaml is out of sync with apm.yml.
+  - vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review: package manifest not found at 
+<workspace>/ci-runner/apm_modules/vibeprogrammer/Reproducible-AI-Agent-Environm
+ents-demo/packages/meridian-code-review/apm.yml; re-run 'apm install' to restore it
+[i] Tip: rerun 'apm install' without --frozen to create or repair package lock state, retaining the original options, 
+including --root DIR or --global if specified.
+[x] Install failed after 0.0s.

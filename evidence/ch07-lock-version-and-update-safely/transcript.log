@@ -1,0 +1,1344 @@
+== ch07-lock-version-and-update-safely == workspace: <workspace> (fresh mktemp dir, isolated HOME)
+
+## A1. The pinned CLI
+$ apm --version
+Agent Package Manager (APM) CLI version 0.33.0
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /version 0\.33\.0/
+
+## A2. Priya: meridian-checkout as Chapter 5 left it, plus Jon's CI gate
+$ grep -n meridian-code-review apm.yml
+19:    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0
+[exit 0]
+  PASS: output matches /#meridian-code-review-v1\.0\.0/
+
+## A3. apm install writes apm.lock.yaml
+$ apm install
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .agents/skills/, .claude/skills/
+  [+] <project root> (local)
+  |-- 1 prompts integrated -> .github/prompts/
+  |-- 3 agents integrated -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) integrated -> 3 targets
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + ledger
+
+[!] Copilot CLI will resolve 1 environment variable at runtime that is not currently set: LEDGER_API_KEY.
+    Export it in your shell before running 'gh copilot', e.g.:
+      export LEDGER_API_KEY=...
+Successfully configured MCP server 'ledger' for VS Code
+  + ledger
+Successfully configured MCP server 'ledger' for Claude Code
+  + ledger
+Successfully configured MCP server 'ledger' for Cursor
+  + ledger
+|  [+]  ledger -> Copilot, Vscode, Claude, Cursor (configured)
+|  [>]  microsoft-learn (self-defined, http)
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for VS Code
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for Claude Code
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for Cursor
+  + microsoft-learn
+|  [+]  microsoft-learn -> Copilot, Vscode, Claude, Cursor (configured)
+[*] Configured 2 servers
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 2 APM dependencies and 2 MCP servers in 1.5s.
+[exit 0]
+  PASS: exit code 0
+  PASS: exists: apm.lock.yaml
+  PASS: apm.lock.yaml matches /^lockfile_version: '1'/
+  PASS: apm.lock.yaml matches /^apm_version: 0\.33\.0/
+  PASS: apm.lock.yaml matches /resolved_ref: meridian-code-review-v1\.0\.0/
+  PASS: apm.lock.yaml matches /resolved_commit: d77ad927023f2b227bd130c2f436866cc07b2e9e/
+  PASS: apm.lock.yaml matches /^  content_hash: sha256:[0-9a-f]{64}/
+  PASS: apm.lock.yaml matches /\.claude/skills/meridian-code-review/SKILL\.md: sha256:[0-9a-f]{64}/
+  PASS: apm.lock.yaml matches /^local_deployed_files:/
+  PASS: apm.lock.yaml matches /^mcp_configs:/
+  PASS: apm.lock.yaml matches /^deployments:/
+$ bash -c grep -c '^- kind:' apm.lock.yaml
+31
+[exit 0]
+
+## A4. A second install changes nothing (the lockfile is rewritten only on semantic change)
+$ apm install
+[>] Installing dependencies from apm.yml...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927 (cached)
+  |-- (files unchanged)
+  [+] <project root> (local)
+  |-- 1 prompts adopted -> .github/prompts/
+  |-- 3 agents adopted -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) adopted -> 3 targets
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [+] ledger (already configured)
+|  [+] microsoft-learn (already configured)
+[*] All servers up to date
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 1 APM dependency in 0.3s.
+[exit 0]
+  PASS: exit code 0
+  PASS: identical: apm.lock.yaml == /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/lock.before
+
+## A5. Commit manifest + lockfile (generated files stay ignored)
+$ bash -c git add -A && git commit -qm "Agent environment: apm.yml, apm.lock.yaml, CI gate" && git push -q origin HEAD:main && git ls-files | grep -E "apm|ci/|workflows"
+.apm/agents/payments-reviewer.agent.md
+.apm/instructions/money-handling.instructions.md
+.apm/prompts/review-checkout-change.prompt.md
+.github/workflows/agent-environment.yml
+apm.lock.yaml
+apm.yml
+ci/check-agent-environment.sh
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /^apm\.lock\.yaml$/
+  PASS: output does not match /^\.claude//
+
+## A6. CI runner: fresh clone, empty HOME. A bare --frozen install on the cold checkout
+$ apm install --frozen
+[>] Installing dependencies from apm.yml...
+[x] --frozen: apm.lock.yaml is out of sync with apm.yml.
+  - vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review: package manifest not found at 
+<workspace>/ci-runner/apm_modules/vibeprogrammer/Reproducible-AI-Agent-Environm
+ents-demo/packages/meridian-code-review/apm.yml; re-run 'apm install' to restore it
+[i] Tip: rerun 'apm install' without --frozen to create or repair package lock state, retaining the original options, 
+including --root DIR or --global if specified.
+[x] Install failed after 0.0s.
+[exit 1]
+  PASS: exit code 1 (APM 0.33.0: cold apm_modules + declared MCP servers)
+  PASS: output matches /package manifest not found/
+
+## A7. Jon's gate: install from the lockfile, require no lockfile change, then --frozen and audit
+$ cat ci/check-agent-environment.sh
+#!/usr/bin/env bash
+# check-agent-environment.sh -- Meridian's CI gate for the agent environment
+# (Chapter 7). Run from the root of a fresh meridian-checkout checkout.
+# The build fails when:
+#   - installing from the committed lockfile would change apm.yml or
+#     apm.lock.yaml (the lockfile does not describe the manifest, or a
+#     locked commit cannot be fetched any more)
+#   - apm install --frozen finds manifest/lockfile or MCP config drift
+#   - a deployed file is missing or no longer matches its locked hash
+# Policy enforcement is left out on purpose (--no-policy); Chapter 10 adds it.
+#
+# Why not just `apm install --frozen` first? With APM v0.33.0, on a cold
+# checkout (no apm_modules/) of a project that declares MCP servers,
+# `apm install --frozen` stopped with "package manifest not found ...
+# re-run 'apm install'" before downloading anything (observed 2026-10-15,
+# see the Chapter 7 demo evidence). A normal install reuses the locked
+# commits, and the git diff check turns any lockfile change into a failure.
+set -euo pipefail
+apm --version
+apm install
+git diff --exit-code -- apm.yml apm.lock.yaml
+apm install --frozen
+apm audit --ci --no-policy
+[exit 0]
+$ bash ci/check-agent-environment.sh
+Agent Package Manager (APM) CLI version 0.33.0
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #d77ad927023f2b227bd130c2f436866cc07b2e9e @d77ad927
+  |-- Skill integrated -> .agents/skills/, .claude/skills/
+  [+] <project root> (local)
+  |-- 1 prompts integrated -> .github/prompts/
+  |-- 3 agents integrated -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) integrated -> 3 targets
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + ledger
+
+[!] Copilot CLI will resolve 1 environment variable at runtime that is not currently set: LEDGER_API_KEY.
+    Export it in your shell before running 'gh copilot', e.g.:
+      export LEDGER_API_KEY=...
+Successfully configured MCP server 'ledger' for VS Code
+  + ledger
+Successfully configured MCP server 'ledger' for Claude Code
+  + ledger
+Successfully configured MCP server 'ledger' for Cursor
+  + ledger
+|  [+]  ledger -> Copilot, Vscode, Claude, Cursor (configured)
+|  [>]  microsoft-learn (self-defined, http)
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for VS Code
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for Claude Code
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for Cursor
+  + microsoft-learn
+|  [+]  microsoft-learn -> Copilot, Vscode, Claude, Cursor (configured)
+[*] Configured 2 servers
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 2 APM dependencies and 2 MCP servers in 1.2s.
+[>] Installing dependencies from apm.yml...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927 (cached)
+  |-- (files unchanged)
+  [+] <project root> (local)
+  |-- 1 prompts adopted -> .github/prompts/
+  |-- 3 agents adopted -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) adopted -> 3 targets
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [+] ledger (already configured)
+|  [+] microsoft-learn (already configured)
+[*] All servers up to date
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 1 APM dependency in 0.3s.
+[i] Lockfile presence verified. Run 'apm audit' for on-disk content integrity.
+[>] Replaying install (cache-only)...
+[+] Replayed 2 package(s)
+[>] Diffing scratch vs working tree...
+[+] No drift detected
+
+                                            [>] APM Policy Compliance                                             
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Status   ┃ Check                    ┃ Message                                                                  ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ [+]      │ lockfile-exists          │ Lockfile present                                                         │
+│ [+]      │ ref-consistency          │ All dependency refs match lockfile                                       │
+│ [+]      │ deployment-ledger-owners │ All deployment ledger owners are valid                                   │
+│ [+]      │ deployed-files-present   │ All deployed files present on disk                                       │
+│ [+]      │ no-orphaned-packages     │ No orphaned packages in lockfile                                         │
+│ [+]      │ skill-subset-consistency │ Skill subset selections match lockfile                                   │
+│ [+]      │ config-consistency       │ MCP configs match lockfile baseline                                      │
+│ [+]      │ content-integrity        │ No critical hidden Unicode or hash drift detected                        │
+│ [+]      │ includes-consent         │ 'includes:' declared -- local content deployment is explicitly consented │
+│ [+]      │ drift                    │ no drift detected against lockfile                                       │
+└──────────┴──────────────────────────┴──────────────────────────────────────────────────────────────────────────┘
+
+[*] All 10 check(s) passed
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /Lockfile presence verified/
+  PASS: output matches /All [0-9]+ check\(s\) passed/
+  PASS: identical: /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/ci.sha256 == /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/priya.sha256
+$ git status --porcelain --untracked-files=no
+[exit 0]
+  PASS: output does not match /apm\.(yml|lock\.yaml)/
+
+## A8. --frozen refuses a manifest the lockfile does not describe
+$ apm install --frozen
+[>] Installing dependencies from apm.yml...
+[x] --frozen: apm.lock.yaml is out of sync with apm.yml.
+  - vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review: declared source, ref, host 
+provider, or transport differs from apm.lock.yaml
+[i] Tip: rerun 'apm install' without --frozen to create or repair package lock state, retaining the original options, 
+including --root DIR or --global if specified.
+[x] Install failed after 0.0s.
+[exit 1]
+  PASS: exit code 1
+  PASS: output matches /out of sync with apm\.yml/
+
+## A9. --frozen refuses to run without a lockfile
+$ apm install --frozen
+[>] Installing dependencies from apm.yml...
+[x] --frozen requires apm.lock.yaml to exist at 
+<workspace>/ci-runner/apm.lock.yaml. Rerun the same install command without 
+--frozen, retaining --root DIR or --global if specified.
+[i] Tip: rerun 'apm install' without --frozen to create or repair package lock state, retaining the original options, 
+including --root DIR or --global if specified.
+[x] Install failed after 0.0s.
+[exit 1]
+  PASS: exit code 1
+
+## B1. Anika hand-edits a deployed skill file on her laptop
+$ apm audit
+[>] Scanning installed packages and deployed files...
+[>] Replaying install (cache-only)...
+[+] Replayed 2 package(s)
+[>] Diffing scratch vs working tree...
+[!] Drift detected: 1 file(s)
+
+[*] 17 file(s) scanned -- no issues found
+
+[x] Drift detected: 1 file(s)
+
+  modified (1):
+    - .claude/skills/meridian-code-review/SKILL.md  [vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review]
+
+  [i] Run 'apm install' to re-sync deployed files with the lockfile.
+
+[exit 0]
+  PASS: exit code 0 (default audit REPORTS drift but still exits 0)
+  PASS: output matches /Drift detected: 1 file/
+  PASS: output matches /modified \(1\)/
+
+## B2. The CI-mode audit fails on the same drift
+$ apm audit --ci --no-policy -f json
+[>] Replaying install (cache-only)...
+[+] Replayed 2 package(s)
+[>] Diffing scratch vs working tree...
+[!] Drift detected: 1 file(s)
+{
+  "passed": false,
+  "checks": [
+    {
+      "name": "lockfile-exists",
+      "passed": true,
+      "message": "Lockfile present",
+      "details": []
+    },
+    {
+      "name": "ref-consistency",
+      "passed": true,
+      "message": "All dependency refs match lockfile",
+      "details": []
+    },
+    {
+      "name": "deployment-ledger-owners",
+      "passed": true,
+      "message": "All deployment ledger owners are valid",
+      "details": []
+    },
+    {
+      "name": "deployed-files-present",
+      "passed": true,
+      "message": "All deployed files present on disk",
+      "details": []
+    },
+    {
+      "name": "no-orphaned-packages",
+      "passed": true,
+      "message": "No orphaned packages in lockfile",
+      "details": []
+    },
+    {
+      "name": "skill-subset-consistency",
+      "passed": true,
+      "message": "Skill subset selections match lockfile",
+      "details": []
+    },
+    {
+      "name": "config-consistency",
+      "passed": true,
+      "message": "MCP configs match lockfile baseline",
+      "details": []
+    },
+    {
+      "name": "content-integrity",
+      "passed": false,
+      "message": "1 file(s) with hash drift -- run 'apm install' to restore drifted files",
+      "details": [
+        "hash-drift: .claude/skills/meridian-code-review/SKILL.md (dep=vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review, expected=16673c19ce70..., actual=18a4ae007efb...)"
+      ],
+      "primitive_coverage": [
+        {
+          "file": ".agents/skills/meridian-code-review/SKILL.md",
+          "target": "copilot",
+          "kind": "skills",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".agents/skills/meridian-code-review/apm.yml",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".agents/skills/meridian-code-review/assets/review-report-template.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".agents/skills/meridian-code-review/references/false-positives.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".agents/skills/meridian-code-review/references/money-rules.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".agents/skills/meridian-code-review/scripts/check_money_rules.py",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/SKILL.md",
+          "target": "claude",
+          "kind": "skills",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/apm.yml",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/assets/review-report-template.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/references/false-positives.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/references/money-rules.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/scripts/check_money_rules.py",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/agents/payments-reviewer.md",
+          "target": "claude",
+          "kind": "agents",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/commands/review-checkout-change.md",
+          "target": "claude",
+          "kind": "commands",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/rules/money-handling.md",
+          "target": "claude",
+          "kind": "instructions",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".cursor/agents/payments-reviewer.md",
+          "target": "cursor",
+          "kind": "agents",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".cursor/commands/review-checkout-change.md",
+          "target": "cursor",
+          "kind": "commands",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".cursor/rules/money-handling.mdc",
+          "target": "cursor",
+          "kind": "instructions",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".github/agents/payments-reviewer.agent.md",
+          "target": "copilot",
+          "kind": "agents",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".github/instructions/money-handling.instructions.md",
+          "target": "copilot",
+          "kind": "instructions",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".github/prompts/review-checkout-change.prompt.md",
+          "target": "copilot",
+          "kind": "prompts",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        }
+      ]
+    },
+    {
+      "name": "drift",
+      "passed": false,
+      "message": "drift detected: 1 file(s): .claude/skills/meridian-code-review/SKILL.md",
+      "details": [
+        "modified: .claude/skills/meridian-code-review/SKILL.md"
+      ]
+    }
+  ],
+  "summary": {
+    "total": 9,
+    "passed": 7,
+    "failed": 2
+  },
+  "drift": {
+    "drift": [
+      {
+        "path": ".claude/skills/meridian-code-review/SKILL.md",
+        "kind": "modified",
+        "package": "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review",
+        "inline_diff": ""
+      }
+    ]
+  }
+}
+[exit 1]
+  PASS: exit code 1
+  PASS: output matches /"hash-drift"|hash drift|hash-drift/
+
+## B3. apm install --frozen restores the locked content
+$ apm install --frozen
+[>] Installing dependencies from apm.yml...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927 (cached)
+  |-- (files unchanged)
+  [+] <project root> (local)
+  |-- 1 prompts adopted -> .github/prompts/
+  |-- 3 agents adopted -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) adopted -> 3 targets
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [+] ledger (already configured)
+|  [+] microsoft-learn (already configured)
+[*] All servers up to date
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 1 APM dependency in 0.4s.
+[i] Lockfile presence verified. Run 'apm audit' for on-disk content integrity.
+[exit 0]
+  PASS: exit code 0
+  PASS: identical: /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/after-repair.sha256 == /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/priya.sha256
+$ apm audit --ci --no-policy
+[>] Replaying install (cache-only)...
+[+] Replayed 2 package(s)
+[>] Diffing scratch vs working tree...
+[+] No drift detected
+
+                                            [>] APM Policy Compliance                                             
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Status   ┃ Check                    ┃ Message                                                                  ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ [+]      │ lockfile-exists          │ Lockfile present                                                         │
+│ [+]      │ ref-consistency          │ All dependency refs match lockfile                                       │
+│ [+]      │ deployment-ledger-owners │ All deployment ledger owners are valid                                   │
+│ [+]      │ deployed-files-present   │ All deployed files present on disk                                       │
+│ [+]      │ no-orphaned-packages     │ No orphaned packages in lockfile                                         │
+│ [+]      │ skill-subset-consistency │ Skill subset selections match lockfile                                   │
+│ [+]      │ config-consistency       │ MCP configs match lockfile baseline                                      │
+│ [+]      │ content-integrity        │ No critical hidden Unicode or hash drift detected                        │
+│ [+]      │ includes-consent         │ 'includes:' declared -- local content deployment is explicitly consented │
+│ [+]      │ drift                    │ no drift detected against lockfile                                       │
+└──────────┴──────────────────────────┴──────────────────────────────────────────────────────────────────────────┘
+
+[*] All 10 check(s) passed
+[exit 0]
+  PASS: exit code 0
+
+## C1. A throwaway Git server on 127.0.0.1 hosting a third-party skill
+$ bash -c git ls-remote http://127.0.0.1:57245/oss-tools/pr-summary.git | sed 's/127.0.0.1:[0-9]*/127.0.0.1:PORT/'
+377f747328a726231b080e3e9cef795e8ada73e9	HEAD
+377f747328a726231b080e3e9cef795e8ada73e9	refs/heads/main
+4b2f4cb32a912bfde12fbf00fc4472c8a6e74787	refs/tags/v1.0.0
+377f747328a726231b080e3e9cef795e8ada73e9	refs/tags/v1.0.0^{}
+[exit 0]
+  PASS: output matches /refs/tags/v1\.0\.0/
+
+## C2. A scratch project pins it to tag v1.0.0 (object form: http needs allow_insecure)
+$ apm install --allow-insecure
+[>] Installing dependencies from apm.yml...
+[>] Resolving oss-tools/pr-summary...
+[!] Insecure HTTP fetch (unencrypted): http://127.0.0.1:57245/oss-tools/pr-summary#v1.0.0
+[i] Targets: claude  (source: apm.yml)
+  [+] oss-tools/pr-summary #v1.0.0 @377f7473
+  |-- Skill integrated -> .claude/skills/
+[i] Added apm_modules/ to .gitignore
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 1 APM dependency in 0.2s.
+[exit 0]
+  PASS: exit code 0
+  PASS: .claude/skills/pr-summary/SKILL.md matches /three bullets/
+$ python3 <demo-repo>/ch07-lock-version-and-update-safely/tools/check_tag_pins.py
+OK      oss-tools/pr-summary v1.0.0 -> 377f747328a7
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /^OK +oss-tools/pr-summary v1\.0\.0/
+
+## C3. Upstream author re-points tag v1.0.0 at new content (force-moved tag)
+$ bash -c git ls-remote http://127.0.0.1:57245/oss-tools/pr-summary.git 'refs/tags/v1.0.0^{}' | cut -c1-12
+8961f2e25a86
+[exit 0]
+  PASS: output does not match /^377f747328a7/
+
+## C4. apm outdated compares tag names: it does NOT notice the move
+$ apm outdated
+[?25l⠋ Checking 1 dependencies                                            0%  Checking pr-summary ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100%
+[?25h[*] All dependencies are up-to-date
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /All dependencies are up-to-date/
+
+## C5. Comparing the locked commit with the remote tag does
+$ python3 <demo-repo>/ch07-lock-version-and-update-safely/tools/check_tag_pins.py
+MOVED   oss-tools/pr-summary v1.0.0 locked 377f747328a7 remote 8961f2e25a86
+[exit 1]
+  PASS: exit code 1
+  PASS: output matches /^MOVED +oss-tools/pr-summary v1\.0\.0 locked/
+
+## C6. With the lockfile, installs keep the locked commit (normal and frozen, cold cache)
+$ apm install --allow-insecure
+[>] Installing dependencies from apm.yml...
+[!] Insecure HTTP fetch (unencrypted): http://127.0.0.1:57245/oss-tools/pr-summary#v1.0.0
+[i] Targets: claude  (source: apm.yml)
+  [+] oss-tools/pr-summary #v1.0.0 @377f7473 (cached)
+  |-- (files unchanged)
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[i] No changes -- install state already up to date in 0.1s.
+[exit 0]
+  PASS: exit code 0
+  PASS: .claude/skills/pr-summary/SKILL.md matches /three bullets/
+  PASS: apm.lock.yaml matches /resolved_commit: 377f747328a726231b080e3e9cef795e8ada73e9/
+$ apm install --frozen --allow-insecure
+[>] Installing dependencies from apm.yml...
+[>] Resolving oss-tools/pr-summary...
+[!] Insecure HTTP fetch (unencrypted): http://127.0.0.1:57245/oss-tools/pr-summary#v1.0.0
+[i] Targets: claude  (source: apm.yml)
+  [+] oss-tools/pr-summary #377f747328a726231b080e3e9cef795e8ada73e9 @377f7473
+  |-- Skill integrated -> .claude/skills/
+[i] Added apm_modules/ to .gitignore
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 1 APM dependency in 0.1s.
+[i] Lockfile presence verified. Run 'apm audit' for on-disk content integrity.
+[exit 0]
+  PASS: exit code 0
+  PASS: .claude/skills/pr-summary/SKILL.md matches /three bullets/
+
+## C7. Without the lockfile, the same manifest silently gets the new content
+$ apm install --allow-insecure
+[>] Installing dependencies from apm.yml...
+[>] Resolving oss-tools/pr-summary...
+[!] Insecure HTTP fetch (unencrypted): http://127.0.0.1:57245/oss-tools/pr-summary#v1.0.0
+[i] Targets: claude  (source: apm.yml)
+  [+] oss-tools/pr-summary #v1.0.0 @8961f2e2
+  |-- Skill integrated -> .claude/skills/
+[i] Added apm_modules/ to .gitignore
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 1 APM dependency in 0.2s.
+[exit 0]
+  PASS: exit code 0
+  PASS: .claude/skills/pr-summary/SKILL.md matches /paste the full diff/
+  PASS: apm.lock.yaml does not match /resolved_commit: 377f747328a726231b080e3e9cef795e8ada73e9/
+
+## C8. If upstream rewrites history and the locked commit disappears, --frozen fails closed
+$ bash -c cd '<workspace>/srv/oss-tools/pr-summary.git' && git cat-file -e 377f747328a726231b080e3e9cef795e8ada73e9
+[exit 1]
+  PASS: non-zero exit (1) (the locked commit no longer exists upstream)
+$ apm install --frozen --allow-insecure
+[>] Installing dependencies from apm.yml...
+[>] Resolving oss-tools/pr-summary...
+[!] Insecure HTTP fetch (unencrypted): http://127.0.0.1:57245/oss-tools/pr-summary#v1.0.0
+[i] Targets: claude  (source: apm.yml)
+  [x] 1 package failed:
+    +- oss-tools/pr-summary -- Failed to download dependency oss-tools/pr-summary: Failed to clone repository 
+oss-tools/pr-summary: fatal: reference is not a tree: 377f747328a726231b080e3e9cef795e8ada73e9
+[x] Installation failed with 1 error(s) in 0.2s. No install transaction changes were committed.
+[exit 1]
+  PASS: exit code 1
+  PASS: output matches /reference is not a tree|not a tree|Failed to download/
+  PASS: absent: .claude/skills/pr-summary/SKILL.md
+
+## D1. Which dependencies have newer tags? (report only)
+$ env COLUMNS=250 apm outdated --verbose
+Skipping local dep: .
+[?25l⠋ Checking 1 dependencies                                            0%⠙ Checking meridian-code-review                                            0%⠹ Checking meridian-code-review                                            0%⠸ Checking meridian-code-review                                            0%⠴ Checking meridian-code-review                                            0%⠦ Checking meridian-code-review                                            0%⠧ Checking meridian-code-review                                            0%⠇ Checking meridian-code-review                                            0%⠋ Checking meridian-code-review                                            0%⠙ Checking meridian-code-review                                            0%⠹ Checking meridian-code-review                                            0%⠸ Checking meridian-code-review                                            0%⠴ Checking meridian-code-review                                            0%⠦ Checking meridian-code-review                                            0%  Checking meridian-code-review ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100%
+[?25h                                                                                                                    Dependency Status                                                                                                                     
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Package                                                                              ┃ Current                     ┃ Latest                                                                                      ┃ Status       ┃ Source               ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━┩
+│ vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review │ meridian-code-review-v1.0.0 │ meridian-code-review-v1.2.0                                                                 │ outdated     │ git tags             │
+│                                                                                      │                             │ tags: meridian-code-review-v1.2.0, meridian-code-review-v1.1.0,                             │              │                      │
+│                                                                                      │                             │ meridian-code-review-v1.0.1, meridian-code-review-v1.0.0                                    │              │                      │
+└──────────────────────────────────────────────────────────────────────────────────────┴─────────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────┴──────────────┴──────────────────────┘
+[!] 1 outdated dependency found
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /meridian-code-review-v1\.0\.0/
+  PASS: output matches /meridian-code-review-v1\.2\.0/
+  PASS: output matches /outdated/
+
+## D2. apm update leaves exact tag pins alone
+$ apm update --dry-run
+[>] Checking upstream for revision-pin freshness...
+[+] All dependencies already at their latest matching refs.
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /already at their latest matching refs/
+
+## D3. For contrast: a semver range would take the newest tag on apm update
+$ apm update --dry-run
+[>] Checking upstream for revision-pin freshness...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Update plan for apm.yml
+
+  [~] vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+      ref: meridian-code-review-v1.0.0 -> meridian-code-review-v1.2.0 (d77ad92 -> dcd8868)
+      files: .agents/skills/meridian-code-review, .agents/skills/meridian-code-review/SKILL.md, 
+.agents/skills/meridian-code-review/apm.yml, +11 more
+
+  1 updated
+  [~] updated
+
+[i] Dry run: no changes applied. Re-run without --dry-run to update.
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /meridian-code-review-v1\.2\.0|1\.2\.0/
+
+## D4a. Before: the installed v1.0.0 checker does not look at capture calls
+$ python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff <demo-repo>/ch07-lock-version-and-update-safely/fixtures/capture-without-key.diff
+0 finding(s)
+[exit 0]
+  PASS: exit code 0
+
+## D4. Priya updates deliberately to v1.1.0 on a branch
+$ apm install vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.1.0
+[*] Validating 1 package...
+[+] vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review#meridian-code-review-v1.1.0 
+(updated ref in apm.yml)
+[*] Updated apm.yml dependency entries
+[>] Installing 1 new package...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+1.0 #meridian-code-review-v1.1.0 @3fba23f7
+  |-- (files unchanged)
+  [+] <project root> (local)
+  |-- 1 prompts adopted -> .github/prompts/
+  |-- 3 agents adopted -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) adopted -> 3 targets
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [+] ledger (already configured)
+|  [+] microsoft-learn (already configured)
+[*] All servers up to date
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 2 APM dependencies in 1.3s.
+[exit 0]
+  PASS: exit code 0
+  PASS: apm.yml matches /#meridian-code-review-v1\.1\.0/
+  PASS: apm.lock.yaml matches /resolved_ref: meridian-code-review-v1\.1\.0/
+  PASS: apm.lock.yaml matches /^  version: 1\.1\.0/
+$ git diff --stat
+ apm.lock.yaml | 62 ++++++++++++++++++++++++++++++++++++++++++--------------------
+ apm.yml       |  2 +-
+ 2 files changed, 43 insertions(+), 21 deletions(-)
+[exit 0]
+$ bash -c git diff -U0 apm.lock.yaml | grep -E '^[-+] +(resolved_ref|resolved_commit|version|content_hash):'
+-  resolved_commit: d77ad927023f2b227bd130c2f436866cc07b2e9e
+-  resolved_ref: meridian-code-review-v1.0.0
+-  version: 1.0.0
++  resolved_commit: 3fba23f79f6faed7c0812d2bb31cfd7b324df562
++  resolved_ref: meridian-code-review-v1.1.0
++  version: 1.1.0
+-  content_hash: sha256:8824bbd9afa499377d9796b018c7bea5f795327c30b9e8ae21380482d491b6f5
++  content_hash: sha256:9e787148107511b46136079ce956e5323f7c50a4341abc2ef21e87963b8c81fc
++  content_hash: sha256:caa9098e971fec329847d7a07975d6858ca911a954991a2c0f627399bc3322c8
+-  content_hash: sha256:16673c19ce70fa37630b5d6f96932d4f01bde1fd5ae833d9893d0bb5438f5b6c
++  content_hash: sha256:41a00fac2ad72caec6b77367d24b54ef81a1ab5a337bb24ec5e38bd89eaecce5
+-  content_hash: sha256:7e926a1a50d80f726aed49d34ff15daf4d5cde8d3fcb0e7f2856434cbbaf85b3
++  content_hash: sha256:45348451115180712cc091b1557e914f1ba3648e260a5fdc3ffaeb7e244c79fe
+-  content_hash: sha256:3c3eef184dd96d20af57072ecdd2a2a1d11d3842a7a2d92f7c3e70764cb770ff
++  content_hash: sha256:8eaaba88be8df3c30dd8ab230877e83403df9c93e832217267edcd7ed8b7fa7f
+-  content_hash: sha256:6fa49c89e541537eed17f83944fa4c7c0a3220fd915b63298166932dc762d9ca
++  content_hash: sha256:6d446f2168eda93ef805162e21e1b5eba7c2815031b95be741fbef1aa2201f74
++  content_hash: sha256:caa9098e971fec329847d7a07975d6858ca911a954991a2c0f627399bc3322c8
+-  content_hash: sha256:16673c19ce70fa37630b5d6f96932d4f01bde1fd5ae833d9893d0bb5438f5b6c
++  content_hash: sha256:41a00fac2ad72caec6b77367d24b54ef81a1ab5a337bb24ec5e38bd89eaecce5
+-  content_hash: sha256:7e926a1a50d80f726aed49d34ff15daf4d5cde8d3fcb0e7f2856434cbbaf85b3
++  content_hash: sha256:45348451115180712cc091b1557e914f1ba3648e260a5fdc3ffaeb7e244c79fe
+-  content_hash: sha256:3c3eef184dd96d20af57072ecdd2a2a1d11d3842a7a2d92f7c3e70764cb770ff
++  content_hash: sha256:8eaaba88be8df3c30dd8ab230877e83403df9c93e832217267edcd7ed8b7fa7f
+-  content_hash: sha256:6fa49c89e541537eed17f83944fa4c7c0a3220fd915b63298166932dc762d9ca
++  content_hash: sha256:6d446f2168eda93ef805162e21e1b5eba7c2815031b95be741fbef1aa2201f74
+[exit 0]
+  PASS: output matches /^\+ +resolved_ref: meridian-code-review-v1\.1\.0/
+
+## D5. The Chapter 3 regression suite against the INSTALLED skill (v1.1.0)
+$ python3 <demo-repo>/tests/meridian-code-review/run_suite.py --skill-dir .claude/skills/meridian-code-review --expect-version 1.1.0
+== structure and metadata
+  PASS  skill-md-exists                          SKILL.md
+  PASS  frontmatter-present                      
+  PASS  name-matches-spec                        meridian-code-review
+  PASS  name-matches-folder                      meridian-code-review vs meridian-code-review
+  PASS  description-length                       459 chars
+  PASS  description-says-what                    starts with what the skill does
+  PASS  description-says-when                    has a 'Use when' clause
+  PASS  compatibility-length                     
+  PASS  body-under-500-lines                     67 lines
+  PASS  version-consistent                       SKILL.md 1.1.0, apm.yml 1.1.0
+  PASS  version-is-expected                      expected 1.1.0
+== resources referenced from SKILL.md
+  PASS  referenced-files-exist                   4 referenced, missing: none
+  PASS  no-orphan-resources                      unreferenced: none
+== checker: exit-code contract and fixtures
+  PASS  usage-error-exit-2                       no arguments -> 2
+  PASS  missing-input-exit-2                     -> 2
+  PASS  help-documents-diff-semantics            --diff help must describe what diff mode really checks
+  PASS  fixture:bad-diff-six-findings            the Chapter 2 fixture: one of every rule, three MR001
+  PASS  fixture:good-diff-clean                  the compliant version of the same change
+  PASS  fixture:deleted-idempotency-key          deleting the key from an unchanged create call must be reported
+  PASS  fixture:unchanged-line-after-deletion    documented contract: MR001/MR003/MR004 report added lines only; an unchanged line after a deletion is not part of the change
+  PASS  fixture:non-utf8-input-is-input-error    exit 1 means findings; unreadable input must be exit 2, never a traceback
+  PASS  fixture:known-false-positive-fee-rate    known: false positive, see references/false-positives.md
+  PASS  fixture:known-gap-whole-object-log       known: false negative, see references/money-rules.md (MR003)
+== side effects (read-only, no network, no subprocess)
+  PASS  no-write-network-or-subprocess-events    0 audit events []
+  PASS  audited-run-still-finds-issues           exit 1
+  PASS  skill-folder-unchanged                   
+  PASS  working-dir-unchanged                    
+== 27 checks, 27 passed, 0 failed
+[exit 0]
+  PASS: exit code 0
+
+## D5b. What 1.1.0 adds: MR002 also covers capture/authorize calls
+$ python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff <demo-repo>/ch07-lock-version-and-update-safely/fixtures/capture-without-key.diff
+src/checkout/capture.ts:4: MR002 payment capture call without an idempotency key
+    const result = await paymentsClient.payments.capture(authorizationId, {
+1 finding(s)
+[exit 1]
+  PASS: exit code 1
+  PASS: output matches /MR002/
+$ bash -c git add -A && git commit -qm 'Update meridian-code-review to v1.1.0' && git checkout -q main && git merge -q --ff-only update/code-review-1.1.0 && git push -q origin main && git log --oneline -1
+d027cd0 Update meridian-code-review to v1.1.0
+[exit 0]
+  PASS: exit code 0
+
+## D6. Update to v1.2.0: Jon's gate passes on a fresh CI clone
+$ apm install vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.2.0
+[*] Validating 1 package...
+[+] vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review#meridian-code-review-v1.2.0 
+(updated ref in apm.yml)
+[*] Updated apm.yml dependency entries
+[>] Installing 1 new package...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+2.0 #meridian-code-review-v1.2.0 @dcd88684
+  |-- (files unchanged)
+  [+] <project root> (local)
+  |-- 1 prompts adopted -> .github/prompts/
+  |-- 3 agents adopted -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) adopted -> 3 targets
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [+] ledger (already configured)
+|  [+] microsoft-learn (already configured)
+[*] All servers up to date
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 2 APM dependencies in 1.3s.
+[exit 0]
+  PASS: exit code 0
+  PASS: apm.lock.yaml matches /resolved_ref: meridian-code-review-v1\.2\.0/
+$ bash -c git add -A && git commit -qm 'Update meridian-code-review to v1.2.0' && git checkout -q main && git merge -q --ff-only update/code-review-1.2.0 && git push -q origin main
+[exit 0]
+$ bash ci/check-agent-environment.sh
+Agent Package Manager (APM) CLI version 0.33.0
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+2.0 #dcd886844725bdff2f0e32b649175c7b32d3c44d @dcd88684
+  |-- Skill integrated -> .agents/skills/, .claude/skills/
+  [+] <project root> (local)
+  |-- 1 prompts integrated -> .github/prompts/
+  |-- 3 agents integrated -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) integrated -> 3 targets
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + ledger
+
+[!] Copilot CLI will resolve 1 environment variable at runtime that is not currently set: LEDGER_API_KEY.
+    Export it in your shell before running 'gh copilot', e.g.:
+      export LEDGER_API_KEY=...
+Successfully configured MCP server 'ledger' for VS Code
+  + ledger
+Successfully configured MCP server 'ledger' for Claude Code
+  + ledger
+Successfully configured MCP server 'ledger' for Cursor
+  + ledger
+|  [+]  ledger -> Copilot, Vscode, Claude, Cursor (configured)
+|  [>]  microsoft-learn (self-defined, http)
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for VS Code
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for Claude Code
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for Cursor
+  + microsoft-learn
+|  [+]  microsoft-learn -> Copilot, Vscode, Claude, Cursor (configured)
+[*] Configured 2 servers
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 2 APM dependencies and 2 MCP servers in 1.0s.
+[>] Installing dependencies from apm.yml...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+2.0 #meridian-code-review-v1.2.0 @dcd88684 (cached)
+  |-- (files unchanged)
+  [+] <project root> (local)
+  |-- 1 prompts adopted -> .github/prompts/
+  |-- 3 agents adopted -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) adopted -> 3 targets
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [+] ledger (already configured)
+|  [+] microsoft-learn (already configured)
+[*] All servers up to date
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 1 APM dependency in 0.4s.
+[i] Lockfile presence verified. Run 'apm audit' for on-disk content integrity.
+[>] Replaying install (cache-only)...
+[+] Replayed 2 package(s)
+[>] Diffing scratch vs working tree...
+[+] No drift detected
+
+                                            [>] APM Policy Compliance                                             
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Status   ┃ Check                    ┃ Message                                                                  ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ [+]      │ lockfile-exists          │ Lockfile present                                                         │
+│ [+]      │ ref-consistency          │ All dependency refs match lockfile                                       │
+│ [+]      │ deployment-ledger-owners │ All deployment ledger owners are valid                                   │
+│ [+]      │ deployed-files-present   │ All deployed files present on disk                                       │
+│ [+]      │ no-orphaned-packages     │ No orphaned packages in lockfile                                         │
+│ [+]      │ skill-subset-consistency │ Skill subset selections match lockfile                                   │
+│ [+]      │ config-consistency       │ MCP configs match lockfile baseline                                      │
+│ [+]      │ content-integrity        │ No critical hidden Unicode or hash drift detected                        │
+│ [+]      │ includes-consent         │ 'includes:' declared -- local content deployment is explicitly consented │
+│ [+]      │ drift                    │ no drift detected against lockfile                                       │
+└──────────┴──────────────────────────┴──────────────────────────────────────────────────────────────────────────┘
+
+[*] All 10 check(s) passed
+[exit 0]
+  PASS: exit code 0 (the gate checks reproducibility, not whether the skill is any good)
+
+## D7. After the merge, the regression suite fails on the installed v1.2.0
+$ python3 <demo-repo>/tests/meridian-code-review/run_suite.py --skill-dir .claude/skills/meridian-code-review --expect-version 1.2.0
+== structure and metadata
+  PASS  skill-md-exists                          SKILL.md
+  PASS  frontmatter-present                      
+  PASS  name-matches-spec                        meridian-code-review
+  PASS  name-matches-folder                      meridian-code-review vs meridian-code-review
+  PASS  description-length                       459 chars
+  PASS  description-says-what                    starts with what the skill does
+  PASS  description-says-when                    has a 'Use when' clause
+  PASS  compatibility-length                     
+  PASS  body-under-500-lines                     67 lines
+  PASS  version-consistent                       SKILL.md 1.2.0, apm.yml 1.2.0
+  PASS  version-is-expected                      expected 1.2.0
+== resources referenced from SKILL.md
+  PASS  referenced-files-exist                   4 referenced, missing: none
+  PASS  no-orphan-resources                      unreferenced: none
+== checker: exit-code contract and fixtures
+  PASS  usage-error-exit-2                       no arguments -> 2
+  PASS  missing-input-exit-2                     -> 2
+  PASS  help-documents-diff-semantics            --diff help must describe what diff mode really checks
+  FAIL  fixture:bad-diff-six-findings            exit 1, rules ['MR001', 'MR001', 'MR002', 'MR003', 'MR004']
+  PASS  fixture:good-diff-clean                  the compliant version of the same change
+  PASS  fixture:deleted-idempotency-key          deleting the key from an unchanged create call must be reported
+  PASS  fixture:unchanged-line-after-deletion    documented contract: MR001/MR003/MR004 report added lines only; an unchanged line after a deletion is not part of the change
+  PASS  fixture:non-utf8-input-is-input-error    exit 1 means findings; unreadable input must be exit 2, never a traceback
+  FAIL  fixture:known-false-positive-fee-rate    exit 0, rules []
+  PASS  fixture:known-gap-whole-object-log       known: false negative, see references/money-rules.md (MR003)
+== side effects (read-only, no network, no subprocess)
+  PASS  no-write-network-or-subprocess-events    0 audit events []
+  PASS  audited-run-still-finds-issues           exit 1
+  PASS  skill-folder-unchanged                   
+  PASS  working-dir-unchanged                    
+== 27 checks, 25 passed, 2 failed: fixture:bad-diff-six-findings, fixture:known-false-positive-fee-rate
+[exit 1]
+  PASS: exit code 1
+  PASS: output matches /FAIL +fixture:bad-diff-six-findings/
+$ python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff <demo-repo>/ch02-build-a-reusable-agent-skill/fixtures/bad.diff
+src/checkout/charge.ts:5: MR001 parseFloat() on a money value
+    const amount = parseFloat(order.total);
+src/checkout/charge.ts:7: MR003 card or personal data passed to a logger
+    logger.info("charging card", { cardNumber: card.number, orderId: order.id });
+src/checkout/charge.ts:8: MR002 payment/charge/refund created without an idempotency key
+    const payment = await paymentsClient.payments.create({
+src/checkout/charge.ts:10: MR004 currency 'eur' is not an upper-case ISO 4217 code
+    currency: "eur",
+src/checkout/charge.ts:13: MR001 toFixed() on a money value (formatting as arithmetic)
+    const display = amount.toFixed(2);
+5 finding(s)
+[exit 1]
+  PASS: output matches /^5 finding/
+  PASS: output does not match /shippingFee = 4\.99/
+
+## D8. Roll back: revert the update commit, frozen reinstall, verify
+$ git revert --no-edit HEAD
+[main 87d3aad] Revert "Update meridian-code-review to v1.2.0"
+ Date: Thu Oct 15 23:56:22 2026 +0000
+ 2 files changed, 25 insertions(+), 25 deletions(-)
+[exit 0]
+  PASS: exit code 0
+  PASS: apm.yml matches /#meridian-code-review-v1\.1\.0/
+  PASS: identical: apm.lock.yaml == /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/lock.v1.1.0
+$ cmp -s <workspace>/before-frozen.sha256 <workspace>/v110.sha256
+[exit 1]
+  PASS: non-zero exit (1) (deployed files are still v1.2.0's: generated files are not in git)
+$ apm install --frozen
+[>] Installing dependencies from apm.yml...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+1.0 #meridian-code-review-v1.1.0 @3fba23f7
+  |-- (files unchanged)
+  [+] <project root> (local)
+  |-- 1 prompts adopted -> .github/prompts/
+  |-- 3 agents adopted -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) adopted -> 3 targets
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [+] ledger (already configured)
+|  [+] microsoft-learn (already configured)
+[*] All servers up to date
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 2 APM dependencies in 0.5s.
+[i] Lockfile presence verified. Run 'apm audit' for on-disk content integrity.
+[exit 0]
+  PASS: exit code 0
+  PASS: identical: /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/rollback.sha256 == /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/v110.sha256
+$ apm audit --ci --no-policy
+[>] Replaying install (cache-only)...
+[+] Replayed 2 package(s)
+[>] Diffing scratch vs working tree...
+[+] No drift detected
+
+                                            [>] APM Policy Compliance                                             
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Status   ┃ Check                    ┃ Message                                                                  ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ [+]      │ lockfile-exists          │ Lockfile present                                                         │
+│ [+]      │ ref-consistency          │ All dependency refs match lockfile                                       │
+│ [+]      │ deployment-ledger-owners │ All deployment ledger owners are valid                                   │
+│ [+]      │ deployed-files-present   │ All deployed files present on disk                                       │
+│ [+]      │ no-orphaned-packages     │ No orphaned packages in lockfile                                         │
+│ [+]      │ skill-subset-consistency │ Skill subset selections match lockfile                                   │
+│ [+]      │ config-consistency       │ MCP configs match lockfile baseline                                      │
+│ [+]      │ content-integrity        │ No critical hidden Unicode or hash drift detected                        │
+│ [+]      │ includes-consent         │ 'includes:' declared -- local content deployment is explicitly consented │
+│ [+]      │ drift                    │ no drift detected against lockfile                                       │
+└──────────┴──────────────────────────┴──────────────────────────────────────────────────────────────────────────┘
+
+[*] All 10 check(s) passed
+[exit 0]
+  PASS: exit code 0
+$ python3 <demo-repo>/tests/meridian-code-review/run_suite.py --skill-dir .claude/skills/meridian-code-review --expect-version 1.1.0
+== structure and metadata
+  PASS  skill-md-exists                          SKILL.md
+  PASS  frontmatter-present                      
+  PASS  name-matches-spec                        meridian-code-review
+  PASS  name-matches-folder                      meridian-code-review vs meridian-code-review
+  PASS  description-length                       459 chars
+  PASS  description-says-what                    starts with what the skill does
+  PASS  description-says-when                    has a 'Use when' clause
+  PASS  compatibility-length                     
+  PASS  body-under-500-lines                     67 lines
+  PASS  version-consistent                       SKILL.md 1.1.0, apm.yml 1.1.0
+  PASS  version-is-expected                      expected 1.1.0
+== resources referenced from SKILL.md
+  PASS  referenced-files-exist                   4 referenced, missing: none
+  PASS  no-orphan-resources                      unreferenced: none
+== checker: exit-code contract and fixtures
+  PASS  usage-error-exit-2                       no arguments -> 2
+  PASS  missing-input-exit-2                     -> 2
+  PASS  help-documents-diff-semantics            --diff help must describe what diff mode really checks
+  PASS  fixture:bad-diff-six-findings            the Chapter 2 fixture: one of every rule, three MR001
+  PASS  fixture:good-diff-clean                  the compliant version of the same change
+  PASS  fixture:deleted-idempotency-key          deleting the key from an unchanged create call must be reported
+  PASS  fixture:unchanged-line-after-deletion    documented contract: MR001/MR003/MR004 report added lines only; an unchanged line after a deletion is not part of the change
+  PASS  fixture:non-utf8-input-is-input-error    exit 1 means findings; unreadable input must be exit 2, never a traceback
+  PASS  fixture:known-false-positive-fee-rate    known: false positive, see references/false-positives.md
+  PASS  fixture:known-gap-whole-object-log       known: false negative, see references/money-rules.md (MR003)
+== side effects (read-only, no network, no subprocess)
+  PASS  no-write-network-or-subprocess-events    0 audit events []
+  PASS  audited-run-still-finds-issues           exit 1
+  PASS  skill-folder-unchanged                   
+  PASS  working-dir-unchanged                    
+== 27 checks, 27 passed, 0 failed
+[exit 0]
+  PASS: exit code 0
+$ bash -c git push -q origin main && git log --oneline -4 | sed 's/^[0-9a-f]* //'
+Revert "Update meridian-code-review to v1.2.0"
+Update meridian-code-review to v1.2.0
+Update meridian-code-review to v1.1.0
+Agent environment: apm.yml, apm.lock.yaml, CI gate
+[exit 0]
+
+## D9. A fresh CI clone after the rollback reproduces v1.1.0 exactly
+$ bash ci/check-agent-environment.sh
+Agent Package Manager (APM) CLI version 0.33.0
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+1.0 #3fba23f79f6faed7c0812d2bb31cfd7b324df562 @3fba23f7
+  |-- Skill integrated -> .agents/skills/, .claude/skills/
+  [+] <project root> (local)
+  |-- 1 prompts integrated -> .github/prompts/
+  |-- 3 agents integrated -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) integrated -> 3 targets
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + ledger
+
+[!] Copilot CLI will resolve 1 environment variable at runtime that is not currently set: LEDGER_API_KEY.
+    Export it in your shell before running 'gh copilot', e.g.:
+      export LEDGER_API_KEY=...
+Successfully configured MCP server 'ledger' for VS Code
+  + ledger
+Successfully configured MCP server 'ledger' for Claude Code
+  + ledger
+Successfully configured MCP server 'ledger' for Cursor
+  + ledger
+|  [+]  ledger -> Copilot, Vscode, Claude, Cursor (configured)
+|  [>]  microsoft-learn (self-defined, http)
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for VS Code
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for Claude Code
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for Cursor
+  + microsoft-learn
+|  [+]  microsoft-learn -> Copilot, Vscode, Claude, Cursor (configured)
+[*] Configured 2 servers
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 2 APM dependencies and 2 MCP servers in 1.0s.
+[>] Installing dependencies from apm.yml...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+1.0 #meridian-code-review-v1.1.0 @3fba23f7 (cached)
+  |-- (files unchanged)
+  [+] <project root> (local)
+  |-- 1 prompts adopted -> .github/prompts/
+  |-- 3 agents adopted -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) adopted -> 3 targets
++- MCP Servers (2)
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [+] ledger (already configured)
+|  [+] microsoft-learn (already configured)
+[*] All servers up to date
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 1 APM dependency in 0.4s.
+[i] Lockfile presence verified. Run 'apm audit' for on-disk content integrity.
+[>] Replaying install (cache-only)...
+[+] Replayed 2 package(s)
+[>] Diffing scratch vs working tree...
+[+] No drift detected
+
+                                            [>] APM Policy Compliance                                             
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Status   ┃ Check                    ┃ Message                                                                  ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ [+]      │ lockfile-exists          │ Lockfile present                                                         │
+│ [+]      │ ref-consistency          │ All dependency refs match lockfile                                       │
+│ [+]      │ deployment-ledger-owners │ All deployment ledger owners are valid                                   │
+│ [+]      │ deployed-files-present   │ All deployed files present on disk                                       │
+│ [+]      │ no-orphaned-packages     │ No orphaned packages in lockfile                                         │
+│ [+]      │ skill-subset-consistency │ Skill subset selections match lockfile                                   │
+│ [+]      │ config-consistency       │ MCP configs match lockfile baseline                                      │
+│ [+]      │ content-integrity        │ No critical hidden Unicode or hash drift detected                        │
+│ [+]      │ includes-consent         │ 'includes:' declared -- local content deployment is explicitly consented │
+│ [+]      │ drift                    │ no drift detected against lockfile                                       │
+└──────────┴──────────────────────────┴──────────────────────────────────────────────────────────────────────────┘
+
+[*] All 10 check(s) passed
+[exit 0]
+  PASS: exit code 0
+  PASS: identical: /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/ci3.sha256 == /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/v110.sha256
+
+## E. Same files, different words: the installed skill twice in Claude Code (optional)
+$ python3 <demo-repo>/ch07-lock-version-and-update-safely/behaviour/two_runs.py . <workspace>/behaviour --runs 2 --model claude-sonnet-5
+{
+  "status": "ran",
+  "claude_code": "2.1.301 (Claude Code)",
+  "model_requested": "claude-sonnet-5",
+  "prompt": "Do a code review of change.diff.",
+  "texts_identical": false,
+  "checks_passed_per_run": [
+    true,
+    true
+  ]
+}
+run1: skill=True rules=MR001,MR002,MR003,MR004 changes_requested=True chars=3473
+run2: skill=True rules=MR001,MR002,MR003,MR004 changes_requested=True chars=3974
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /"status": "ran"/
+  PASS: output matches /"texts_identical": false/
+  PASS: output matches /run1: skill=True rules=MR001,MR002,MR003,MR004 changes_requested=True/
+  PASS: output matches /run2: skill=True rules=MR001,MR002,MR003,MR004 changes_requested=True/
+== ch07-lock-version-and-update-safely: passed (99 passed, 0 failed) ==
