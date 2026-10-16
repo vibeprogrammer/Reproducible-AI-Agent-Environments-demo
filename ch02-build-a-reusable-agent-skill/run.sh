@@ -8,7 +8,15 @@ source "$(dirname "$0")/../scripts/lib.sh"
 demo_begin ch02-build-a-reusable-agent-skill
 
 DEMO_DIR="$REPO_ROOT/ch02-build-a-reusable-agent-skill"
-PKG_SRC="$REPO_ROOT/packages/meridian-code-review"
+# Build from the published v1.0.0 snapshot, not from main: later chapters ship
+# newer versions of the package on main (v1.0.1, v1.1.0, v1.2.x).
+PKG_TAG="meridian-code-review-v1.0.0"
+git -C "$REPO_ROOT" rev-parse -q --verify "refs/tags/$PKG_TAG" >/dev/null \
+  || git -C "$REPO_ROOT" fetch -q origin "refs/tags/$PKG_TAG:refs/tags/$PKG_TAG"
+PKG_SNAP="$(mktemp -d)"
+git -C "$REPO_ROOT" archive "$PKG_TAG" packages/meridian-code-review \
+  | tar -x -C "$PKG_SNAP"
+PKG_SRC="$PKG_SNAP/packages/meridian-code-review"
 PKG_REF="vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.0.0"
 SKILLS_REF_COMMIT="69ef37e9424c0a7ea9dd2293b559e43ec8176379"
 export APM_PROGRESS=never   # documented env var: no install TUI in logs
