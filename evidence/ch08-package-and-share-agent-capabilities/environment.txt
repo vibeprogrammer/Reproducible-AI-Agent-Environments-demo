@@ -1,5 +1,5 @@
 demo: ch08-package-and-share-agent-capabilities
-started_utc: 2026-10-16T00:20:05Z
+started_utc: 2026-10-16T00:22:57Z
 apm_version: 0.33.0
 apm_pinned: 0.33.0
 git: git version 2.39.5

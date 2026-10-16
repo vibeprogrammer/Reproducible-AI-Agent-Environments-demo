@@ -107,6 +107,31 @@ cp -R "$BUNDLE" "$WORK/bundle"
 cd "$WORK"
 
 # ---------------------------------------------------------------------------
+step "5a. A meta-package: dependencies only, no primitives of its own"
+mkdir reviewer-kit && cd reviewer-kit && git init -q
+cat > apm.yml <<EOF
+name: meridian-reviewer-kit
+version: 1.0.0
+description: Everything a Meridian reviewer needs, as one dependency
+license: MIT
+dependencies:
+  apm:
+    - ${STD_DEP}#${STD_TAG}
+EOF
+run cat apm.yml
+apmq apm install --target claude
+expect_rc 0
+expect_out 'Installed 2 APM dependencies'
+run apm pack
+expect_rc 0
+expect_out 'Packed 10 file\(s\) -> build/meridian-reviewer-kit-1\.0\.0'
+run_sh 'find build -type f | LC_ALL=C sort'
+expect_out 'skills/meridian-code-review/SKILL\.md$'
+expect_out 'commands/payment-pr\.md$'
+keep_out reviewer-kit-bundle-files.txt
+cd "$WORK"
+
+# ---------------------------------------------------------------------------
 step "6. Bundle consumer: install the packed directory, then a tampered copy"
 mkdir bundle-user && cd bundle-user && git init -q && mkdir .claude
 printf 'name: bundle-user\nversion: 0.1.0\n' > apm.yml

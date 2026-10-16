@@ -1,7 +1,7 @@
 pack:
   format: claude-plugin
   target: claude
-  packed_at: '2026-10-16T00:20:10.782959+00:00'
+  packed_at: '2026-10-16T00:23:03.686794+00:00'
   bundle_files:
     commands/payment-pr.md: b90dbf2d01dddc82f3bd079361f219eec1d7839cc804b1fcb56409a90520453e
     instructions/payment-standards.instructions.md: 62ed3b707d47682bf8e831d330ce3397ebab663f3503b56335e7609e5b8a29fe

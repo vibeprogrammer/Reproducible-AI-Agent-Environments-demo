@@ -16,9 +16,7 @@ eering-standards-v1.0.0 #13749d8802c87e8f2e402fd376a4466980b6bbdf @13749d88
   |-- 1 prompts integrated -> .github/prompts/
   |-- 3 agents integrated -> 3 targets
   |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
-[?25l[............................]   0% integrate - 0:00:00
-[............................]   0% integrate - 0:00:00
-
++- MCP Servers (2)
 [i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
 |  [>]  ledger (self-defined, stdio)
 |     +- Configuring for Copilot, Vscode, Claude, Cursor...
@@ -51,4 +49,4 @@ Successfully configured MCP server 'microsoft-learn' for Cursor
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 3 APM dependencies and 2 MCP servers in 0.6s.
+[*] Installed 3 APM dependencies and 2 MCP servers in 0.4s.

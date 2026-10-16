@@ -49,4 +49,4 @@ Successfully configured MCP server 'microsoft-learn' for Cursor
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 3 APM dependencies and 2 MCP servers in 2.8s.
+[*] Installed 3 APM dependencies and 2 MCP servers in 1.3s.

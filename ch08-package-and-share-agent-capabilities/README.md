@@ -46,7 +46,7 @@ bash ch08-package-and-share-agent-capabilities/run.sh
 
 Evidence goes to `../evidence/ch08-package-and-share-agent-capabilities/`
 (`transcript.log`, `environment.txt`, `result.json`, `artifacts/`).
-Last run: 125 checks passed, 0 failed (APM 0.33.0, Debian 12 x86_64,
+Last run: 131 checks passed, 0 failed (APM 0.33.0, Debian 12 x86_64,
 2026-10-16).
 
 ## What the run shows (expected observations)
@@ -68,6 +68,10 @@ Last run: 125 checks passed, 0 failed (APM 0.33.0, Debian 12 x86_64,
    `commands/payment-pr.md`, the skill under `skills/`, and an embedded
    `apm.lock.yaml` whose `pack.bundle_files` maps every file to a
    SHA-256). `apm pack --archive -o dist` writes a `.zip`.
+5a. A meta-package, `meridian-reviewer-kit`, created in the workspace:
+   an `apm.yml` with one dependency (the team package) and no primitives
+   of its own. `apm install --target claude` installs 2 APM dependencies;
+   `apm pack` packs 10 files, all of them dependency content.
 6. `apm install ../bundle --target claude` installs 9 files and does not
    add a dependency to `apm.yml`. A copy with one changed line is
    refused: "Bundle integrity check failed … Hash mismatch", exit 1,

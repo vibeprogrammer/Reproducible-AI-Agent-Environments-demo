@@ -13,6 +13,7 @@ d77ad92 refs/tags/meridian-code-review-v1.0.0
 1d8dbb1 refs/tags/meridian-code-review-v1.0.1
 3fba23f refs/tags/meridian-code-review-v1.1.0
 dcd8868 refs/tags/meridian-code-review-v1.2.0
+3dd6fdc refs/tags/meridian-code-review-v1.2.1
 13749d8 refs/tags/meridian-engineering-standards-v1.0.0
 [exit 0]
   PASS: exit code 0
@@ -116,7 +117,7 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
   |-- 1 rule(s) integrated -> .claude/rules/
 [i] Added apm_modules/ to .gitignore
   [i] Mapped input -> command arguments in payment-pr.md: [ticket]
-[*] Installed 2 APM dependencies in 1.3s.
+[*] Installed 2 APM dependencies in 1.9s.
 [exit 0]
   PASS: exit code 0
   PASS: output matches /meridian-code-review-v1\.1\.0 @3fba23f7/
@@ -165,7 +166,7 @@ $ bash -c sed -n '/^pack:/,/^lockfile_version/p' build/meridian-engineering-stan
 pack:
   format: claude-plugin
   target: claude
-  packed_at: '2026-10-16T00:20:10.782959+00:00'
+  packed_at: '2026-10-16T00:23:03.686794+00:00'
   bundle_files:
     commands/payment-pr.md: b90dbf2d01dddc82f3bd079361f219eec1d7839cc804b1fcb56409a90520453e
     instructions/payment-standards.instructions.md: 62ed3b707d47682bf8e831d330ce3397ebab663f3503b56335e7609e5b8a29fe
@@ -191,6 +192,60 @@ pipelines.
 [exit 0]
   PASS: exit code 0
   PASS: exists: dist/meridian-engineering-standards-1.0.0.zip
+
+## 5a. A meta-package: dependencies only, no primitives of its own
+$ cat apm.yml
+name: meridian-reviewer-kit
+version: 1.0.0
+description: Everything a Meridian reviewer needs, as one dependency
+license: MIT
+dependencies:
+  apm:
+    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-engineering-standards#meridian-engineering-standards-v1.0.0
+[exit 0]
+$ bash -c set -o pipefail; apm install --target claude 2>&1 | sed -E '/^\s*> resolve |^\[[.#]+\]|\?25h/d'
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-engineering-standards...
+[?25l[............................]   0% resolve - 0:00:00
+
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-engineering-standards#meridian-engin
+eering-standards-v1.0.0 #meridian-engineering-standards-v1.0.0 @13749d88
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+1.0 #meridian-code-review-v1.1.0 @3fba23f7
+  |-- 1 commands integrated -> .claude/commands/
+  |-- 1 rule(s) integrated -> .claude/rules/
+  |-- Skill integrated -> .claude/skills/
+[i] Added apm_modules/ to .gitignore
+  [i] Mapped input -> command arguments in payment-pr.md: [ticket]
+[*] Installed 2 APM dependencies in 1.4s.
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /Installed 2 APM dependencies/
+$ apm pack
+[i] No plugin.json found; synthesising from apm.yml.
+[*] Packed 10 file(s) -> build/meridian-reviewer-kit-1.0.0
+[i] Claude plugin bundle ready -- contains plugin.json plus plugin-native directories and an embedded apm.lock.yaml.
+[i] Share with: apm install build/meridian-reviewer-kit-1.0.0
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /Packed 10 file\(s\) -> build/meridian-reviewer-kit-1\.0\.0/
+$ bash -c find build -type f | LC_ALL=C sort
+build/meridian-reviewer-kit-1.0.0/apm.lock.yaml
+build/meridian-reviewer-kit-1.0.0/commands/payment-pr.md
+build/meridian-reviewer-kit-1.0.0/instructions/payment-standards.md
+build/meridian-reviewer-kit-1.0.0/plugin.json
+build/meridian-reviewer-kit-1.0.0/skills/meridian-code-review/CHANGELOG.md
+build/meridian-reviewer-kit-1.0.0/skills/meridian-code-review/SKILL.md
+build/meridian-reviewer-kit-1.0.0/skills/meridian-code-review/apm.yml
+build/meridian-reviewer-kit-1.0.0/skills/meridian-code-review/assets/review-report-template.md
+build/meridian-reviewer-kit-1.0.0/skills/meridian-code-review/references/false-positives.md
+build/meridian-reviewer-kit-1.0.0/skills/meridian-code-review/references/money-rules.md
+build/meridian-reviewer-kit-1.0.0/skills/meridian-code-review/scripts/check_money_rules.py
+[exit 0]
+  PASS: output matches /skills/meridian-code-review/SKILL\.md$/
+  PASS: output matches /commands/payment-pr\.md$/
 
 ## 6. Bundle consumer: install the packed directory, then a tampered copy
 $ apm install ../bundle --target claude
@@ -316,7 +371,7 @@ Successfully configured MCP server 'microsoft-learn' for Cursor
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 3 APM dependencies and 2 MCP servers in 2.8s.
+[*] Installed 3 APM dependencies and 2 MCP servers in 1.3s.
 [exit 0]
   PASS: exit code 0
   PASS: output matches /Installed 3 APM dependencies and 2 MCP servers/
@@ -416,7 +471,7 @@ $ bash -c set -o pipefail; apm install --frozen 2>&1 | sed -E '/^\s*> resolve |^
 nments-demo/packages/meridian-code-review/apm.yml; re-run 'apm install' to restore it
 [i] Tip: rerun 'apm install' without --frozen to create or repair package lock state, retaining the original options, 
 including --root DIR or --global if specified.
-[x] Install failed after 0.1s.
+[x] Install failed after 0.0s.
 [exit 1]
   PASS: exit code 1 (cold --frozen stops (as in Chapter 7))
   PASS: output matches /package manifest not found/
@@ -506,11 +561,11 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 2 APM dependencies in 0.4s.
+[*] Installed 2 APM dependencies in 0.5s.
 [i] Lockfile presence verified. Run 'apm audit' for on-disk content integrity.
 [exit 0]
   PASS: exit code 0
-  PASS: identical: /tmp/raae-ch08-package-and-share-agent-capabilities-iPE6E9/priya.sha256 == /tmp/raae-ch08-package-and-share-agent-capabilities-iPE6E9/anika.sha256
+  PASS: identical: /tmp/raae-ch08-package-and-share-agent-capabilities-8Yygux/priya.sha256 == /tmp/raae-ch08-package-and-share-agent-capabilities-8Yygux/anika.sha256
 
 ## 10. Conflicting pins: the skill directly at v1.0.1 and via the package at v1.1.0
 $ bash -c grep -n "packages/meridian-" apm.yml
@@ -520,9 +575,10 @@ $ bash -c grep -n "packages/meridian-" apm.yml
   PASS: output matches /meridian-code-review#meridian-code-review-v1\.0\.1/
 $ bash -c set -o pipefail; apm install 2>&1 | sed -E '/^\s*> resolve |^\[[.#]+\]|\?25h/d'
 [>] Installing dependencies from apm.yml...
-[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
 [>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-engineering-standards...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
 [?25l[##############..............]  50% resolve - 0:00:00
+[############################] 100% resolve   0:00:00
 [x] Cannot resolve vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review: incompatible 
 immutable requirements.
   meridian-checkout -> 
@@ -556,7 +612,7 @@ apm.lock.yaml.
   PASS: output matches /incompatible immutable/
   PASS: output matches /requirements/
   PASS: output matches /Align the requested refs/
-  PASS: identical: /tmp/raae-ch08-package-and-share-agent-capabilities-iPE6E9/lock-before-conflict.yaml == apm.lock.yaml
+  PASS: identical: /tmp/raae-ch08-package-and-share-agent-capabilities-8Yygux/lock-before-conflict.yaml == apm.lock.yaml
 $ bash -c set -o pipefail; apm install 2>&1 | sed -E '/^\s*> resolve |^\[[.#]+\]|\?25h/d'
 [>] Installing dependencies from apm.yml...
 [>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-engineering-standards...
@@ -576,9 +632,7 @@ eering-standards-v1.0.0 #13749d8802c87e8f2e402fd376a4466980b6bbdf @13749d88
   |-- 1 prompts integrated -> .github/prompts/
   |-- 3 agents integrated -> 3 targets
   |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
-[?25l[............................]   0% integrate - 0:00:00
-[............................]   0% integrate - 0:00:00
-
++- MCP Servers (2)
 [i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
 |  [>]  ledger (self-defined, stdio)
 |     +- Configuring for Copilot, Vscode, Claude, Cursor...
@@ -611,7 +665,7 @@ Successfully configured MCP server 'microsoft-learn' for Cursor
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 3 APM dependencies and 2 MCP servers in 0.6s.
+[*] Installed 3 APM dependencies and 2 MCP servers in 0.4s.
 [exit 0]
   PASS: exit code 0 (the same pin twice is fine)
 
@@ -744,7 +798,7 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
   [i] Mapped input -> command arguments in payment-pr.md: [ticket]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 2 APM dependencies in 1.2s.
+[*] Installed 2 APM dependencies in 1.5s.
 [exit 0]
   PASS: exit code 0
   PASS: output matches /meridian-engineering-standards-v1\.0\.0 @13749d88/
@@ -794,4 +848,4 @@ $ apm experimental list
 [i] Tip: apm experimental enable <name>
 [exit 0]
   PASS: exit code 0
-== ch08-package-and-share-agent-capabilities: passed (125 passed, 0 failed) ==
+== ch08-package-and-share-agent-capabilities: passed (131 passed, 0 failed) ==
