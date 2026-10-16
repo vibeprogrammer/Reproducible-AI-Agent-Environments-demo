@@ -1,6 +1,6 @@
 meridian-checkout passed=True
    dependency-pinned-constraint -- 2 dependency(ies) use unbounded constraints (hint: pin to a semver range, literal tag, or SHA) (enforcement: warn)
-       vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards: bare branch 'meridian-engineering-standards-v1.0.0' tracks a moving tip
+       vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards: bare branch 'meridian-engineering-standards-v1.0.1' tracks a moving tip
        vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-role-payments: bare branch 'meridian-role-payments-v1.0.0' tracks a moving tip
    mcp-self-defined -- 2 self-defined MCP server(s) (warn)
        ledger: self-defined server
@@ -11,7 +11,7 @@ meridian-ledger passed=True
    dependency-denylist -- 1 dependency(ies) match deny list (enforcement: warn)
        vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-standards: denied by pattern: vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-standards
    dependency-pinned-constraint -- 3 dependency(ies) use unbounded constraints (hint: pin to a semver range, literal tag, or SHA) (enforcement: warn)
-       vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards: bare branch 'meridian-engineering-standards-v1.0.0' tracks a moving tip
+       vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards: bare branch 'meridian-engineering-standards-v1.0.1' tracks a moving tip
        vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-role-payments: bare branch 'meridian-role-payments-v1.0.0' tracks a moving tip
        vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-standards: bare branch 'meridian-standards-v0.9.0' tracks a moving tip
 meridian-platform-tools passed=True

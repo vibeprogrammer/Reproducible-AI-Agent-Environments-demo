@@ -2,7 +2,7 @@
   "summary": {
     "repos": 3,
     "baseline_adopted": 3,
-    "role_bundle_adopted": 3,
+    "role_package_adopted": 3,
     "owner_declared": 3,
     "policy_pass": 3,
     "policy_warnings": 1,
@@ -14,8 +14,8 @@
     {
       "repo": "meridian-checkout",
       "owner": "meridian-finance/payments-team",
-      "baseline": "meridian-engineering-standards-v1.0.0",
-      "role_bundles": [
+      "baseline": "meridian-engineering-standards-v1.0.1",
+      "role_packages": [
         "meridian-role-payments"
       ],
       "internal": 3,
@@ -32,8 +32,8 @@
     {
       "repo": "meridian-ledger",
       "owner": "meridian-finance/ledger-team",
-      "baseline": "meridian-engineering-standards-v1.0.0",
-      "role_bundles": [
+      "baseline": "meridian-engineering-standards-v1.0.1",
+      "role_packages": [
         "meridian-role-payments"
       ],
       "internal": 3,
@@ -50,8 +50,8 @@
     {
       "repo": "meridian-platform-tools",
       "owner": "meridian-finance/platform-team",
-      "baseline": "meridian-engineering-standards-v1.0.0",
-      "role_bundles": [
+      "baseline": "meridian-engineering-standards-v1.0.1",
+      "role_packages": [
         "meridian-role-platform"
       ],
       "internal": 3,

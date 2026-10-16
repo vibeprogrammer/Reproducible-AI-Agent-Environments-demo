@@ -212,7 +212,7 @@
       "passed": false,
       "message": "1 version mismatch(es)",
       "details": [
-        "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards: expected ref 'meridian-engineering-standards-v1.1.0', got 'meridian-engineering-standards-v1.0.0'"
+        "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards: expected ref 'meridian-engineering-standards-v1.1.0', got 'meridian-engineering-standards-v1.0.1'"
       ]
     },
     {

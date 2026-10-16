@@ -4,3 +4,7 @@ d77ad92 refs/tags/meridian-code-review-v1.0.0
 dcd8868 refs/tags/meridian-code-review-v1.2.0
 3dd6fdc refs/tags/meridian-code-review-v1.2.1
 13749d8 refs/tags/meridian-engineering-standards-v1.0.0
+c9e1b83 refs/tags/meridian-engineering-standards-v1.0.1
+81b2894 refs/tags/meridian-role-payments-v1.0.0
+81b2894 refs/tags/meridian-role-platform-v1.0.0
+81b2894 refs/tags/meridian-standards-v0.9.0

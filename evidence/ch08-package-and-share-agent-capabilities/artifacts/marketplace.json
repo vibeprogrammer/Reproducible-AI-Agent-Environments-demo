@@ -8,13 +8,13 @@
     {
       "name": "meridian-engineering-standards",
       "description": "Meridian's shared payment standards and review workflow",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "source": {
         "source": "git-subdir",
         "url": "vibeprogrammer/Reproducible-AI-Agent-Environments-demo",
         "path": "packages/meridian-engineering-standards",
-        "ref": "meridian-engineering-standards-v1.0.0",
-        "sha": "13749d8802c87e8f2e402fd376a4466980b6bbdf",
+        "ref": "meridian-engineering-standards-v1.0.1",
+        "sha": "c9e1b835e5f15401e406be21d390a6fd2a60dfb2",
         "tag_pattern": "meridian-engineering-standards-v{version}"
       }
     },

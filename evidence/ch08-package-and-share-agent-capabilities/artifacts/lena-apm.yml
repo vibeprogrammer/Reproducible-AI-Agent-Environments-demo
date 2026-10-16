@@ -7,4 +7,4 @@ dependencies:
     - git: 
         https://github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo
       path: packages/meridian-engineering-standards
-      ref: meridian-engineering-standards-v1.0.0
+      ref: meridian-engineering-standards-v1.0.1

@@ -210,7 +210,7 @@
       "passed": true,
       "message": "2 dependency(ies) use unbounded constraints (hint: pin to a semver range, literal tag, or SHA) (enforcement: warn)",
       "details": [
-        "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards: bare branch 'meridian-engineering-standards-v1.0.0' tracks a moving tip",
+        "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards: bare branch 'meridian-engineering-standards-v1.0.1' tracks a moving tip",
         "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-role-payments: bare branch 'meridian-role-payments-v1.0.0' tracks a moving tip"
       ]
     },

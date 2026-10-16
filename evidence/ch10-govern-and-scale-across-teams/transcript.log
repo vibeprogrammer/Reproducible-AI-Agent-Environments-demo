@@ -108,13 +108,13 @@ $ bash -c apm install 2>&1 | quiet
 
   [+] 
 github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-engineering-standards#meridian-engin
-eering-standards-v1.0.0 #meridian-engineering-standards-v1.0.0 @13749d88
+eering-standards-v1.0.1 #meridian-engineering-standards-v1.0.1 @c9e1b835
   [+] 
 github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-role-payments#meridian-role-payments
 -v1.0.0 #meridian-role-payments-v1.0.0 @81b2894f
   [+] 
 github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
-1.0 #meridian-code-review-v1.1.0 @3fba23f7
+2.1 #meridian-code-review-v1.2.1 @3dd6fdc6
   |-- 1 commands integrated -> .claude/commands/
   |-- 1 rule(s) integrated -> .claude/rules/
   |-- 1 rule(s) integrated -> .claude/rules/
@@ -136,22 +136,22 @@ Successfully configured MCP server 'microsoft-learn' for Claude Code
   [i] Mapped input -> command arguments in payment-pr.md: [ticket]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 3 APM dependencies and 2 MCP servers in 2.7s.
+[*] Installed 3 APM dependencies and 2 MCP servers in 2.3s.
 [exit 0]
   PASS: exit code 0 (install meridian-checkout)
   PASS: exists: repos/meridian-checkout/apm.lock.yaml
 $ bash -c apm install 2>&1 | quiet
 [>] Installing dependencies from apm.yml...
 [>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-engineering-standards...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-standards...
 [>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-role-payments...
 [>] Resolving apm-autopilot-comment...
-[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-standards...
 
   [+] github.com/microsoft/apm/packages/autopilot/autopilot-comment#ee08bb59b9a7bce67fb4010e4af8652c4c53a7de 
 #ee08bb59b9a7bce67fb4010e4af8652c4c53a7de @ee08bb59
   [+] 
 github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-engineering-standards#meridian-engin
-eering-standards-v1.0.0 #meridian-engineering-standards-v1.0.0 @13749d88
+eering-standards-v1.0.1 #meridian-engineering-standards-v1.0.1 @c9e1b835
   [+] 
 github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-role-payments#meridian-role-payments
 -v1.0.0 #meridian-role-payments-v1.0.0 @81b2894f
@@ -160,7 +160,7 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
 #meridian-standards-v0.9.0 @81b2894f
   [+] 
 github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
-1.0 #meridian-code-review-v1.1.0 @3fba23f7
+2.1 #meridian-code-review-v1.2.1 @3dd6fdc6
   |-- Skill integrated -> .claude/skills/
   |-- 1 commands integrated -> .claude/commands/
   |-- 1 rule(s) integrated -> .claude/rules/
@@ -171,14 +171,14 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
   [i] Mapped input -> command arguments in payment-pr.md: [ticket]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 5 APM dependencies in 1.9s.
+[*] Installed 5 APM dependencies in 3.0s.
 [exit 0]
   PASS: exit code 0 (install meridian-ledger)
   PASS: exists: repos/meridian-ledger/apm.lock.yaml
 $ bash -c apm install 2>&1 | quiet
 [>] Installing dependencies from apm.yml...
-[>] Resolving apm-pr-description-skill...
 [>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-role-platform...
+[>] Resolving apm-pr-description-skill...
 
   [+] github.com/microsoft/apm/packages/pr-description-skill#ee08bb59b9a7bce67fb4010e4af8652c4c53a7de 
 #ee08bb59b9a7bce67fb4010e4af8652c4c53a7de @ee08bb59
@@ -190,10 +190,21 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
 [i] Added apm_modules/ to .gitignore
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 2 APM dependencies in 1.1s.
+[*] Installed 2 APM dependencies in 0.9s.
 [exit 0]
   PASS: exit code 0 (install meridian-platform-tools)
   PASS: exists: repos/meridian-platform-tools/apm.lock.yaml
+$ bash -c grep -E '^  name: meridian|resolved_ref' repos/meridian-checkout/apm.lock.yaml
+  name: meridian-engineering-standards
+  resolved_ref: meridian-engineering-standards-v1.0.1
+  name: meridian-role-payments
+  resolved_ref: meridian-role-payments-v1.0.0
+  name: meridian-code-review
+  resolved_ref: meridian-code-review-v1.2.1
+[exit 0]
+  PASS: output matches /resolved_ref: meridian-engineering-standards-v1\.0\.1/
+  PASS: output matches /resolved_ref: meridian-code-review-v1\.2\.1/
+  PASS: repos/meridian-ledger/apm.lock.yaml matches /resolved_ref: meridian-code-review-v1\.2\.1/
 
 ## C. Week 1: the pilot policy in warn mode
 $ apm audit --ci --no-drift --no-fail-fast --policy ../../policies/meridian-finance/apm-policy.pilot.yml
@@ -337,7 +348,7 @@ for r in ["meridian-checkout","meridian-ledger","meridian-platform-tools"]:
 EOF
 meridian-checkout passed=True
    dependency-pinned-constraint -- 2 dependency(ies) use unbounded constraints (hint: pin to a semver range, literal tag, or SHA) (enforcement: warn)
-       vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards: bare branch 'meridian-engineering-standards-v1.0.0' tracks a moving tip
+       vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards: bare branch 'meridian-engineering-standards-v1.0.1' tracks a moving tip
        vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-role-payments: bare branch 'meridian-role-payments-v1.0.0' tracks a moving tip
    mcp-self-defined -- 2 self-defined MCP server(s) (warn)
        ledger: self-defined server
@@ -348,7 +359,7 @@ meridian-ledger passed=True
    dependency-denylist -- 1 dependency(ies) match deny list (enforcement: warn)
        vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-standards: denied by pattern: vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-standards
    dependency-pinned-constraint -- 3 dependency(ies) use unbounded constraints (hint: pin to a semver range, literal tag, or SHA) (enforcement: warn)
-       vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards: bare branch 'meridian-engineering-standards-v1.0.0' tracks a moving tip
+       vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards: bare branch 'meridian-engineering-standards-v1.0.1' tracks a moving tip
        vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-role-payments: bare branch 'meridian-role-payments-v1.0.0' tracks a moving tip
        vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-standards: bare branch 'meridian-standards-v0.9.0' tracks a moving tip
 meridian-platform-tools passed=True
@@ -359,7 +370,7 @@ meridian-platform-tools passed=True
    required-manifest-fields -- 1 required manifest field(s) missing (enforcement: warn)
        author
 [exit 0]
-  PASS: output matches /bare branch 'meridian-engineering-standards-v1.0.0' tracks a moving tip/
+  PASS: output matches /bare branch 'meridian-engineering-standards-v1.0.1' tracks a moving tip/
   PASS: output matches /meridian-standards: denied by pattern/
   PASS: output matches /autopilot-comment: not in allowed sources/
   PASS: output matches /required-packages/
@@ -368,16 +379,16 @@ meridian-platform-tools passed=True
 
 ## D. Metrics before remediation
 $ python3 <demo-repo>/ch10-govern-and-scale-across-teams/tools/adoption_metrics.py meridian-checkout meridian-ledger meridian-platform-tools --exceptions ../exceptions.yml --today 2026-10-16 --policy ../policies/meridian-finance/apm-policy.pilot.yml --json-out ../metrics-week1.json
-| repo | owner | baseline | role bundles | internal | 3rd-party | policy | exceptions |
+| repo | owner | baseline | role packages | internal | 3rd-party | policy | exceptions |
 |---|---|---|---|---|---|---|---|
-| meridian-checkout | meridian-finance/payments-team | meridian-engineering-standards-v1.0.0 | meridian-role-payments | 3 | 0 | pass, rule warnings: 2 | - |
-| meridian-ledger | meridian-finance/ledger-team | meridian-engineering-standards-v1.0.0 | meridian-role-payments | 4 | 1 | pass, rule warnings: 3 | - |
+| meridian-checkout | meridian-finance/payments-team | meridian-engineering-standards-v1.0.1 | meridian-role-payments | 3 | 0 | pass, rule warnings: 2 | - |
+| meridian-ledger | meridian-finance/ledger-team | meridian-engineering-standards-v1.0.1 | meridian-role-payments | 4 | 1 | pass, rule warnings: 3 | - |
 | meridian-platform-tools | (none) | missing | meridian-role-platform | 1 | 1 | pass, rule warnings: 3 | - |
 
-baseline adopted: 2/3; role bundle: 3/3; owner declared: 2/3; policy pass: 3/3 (rule warnings: 8); third-party packages: 2; open exceptions: 0
+baseline adopted: 2/3; role package: 3/3; owner declared: 2/3; policy pass: 3/3 (rule warnings: 8); third-party packages: 2; open exceptions: 0
 [exit 0]
   PASS: exit code 0
-  PASS: output matches /baseline adopted: 2/3; role bundle: 3/3; owner declared: 2/3; policy pass: 3/3 \(rule warnings: 8\)/
+  PASS: output matches /baseline adopted: 2/3; role package: 3/3; owner declared: 2/3; policy pass: 3/3 \(rule warnings: 8\)/
   PASS: output does not match /EXC-001/
 
 ## E. Same violation, block mode: the deprecated package now fails the job
@@ -455,31 +466,32 @@ $ bash -c sed -i 's#^description: .*#&\nauthor: meridian-finance/platform-team#'
 author: meridian-finance/platform-team
 [exit 0]
   PASS: output matches /author: meridian-finance/platform-team/
-$ bash -c apm install vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-engineering-standards#meridian-engineering-standards-v1.0.0 2>&1 | quiet
+$ bash -c apm install vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-engineering-standards#meridian-engineering-standards-v1.0.1 2>&1 | quiet
 [*] Validating 1 package...
 [+] 
 vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards#meridian-engineering-stan
-dards-v1.0.0
+dards-v1.0.1
 [*] Updated apm.yml with 1 new package(s)
 [>] Installing 1 new package...
 [>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-engineering-standards...
 
   [+] 
 github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-engineering-standards#meridian-engin
-eering-standards-v1.0.0 #meridian-engineering-standards-v1.0.0 @13749d88
+eering-standards-v1.0.1 #meridian-engineering-standards-v1.0.1 @c9e1b835
   [+] 
 github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
-1.0 #meridian-code-review-v1.1.0 @3fba23f7
+2.1 #meridian-code-review-v1.2.1 @3dd6fdc6
   |-- 1 commands integrated -> .claude/commands/
   |-- 1 rule(s) integrated -> .claude/rules/
   |-- Skill integrated -> .claude/skills/
   [i] Mapped input -> command arguments in payment-pr.md: [ticket]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 2 APM dependencies in 1.4s.
+[*] Installed 2 APM dependencies in 2.6s.
 [exit 0]
   PASS: exit code 0
-  PASS: apm.yml matches /meridian-engineering-standards#meridian-engineering-standards-v1.0.0/
+  PASS: apm.yml matches /meridian-engineering-standards#meridian-engineering-standards-v1.0.1/
+  PASS: apm.lock.yaml matches /resolved_ref: meridian-code-review-v1\.2\.1/
 
 ## G. Week 3: the enforced policy (block, exception EXC-001 recorded)
 $ apm audit --ci --no-drift --no-fail-fast -f json -o policy-audit.json --policy ../../policies/meridian-finance/apm-policy.yml
@@ -537,25 +549,25 @@ $ apm audit --ci --no-drift --no-fail-fast --policy ../../policies/meridian-chec
 [exit 0]
   PASS: exit code 0 (checkout passes its own stricter override)
 $ python3 <demo-repo>/ch10-govern-and-scale-across-teams/tools/adoption_metrics.py meridian-checkout meridian-ledger meridian-platform-tools --exceptions ../exceptions.yml --today 2026-10-16 --policy ../policies/meridian-finance/apm-policy.yml --json-out ../metrics-week3.json --fail-on-expired
-| repo | owner | baseline | role bundles | internal | 3rd-party | policy | exceptions |
+| repo | owner | baseline | role packages | internal | 3rd-party | policy | exceptions |
 |---|---|---|---|---|---|---|---|
-| meridian-checkout | meridian-finance/payments-team | meridian-engineering-standards-v1.0.0 | meridian-role-payments | 3 | 0 | pass, rule warnings: 1 | - |
-| meridian-ledger | meridian-finance/ledger-team | meridian-engineering-standards-v1.0.0 | meridian-role-payments | 3 | 1 | pass | EXC-001 (76d left) |
-| meridian-platform-tools | meridian-finance/platform-team | meridian-engineering-standards-v1.0.0 | meridian-role-platform | 3 | 1 | pass | - |
+| meridian-checkout | meridian-finance/payments-team | meridian-engineering-standards-v1.0.1 | meridian-role-payments | 3 | 0 | pass, rule warnings: 1 | - |
+| meridian-ledger | meridian-finance/ledger-team | meridian-engineering-standards-v1.0.1 | meridian-role-payments | 3 | 1 | pass | EXC-001 (76d left) |
+| meridian-platform-tools | meridian-finance/platform-team | meridian-engineering-standards-v1.0.1 | meridian-role-platform | 3 | 1 | pass | - |
 
-baseline adopted: 3/3; role bundle: 3/3; owner declared: 3/3; policy pass: 3/3 (rule warnings: 1); third-party packages: 2; open exceptions: 1
+baseline adopted: 3/3; role package: 3/3; owner declared: 3/3; policy pass: 3/3 (rule warnings: 1); third-party packages: 2; open exceptions: 1
 [exit 0]
   PASS: exit code 0
-  PASS: output matches /baseline adopted: 3/3; role bundle: 3/3; owner declared: 3/3; policy pass: 3/3 \(rule warnings: 1\)/
+  PASS: output matches /baseline adopted: 3/3; role package: 3/3; owner declared: 3/3; policy pass: 3/3 \(rule warnings: 1\)/
   PASS: output matches /EXC-001 \(76d left\)/
 
 ## H. Exceptions expire: the same register three months later
 $ python3 <demo-repo>/ch10-govern-and-scale-across-teams/tools/adoption_metrics.py meridian-ledger --exceptions ../exceptions.yml --today 2027-01-15 --policy ../policies/meridian-finance/apm-policy.yml --json-out ../metrics-expired.json --fail-on-expired
-| repo | owner | baseline | role bundles | internal | 3rd-party | policy | exceptions |
+| repo | owner | baseline | role packages | internal | 3rd-party | policy | exceptions |
 |---|---|---|---|---|---|---|---|
-| meridian-ledger | meridian-finance/ledger-team | meridian-engineering-standards-v1.0.0 | meridian-role-payments | 3 | 1 | pass | EXC-001 (EXPIRED) |
+| meridian-ledger | meridian-finance/ledger-team | meridian-engineering-standards-v1.0.1 | meridian-role-payments | 3 | 1 | pass | EXC-001 (EXPIRED) |
 
-baseline adopted: 1/1; role bundle: 1/1; owner declared: 1/1; policy pass: 1/1 (rule warnings: 0); third-party packages: 1; open exceptions: 1
+baseline adopted: 1/1; role package: 1/1; owner declared: 1/1; policy pass: 1/1 (rule warnings: 0); third-party packages: 1; open exceptions: 1
 expired exceptions: EXC-001 (EXPIRED)
 [exit 1]
   PASS: exit code 1 (an expired exception fails the metrics job)
@@ -579,7 +591,7 @@ $ bash -c apm install microsoft/apm/packages/autopilot/autopilot-comment#ee08bb5
 [*] All servers up to date
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 1 APM dependency in 0.3s.
+[*] Installed 1 APM dependency in 0.4s.
 [exit 0]
   PASS: exit code 0 (no org policy is discovered offline, so install proceeds)
 $ apm audit --ci --no-drift --no-fail-fast --policy ../../policies/meridian-finance/apm-policy.yml
@@ -1025,7 +1037,7 @@ $ apm audit --ci --no-drift --no-fail-fast -f json --policy ../../policies/requi
       "passed": true,
       "message": "Required package versions match (warnings: 1)",
       "details": [
-        "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards: expected ref 'meridian-engineering-standards-v1.1.0', got 'meridian-engineering-standards-v1.0.0'"
+        "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards: expected ref 'meridian-engineering-standards-v1.1.0', got 'meridian-engineering-standards-v1.0.1'"
       ]
     },
     {
@@ -1343,7 +1355,7 @@ $ apm audit --ci --no-drift --no-fail-fast -f json --policy ../../policies/requi
       "passed": false,
       "message": "1 version mismatch(es)",
       "details": [
-        "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards: expected ref 'meridian-engineering-standards-v1.1.0', got 'meridian-engineering-standards-v1.0.0'"
+        "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards: expected ref 'meridian-engineering-standards-v1.1.0', got 'meridian-engineering-standards-v1.0.1'"
       ]
     },
     {
@@ -1445,7 +1457,7 @@ $ apm audit --ci --no-drift --no-fail-fast -f json --policy ../../policies/requi
 }
 [exit 1]
   PASS: exit code 1 (block: the mismatch fails)
-  PASS: output matches /expected ref 'meridian-engineering-standards-v1.1.0', got 'meridian-engineering-standards-v1.0.0'/
+  PASS: output matches /expected ref 'meridian-engineering-standards-v1.1.0', got 'meridian-engineering-standards-v1.0.1'/
 
 ## N. require: checks the manifest, not the transitive graph
 $ apm audit --ci --no-drift --no-fail-fast --policy ../../policies/require-transitive.yml
@@ -1541,7 +1553,7 @@ $ apm audit --ci --no-drift --policy ../../policies/meridian-finance/apm-policy.
   PASS: exit code 0 (matching hash: policy enforced and passing)
   PASS: output matches /All 30 check\(s\) passed/
 $ apm audit --ci --no-drift --policy ../../policies/meridian-finance/apm-policy.yml
-[!] Policy fetch failed: Policy hash mismatch from file:../../policies/meridian-finance/apm-policy.yml: expected sha256:0000000000000000000000000000000000000000000000000000000000000000, got sha256:cc062058ac235e0dca6bd4c690c9a9c6cb2d9034bf975d82f8425c929e55b6f6; enforcement skipped (set policy.fetch_failure_default=block in apm.yml to fail closed)
+[!] Policy fetch failed: Policy hash mismatch from file:../../policies/meridian-finance/apm-policy.yml: expected sha256:0000000000000000000000000000000000000000000000000000000000000000, got sha256:e4befbc98fb4592b4e4a1e050226c59097bf35f78d67a6eb3794442891dd79a8; enforcement skipped (set policy.fetch_failure_default=block in apm.yml to fail closed)
 [!] drift detection skipped (--no-drift); coverage reduced -- hand-edits and missing integrations will not be caught
 
                                       [>] APM Policy Compliance                                      
@@ -1565,8 +1577,8 @@ $ apm audit --ci --no-drift --policy ../../policies/meridian-finance/apm-policy.
   PASS: output matches /Policy hash mismatch/
   PASS: output matches /enforcement skipped/
 $ apm audit --ci --no-drift --policy ../../policies/meridian-finance/apm-policy.yml
-[x] Policy fetch failed: Policy hash mismatch from file:../../policies/meridian-finance/apm-policy.yml: expected sha256:0000000000000000000000000000000000000000000000000000000000000000, got sha256:cc062058ac235e0dca6bd4c690c9a9c6cb2d9034bf975d82f8425c929e55b6f6 (policy.fetch_failure_default=block)
+[x] Policy fetch failed: Policy hash mismatch from file:../../policies/meridian-finance/apm-policy.yml: expected sha256:0000000000000000000000000000000000000000000000000000000000000000, got sha256:e4befbc98fb4592b4e4a1e050226c59097bf35f78d67a6eb3794442891dd79a8 (policy.fetch_failure_default=block)
 [exit 1]
   PASS: exit code 1 (mismatch with fetch_failure_default: block fails closed)
   PASS: output matches /Policy hash mismatch/
-== ch10-govern-and-scale-across-teams: passed (75 passed, 0 failed) ==
+== ch10-govern-and-scale-across-teams: passed (79 passed, 0 failed) ==
