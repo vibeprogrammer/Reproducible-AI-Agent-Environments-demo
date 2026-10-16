@@ -1,0 +1,12 @@
+# Meridian policy exceptions register (outside APM: APM 0.33.0 has no
+# waiver field). Each entry matches an allow-list line in
+# policies/meridian-finance/apm-policy.yml that carries the same id.
+exceptions:
+  - id: EXC-001
+    repo: meridian-ledger
+    package: microsoft/apm/packages/autopilot/autopilot-comment
+    rule: dependency-allowlist
+    owner: meridian-finance/ledger-team
+    approved_by: Jon
+    reason: ledger team is trialling automated PR summaries; replace with an approved package or drop
+    expires: 2026-12-31

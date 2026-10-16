@@ -1,0 +1,20 @@
+# Meridian enterprise hub policy.
+# In production: <enterprise-hub-org>/.github-private/apm-policy.yml,
+# owned by the security team. Every org policy extends it.
+name: "Meridian enterprise baseline"
+version: "1.0.0"
+enforcement: warn
+
+dependencies:
+  deny:
+    - "untrusted-org/**"   # placeholder for sources security has banned
+  max_depth: 5             # no deeper transitive chains than this
+
+mcp:
+  self_defined: warn       # flag MCP servers declared inline in apm.yml
+  transport:
+    allow: [stdio, http]
+
+manifest:
+  # Ownership: every repo's apm.yml must say who owns its agent setup.
+  required_fields: [version, description, author]

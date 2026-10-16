@@ -1,0 +1,12 @@
+# Repo override for meridian-checkout (the payments service).
+# It extends the org policy and may only tighten it.
+name: "meridian-checkout repo policy"
+version: "1.0.0"
+extends: "@POLICIES@/meridian-finance/apm-policy.yml"
+enforcement: block
+
+dependencies:
+  deny:
+    # No autonomous PR-comment automation in the payments service,
+    # even though the org grants EXC-001 for meridian-ledger.
+    - "microsoft/apm/packages/autopilot/**"

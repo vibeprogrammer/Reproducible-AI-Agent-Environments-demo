@@ -1,0 +1,28 @@
+# meridian-finance org policy -- ENFORCED (after the pilot).
+# In production: meridian-finance/.github-private/apm-policy.yml.
+# Changes go through a pull request reviewed by the policy owners
+# (Marta for engineering, Jon for platform/security).
+name: "meridian-finance org policy"
+version: "1.1.0"
+extends: "@POLICIES@/enterprise/apm-policy.yml"
+enforcement: block
+
+dependencies:
+  allow:
+    # Approved sources: Meridian's own packages ...
+    - "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/**"
+    # ... and approved third-party capabilities, listed one by one.
+    - "microsoft/apm/packages/pr-description-skill"
+    # EXCEPTION EXC-001 (see exceptions.yml): meridian-ledger only,
+    # owner meridian-finance/ledger-team, expires 2026-12-31.
+    - "microsoft/apm/packages/autopilot/autopilot-comment"
+  deny:
+    # Deprecated: superseded by meridian-engineering-standards.
+    - "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-standards"
+  require:
+    # Baseline: every repo declares the shared standards package directly.
+    - "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards"
+  # require_pinned_constraint was dropped after the pilot: APM 0.33.0
+  # reads per-package tags such as meridian-engineering-standards-v1.0.0
+  # as branch names. Commit pinning comes from apm.lock.yaml plus
+  # `apm install --frozen` in CI (Chapter 7).

@@ -1,0 +1,67 @@
+{
+  "summary": {
+    "repos": 3,
+    "baseline_adopted": 3,
+    "role_bundle_adopted": 3,
+    "owner_declared": 3,
+    "policy_pass": 3,
+    "policy_warnings": 1,
+    "third_party_packages": 2,
+    "open_exceptions": 1,
+    "as_of": "2026-10-16"
+  },
+  "repos": [
+    {
+      "repo": "meridian-checkout",
+      "owner": "meridian-finance/payments-team",
+      "baseline": "meridian-engineering-standards-v1.0.0",
+      "role_bundles": [
+        "meridian-role-payments"
+      ],
+      "internal": 3,
+      "third_party": 0,
+      "locked": 3,
+      "max_depth": 2,
+      "policy": "pass",
+      "failed_checks": [],
+      "warned_checks": [
+        "mcp-self-defined"
+      ],
+      "exceptions": []
+    },
+    {
+      "repo": "meridian-ledger",
+      "owner": "meridian-finance/ledger-team",
+      "baseline": "meridian-engineering-standards-v1.0.0",
+      "role_bundles": [
+        "meridian-role-payments"
+      ],
+      "internal": 3,
+      "third_party": 1,
+      "locked": 4,
+      "max_depth": 2,
+      "policy": "pass",
+      "failed_checks": [],
+      "warned_checks": [],
+      "exceptions": [
+        "EXC-001 (76d left)"
+      ]
+    },
+    {
+      "repo": "meridian-platform-tools",
+      "owner": "meridian-finance/platform-team",
+      "baseline": "meridian-engineering-standards-v1.0.0",
+      "role_bundles": [
+        "meridian-role-platform"
+      ],
+      "internal": 3,
+      "third_party": 1,
+      "locked": 4,
+      "max_depth": 2,
+      "policy": "pass",
+      "failed_checks": [],
+      "warned_checks": [],
+      "exceptions": []
+    }
+  ]
+}

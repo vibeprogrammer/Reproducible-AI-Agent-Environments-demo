@@ -1,0 +1,17 @@
+name: meridian-ledger
+version: 2.3.0
+description: Agent environment for Meridian's ledger service
+author: meridian-finance/ledger-team
+license: UNLICENSED
+
+targets:
+  - claude
+
+dependencies:
+  apm:
+    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-engineering-standards#meridian-engineering-standards-v1.0.0
+    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-role-payments#meridian-role-payments-v1.0.0
+    # Left over from the first shared package; deprecated.
+    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-standards#meridian-standards-v0.9.0
+    # Third-party, not on the approved list (yet), pinned to a full SHA.
+    - microsoft/apm/packages/autopilot/autopilot-comment#ee08bb59b9a7bce67fb4010e4af8652c4c53a7de

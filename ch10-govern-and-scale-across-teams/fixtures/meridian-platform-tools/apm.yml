@@ -1,0 +1,11 @@
+name: meridian-platform-tools
+version: 0.4.0
+description: Agent environment for Meridian's CI and release tooling
+targets:
+  - claude
+
+dependencies:
+  apm:
+    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-role-platform#meridian-role-platform-v1.0.0
+    # Approved third-party skill, pinned to a full SHA.
+    - microsoft/apm/packages/pr-description-skill#ee08bb59b9a7bce67fb4010e4af8652c4c53a7de

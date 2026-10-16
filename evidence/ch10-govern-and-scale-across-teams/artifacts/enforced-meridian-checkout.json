@@ -1,0 +1,295 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "lockfile-exists",
+      "passed": true,
+      "message": "Lockfile present",
+      "details": []
+    },
+    {
+      "name": "ref-consistency",
+      "passed": true,
+      "message": "All dependency refs match lockfile",
+      "details": []
+    },
+    {
+      "name": "deployment-ledger-owners",
+      "passed": true,
+      "message": "All deployment ledger owners are valid",
+      "details": []
+    },
+    {
+      "name": "deployed-files-present",
+      "passed": true,
+      "message": "All deployed files present on disk",
+      "details": []
+    },
+    {
+      "name": "no-orphaned-packages",
+      "passed": true,
+      "message": "No orphaned packages in lockfile",
+      "details": []
+    },
+    {
+      "name": "skill-subset-consistency",
+      "passed": true,
+      "message": "Skill subset selections match lockfile",
+      "details": []
+    },
+    {
+      "name": "config-consistency",
+      "passed": true,
+      "message": "MCP configs match lockfile baseline",
+      "details": []
+    },
+    {
+      "name": "content-integrity",
+      "passed": true,
+      "message": "No critical hidden Unicode or hash drift detected",
+      "details": [],
+      "primitive_coverage": [
+        {
+          "file": ".claude/commands/payment-pr.md",
+          "target": "claude",
+          "kind": "commands",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/rules/payment-standards.md",
+          "target": "claude",
+          "kind": "instructions",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/rules/payment-changes.md",
+          "target": "claude",
+          "kind": "instructions",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/SKILL.md",
+          "target": "claude",
+          "kind": "skills",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/CHANGELOG.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/apm.yml",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/assets/review-report-template.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/references/false-positives.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/references/money-rules.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/scripts/check_money_rules.py",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        }
+      ]
+    },
+    {
+      "name": "includes-consent",
+      "passed": true,
+      "message": "No local content deployed -- includes consent check skipped",
+      "details": []
+    },
+    {
+      "name": "dependency-allowlist",
+      "passed": true,
+      "message": "All dependencies match allow list",
+      "details": []
+    },
+    {
+      "name": "dependency-denylist",
+      "passed": true,
+      "message": "No dependencies match deny list",
+      "details": []
+    },
+    {
+      "name": "required-packages",
+      "passed": true,
+      "message": "All required packages present in manifest",
+      "details": []
+    },
+    {
+      "name": "required-packages-deployed",
+      "passed": true,
+      "message": "All required packages present in lockfile",
+      "details": []
+    },
+    {
+      "name": "required-executable-untrusted",
+      "passed": true,
+      "message": "No required executables to verify",
+      "details": []
+    },
+    {
+      "name": "required-package-version",
+      "passed": true,
+      "message": "No version-pinned required packages",
+      "details": []
+    },
+    {
+      "name": "transitive-depth",
+      "passed": true,
+      "message": "All dependencies within depth limit (5)",
+      "details": []
+    },
+    {
+      "name": "registry-source",
+      "passed": true,
+      "message": "No registry source policy",
+      "details": []
+    },
+    {
+      "name": "dependency-pinned-constraint",
+      "passed": true,
+      "message": "Pinned-constraint requirement disabled",
+      "details": []
+    },
+    {
+      "name": "mcp-allowlist",
+      "passed": true,
+      "message": "No MCP allow list configured",
+      "details": []
+    },
+    {
+      "name": "mcp-denylist",
+      "passed": true,
+      "message": "No MCP deny list configured",
+      "details": []
+    },
+    {
+      "name": "mcp-transport",
+      "passed": true,
+      "message": "All MCP transports comply with policy",
+      "details": []
+    },
+    {
+      "name": "mcp-self-defined",
+      "passed": true,
+      "message": "2 self-defined MCP server(s) (warn)",
+      "details": [
+        "ledger: self-defined server",
+        "microsoft-learn: self-defined server"
+      ]
+    },
+    {
+      "name": "explicit-includes",
+      "passed": true,
+      "message": "Explicit includes not required by policy",
+      "details": []
+    },
+    {
+      "name": "dependency-content-hashes",
+      "passed": true,
+      "message": "Dependency content hashes not required by policy",
+      "details": []
+    },
+    {
+      "name": "compilation-target",
+      "passed": true,
+      "message": "No compilation target restrictions configured",
+      "details": []
+    },
+    {
+      "name": "compilation-strategy",
+      "passed": true,
+      "message": "No compilation strategy enforced",
+      "details": []
+    },
+    {
+      "name": "source-attribution",
+      "passed": true,
+      "message": "Source attribution not required by policy",
+      "details": []
+    },
+    {
+      "name": "required-manifest-fields",
+      "passed": true,
+      "message": "All required manifest fields present",
+      "details": []
+    },
+    {
+      "name": "scripts-policy",
+      "passed": true,
+      "message": "Scripts allowed by policy",
+      "details": []
+    },
+    {
+      "name": "unmanaged-files",
+      "passed": true,
+      "message": "Unmanaged files check disabled (action: ignore)",
+      "details": []
+    }
+  ],
+  "summary": {
+    "total": 30,
+    "passed": 30,
+    "failed": 0
+  }
+}

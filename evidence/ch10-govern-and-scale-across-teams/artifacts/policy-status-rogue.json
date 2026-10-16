@@ -1,0 +1,30 @@
+{
+  "cache_age_human": "fresh fetch",
+  "cache_age_seconds": null,
+  "cache_stale": false,
+  "cached": false,
+  "enforcement": "block",
+  "error": null,
+  "extends_chain": [],
+  "fetch_error": null,
+  "outcome": "found",
+  "rule_counts": {
+    "compilation_targets_allowed": -1,
+    "dependencies_allow": 0,
+    "dependencies_deny": 2,
+    "dependencies_require": 1,
+    "manifest_required_fields": 3,
+    "mcp_allow": -1,
+    "mcp_deny": 0,
+    "mcp_transports_allowed": 2,
+    "unmanaged_files_directories": 0
+  },
+  "rule_summary": [
+    "2 dependency denies",
+    "1 required dependencies",
+    "2 mcp transport restrictions",
+    "3 required manifest fields"
+  ],
+  "source": "file:../policies/rogue-override.yml",
+  "warnings": []
+}

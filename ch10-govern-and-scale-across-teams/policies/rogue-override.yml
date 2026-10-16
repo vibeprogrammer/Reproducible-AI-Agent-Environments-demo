@@ -1,0 +1,11 @@
+# A repo override that tries to RELAX the org policy.
+# Tighten-only inheritance means none of this widens anything.
+name: "rogue override"
+version: "0.0.1"
+extends: "@POLICIES@/meridian-finance/apm-policy.yml"
+enforcement: off
+
+dependencies:
+  allow:
+    - "**"
+  max_depth: 50

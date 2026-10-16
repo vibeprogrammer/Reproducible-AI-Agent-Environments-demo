@@ -1,0 +1,418 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "lockfile-exists",
+      "passed": true,
+      "message": "Lockfile present",
+      "details": []
+    },
+    {
+      "name": "ref-consistency",
+      "passed": true,
+      "message": "All dependency refs match lockfile",
+      "details": []
+    },
+    {
+      "name": "deployment-ledger-owners",
+      "passed": true,
+      "message": "All deployment ledger owners are valid",
+      "details": []
+    },
+    {
+      "name": "deployed-files-present",
+      "passed": true,
+      "message": "All deployed files present on disk",
+      "details": []
+    },
+    {
+      "name": "no-orphaned-packages",
+      "passed": true,
+      "message": "No orphaned packages in lockfile",
+      "details": []
+    },
+    {
+      "name": "skill-subset-consistency",
+      "passed": true,
+      "message": "Skill subset selections match lockfile",
+      "details": []
+    },
+    {
+      "name": "config-consistency",
+      "passed": true,
+      "message": "No MCP configs to check",
+      "details": []
+    },
+    {
+      "name": "content-integrity",
+      "passed": true,
+      "message": "No critical hidden Unicode or hash drift detected",
+      "details": [],
+      "primitive_coverage": [
+        {
+          "file": ".claude/skills/pr-description-skill/SKILL.md",
+          "target": "claude",
+          "kind": "skills",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/apm.yml",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/assets/mermaid-conventions.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/assets/pr-body-template.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/assets/scenario-evidence-rubric.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/assets/section-rubric.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/evals/.gitignore",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/evals/README.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/evals/content/auth-refactor.json",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/evals/content/dep-bump.json",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/evals/content/docs-only.json",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/evals/evals.json",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/evals/fixtures/auth-refactor__with_skill.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/evals/fixtures/auth-refactor__without_skill.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/evals/fixtures/dep-bump__with_skill.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/evals/fixtures/dep-bump__without_skill.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/evals/fixtures/docs-only__with_skill.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/evals/fixtures/docs-only__without_skill.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/evals/results/.gitkeep",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/evals/triggers.json",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/skills/pr-description-skill/scripts/run_evals.py",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/rules/ci-workflows.md",
+          "target": "claude",
+          "kind": "instructions",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        }
+      ]
+    },
+    {
+      "name": "includes-consent",
+      "passed": true,
+      "message": "No local content deployed -- includes consent check skipped",
+      "details": []
+    },
+    {
+      "name": "dependency-allowlist",
+      "passed": true,
+      "message": "All dependencies match allow list",
+      "details": []
+    },
+    {
+      "name": "dependency-denylist",
+      "passed": true,
+      "message": "No dependencies match deny list",
+      "details": []
+    },
+    {
+      "name": "required-packages",
+      "passed": true,
+      "message": "1 required package(s) missing from manifest (enforcement: warn)",
+      "details": [
+        "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards"
+      ]
+    },
+    {
+      "name": "required-packages-deployed",
+      "passed": true,
+      "message": "All required packages present in lockfile",
+      "details": []
+    },
+    {
+      "name": "required-executable-untrusted",
+      "passed": true,
+      "message": "No required executables to verify",
+      "details": []
+    },
+    {
+      "name": "required-package-version",
+      "passed": true,
+      "message": "No version-pinned required packages",
+      "details": []
+    },
+    {
+      "name": "transitive-depth",
+      "passed": true,
+      "message": "All dependencies within depth limit (5)",
+      "details": []
+    },
+    {
+      "name": "registry-source",
+      "passed": true,
+      "message": "No registry source policy",
+      "details": []
+    },
+    {
+      "name": "dependency-pinned-constraint",
+      "passed": true,
+      "message": "1 dependency(ies) use unbounded constraints (hint: pin to a semver range, literal tag, or SHA) (enforcement: warn)",
+      "details": [
+        "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-role-platform: bare branch 'meridian-role-platform-v1.0.0' tracks a moving tip"
+      ]
+    },
+    {
+      "name": "mcp-allowlist",
+      "passed": true,
+      "message": "No MCP allow list configured",
+      "details": []
+    },
+    {
+      "name": "mcp-denylist",
+      "passed": true,
+      "message": "No MCP deny list configured",
+      "details": []
+    },
+    {
+      "name": "mcp-transport",
+      "passed": true,
+      "message": "All MCP transports comply with policy",
+      "details": []
+    },
+    {
+      "name": "mcp-self-defined",
+      "passed": true,
+      "message": "No self-defined MCP servers found",
+      "details": []
+    },
+    {
+      "name": "explicit-includes",
+      "passed": true,
+      "message": "Explicit includes not required by policy",
+      "details": []
+    },
+    {
+      "name": "dependency-content-hashes",
+      "passed": true,
+      "message": "Dependency content hashes not required by policy",
+      "details": []
+    },
+    {
+      "name": "compilation-target",
+      "passed": true,
+      "message": "No compilation target restrictions configured",
+      "details": []
+    },
+    {
+      "name": "compilation-strategy",
+      "passed": true,
+      "message": "No compilation strategy enforced",
+      "details": []
+    },
+    {
+      "name": "source-attribution",
+      "passed": true,
+      "message": "Source attribution not required by policy",
+      "details": []
+    },
+    {
+      "name": "required-manifest-fields",
+      "passed": true,
+      "message": "1 required manifest field(s) missing (enforcement: warn)",
+      "details": [
+        "author"
+      ]
+    },
+    {
+      "name": "scripts-policy",
+      "passed": true,
+      "message": "Scripts allowed by policy",
+      "details": []
+    },
+    {
+      "name": "unmanaged-files",
+      "passed": true,
+      "message": "Unmanaged files check disabled (action: ignore)",
+      "details": []
+    }
+  ],
+  "summary": {
+    "total": 30,
+    "passed": 30,
+    "failed": 0
+  }
+}
