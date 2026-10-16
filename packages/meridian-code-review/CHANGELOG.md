@@ -3,7 +3,13 @@
 Versions follow the per-package tag convention `meridian-code-review-vX.Y.Z`.
 Published tags never move; fixes ship as new versions.
 
-## 1.2.0 (2026-10-16)
+## 1.2.0 (2026-10-16) - KNOWN BAD, do not use
+
+> **Known bad.** 1.2.0 removed `fee` from the money-name pattern, so MR001
+> stopped flagging real fee amounts such as `shippingFee = 4.99`. The
+> Chapter 3 regression suite fails on it (`fixture:bad-diff-six-findings`:
+> 5 findings instead of 6). Stay on 1.1.0 (Meridian rolled back to it in
+> Chapter 7). The tag stays where it is; a fix will ship as a new version.
 
 Minor release (Chapter 7).
 
