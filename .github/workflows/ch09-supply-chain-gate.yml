@@ -42,7 +42,7 @@ jobs:
           setup-only: "true"
           apm-version: "0.33.0"
       - name: APM version
-        run: apm --version
+        run: echo "::notice title=APM version::$(apm --version)"
       - name: Guard manifests and CI files
         run: >
           python3 ../../gate/check_supply_chain.py
