@@ -20,7 +20,7 @@ CH5_FIXTURE="$REPO_ROOT/ch05-declare-and-restore-environments-with-apm/fixture/m
 keep_out() { mkdir -p "$EVIDENCE/artifacts"; _norm < "$LAST_OUT" > "$EVIDENCE/artifacts/$1"; }
 # Run an apm command with the progress-spinner lines filtered out.
 # pipefail keeps apm's own exit code.
-SPIN='/^\s*> resolve |^\[[.#]+\]|\?25h/d'
+SPIN='/^\s*> resolve |^\[[.#]+\]|\?25[hl]/d'
 apmq() { run_sh "set -o pipefail; $* 2>&1 | sed -E '$SPIN'"; }
 generated() {
   find .agents .claude .cursor .github .vscode .mcp.json -type f 2>/dev/null \
@@ -301,7 +301,25 @@ keep_out aligned-install.txt
 cd "$WORK"
 
 # ---------------------------------------------------------------------------
-step "11. The internal catalogue: an APM marketplace in its own git repo"
+step "11. The internal catalogue: scaffold it with the marketplace commands"
+mkdir catalog-scaffold && cd catalog-scaffold && git init -q
+run apm marketplace init --owner meridian-finance --name meridian-agent-catalog
+expect_rc 0
+expect_file apm.yml
+run apm marketplace package remove example-package --yes
+expect_rc 0
+run apm marketplace package add vibeprogrammer/Reproducible-AI-Agent-Environments-demo --name meridian-engineering-standards --subdir packages/meridian-engineering-standards --tag-pattern 'meridian-engineering-standards-v{version}' --version '^1.0.0'
+expect_rc 0
+run apm marketplace package add vibeprogrammer/Reproducible-AI-Agent-Environments-demo --name meridian-code-review --subdir packages/meridian-code-review --tag-pattern 'meridian-code-review-v{version}' --version '~1.1.0'
+expect_rc 0
+run_sh "sed -n '/^  packages:/,\$p' apm.yml"
+expect_out 'subdir: packages/meridian-engineering-standards'
+expect_out 'tag_pattern: meridian-code-review-v\{version\}'
+expect_out 'version: ~1\.1\.0'
+keep_out catalog-scaffold-packages.txt
+cd "$WORK"
+
+step "11b. The committed catalogue (same entries, plus comments and a license)"
 cp -R "$HERE/fixture/meridian-agent-catalog" catalog
 cd catalog
 git init -q
@@ -322,7 +340,7 @@ keep_artifact .claude-plugin/marketplace.json marketplace.json
 git add -A && git commit -qm "Catalogue 1.0.0"
 cd "$WORK"
 
-step "11a. Lena: find and install from the catalogue by name"
+step "11c. Lena: find and install from the catalogue by name"
 mkdir lena && cd lena && git init -q
 printf 'name: lena-sandbox\nversion: 0.1.0\ntargets:\n  - cursor\n' > apm.yml
 run apm marketplace add "$WORK/catalog" --name meridian

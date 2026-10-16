@@ -46,7 +46,7 @@ bash ch08-package-and-share-agent-capabilities/run.sh
 
 Evidence goes to `../evidence/ch08-package-and-share-agent-capabilities/`
 (`transcript.log`, `environment.txt`, `result.json`, `artifacts/`).
-Last run: 131 checks passed, 0 failed (APM 0.33.0, Debian 12 x86_64,
+Last run: 139 checks passed, 0 failed (APM 0.33.0, Debian 12 x86_64,
 2026-10-16).
 
 ## What the run shows (expected observations)
@@ -99,7 +99,10 @@ Last run: 131 checks passed, 0 failed (APM 0.33.0, Debian 12 x86_64,
     pins v1.1.0) fails: "incompatible immutable requirements … Align the
     requested refs", exit 1, lockfile untouched. The same pin (v1.1.0)
     twice installs.
-11. The catalogue: `apm marketplace check` reports both entries OK;
+11. The catalogue: `apm marketplace init`, `apm marketplace package remove` and
+    two `apm marketplace package add` calls (with `--subdir`, `--tag-pattern`,
+    `--version`) scaffold the same entries as the committed fixture.
+    For the fixture, `apm marketplace check` reports both entries OK;
     `apm pack` writes `.claude-plugin/marketplace.json` with
     `git-subdir` sources pinned to a tag and a commit SHA; `~1.1.0`
     resolves to `meridian-code-review-v1.1.0`, not the known-bad
