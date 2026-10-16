@@ -2,7 +2,7 @@
 
 Meridian's shared engineering standards for payment services, as one
 APM package. Fictional demo package for the book *Reproducible AI Agent
-Environments* (Chapter 8).
+Environments* (Chapter 8; 1.0.1 released in Chapter 9).
 
 It contains:
 
@@ -12,14 +12,15 @@ It contains:
 - `.apm/prompts/payment-pr.prompt.md` — prepares a pull request for a
   payment change and runs the review skill.
 - A dependency on the `meridian-code-review` skill, pinned to
-  `meridian-code-review-v1.1.0`. Consumers get the skill transitively.
+  `meridian-code-review-v1.2.1` (since 1.0.1; 1.0.0 pinned
+  `meridian-code-review-v1.1.0`). Consumers get the skill transitively.
 
 Install it in a consuming project:
 
 ```yaml
 dependencies:
   apm:
-    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-engineering-standards#meridian-engineering-standards-v1.0.0
+    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-engineering-standards#meridian-engineering-standards-v1.0.1
 ```
 
 Releases are git tags named `meridian-engineering-standards-vX.Y.Z`.
