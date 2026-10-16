@@ -1,0 +1,1 @@
+An idempotency key is a unique value sent with a request so the server can recognize retries of the same operation. It helps prevent a retry from creating a second payment or other duplicate result.

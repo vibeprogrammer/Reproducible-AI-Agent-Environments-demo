@@ -1,0 +1,1 @@
+The diff changes checkout charges to parse the order total as a floating point amount and add a 4.99 shipping fee. It also changes the currency from `EUR` to `eur`, removes the idempotency key, and adds logs containing the card number and a formatted charge amount.

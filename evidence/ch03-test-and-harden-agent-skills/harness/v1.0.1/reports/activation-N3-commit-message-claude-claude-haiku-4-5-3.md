@@ -1,0 +1,1 @@
+Add shipping fee to order charge calculation

@@ -1,0 +1,1 @@
+Refactor chargeOrder to calculate amount as float with shipping fee and update logging

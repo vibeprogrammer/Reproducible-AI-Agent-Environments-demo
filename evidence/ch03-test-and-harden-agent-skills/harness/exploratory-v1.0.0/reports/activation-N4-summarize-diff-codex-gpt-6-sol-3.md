@@ -1,0 +1,1 @@
+`change.diff` changes charging to parse `order.total` as a floating-point amount and add a 4.99 shipping fee, instead of using `totalMinor`. It also lowercases the currency code, removes the idempotency key, and adds logs that include the full card number before charging and the payment ID and display amount afterward.

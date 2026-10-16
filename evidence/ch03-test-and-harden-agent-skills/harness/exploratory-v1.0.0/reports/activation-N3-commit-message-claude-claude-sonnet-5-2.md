@@ -1,0 +1,1 @@
+Switch chargeOrder to float amounts with a hardcoded shipping fee, lowercase currency, and log the raw card number

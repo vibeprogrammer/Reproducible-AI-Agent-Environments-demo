@@ -1,0 +1,1 @@
+Add shipping fee calculation and card logging to chargeOrder

@@ -1,0 +1,1 @@
+Switch checkout charge to float-based amount parsing, lowercase currency, and log the raw card number

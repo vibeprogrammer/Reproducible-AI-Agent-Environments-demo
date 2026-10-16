@@ -1,0 +1,1 @@
+Switch charge amount to floating-point dollars, lowercase currency, drop idempotency key, and log the card number

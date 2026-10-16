@@ -1,0 +1,1 @@
+Add shipping fee to checkout charges and update payment logging

@@ -1,0 +1,1 @@
+This diff modifies the `chargeOrder` function to convert from integer minor units to floating-point amounts, adds a hardcoded shipping fee, removes the idempotency key from the payment request, changes the currency code to lowercase, and adds logging that exposes card data and other payment details.

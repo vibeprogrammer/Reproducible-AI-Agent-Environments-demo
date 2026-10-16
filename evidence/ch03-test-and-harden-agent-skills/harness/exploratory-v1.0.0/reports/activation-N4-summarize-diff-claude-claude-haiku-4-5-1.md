@@ -1,0 +1,1 @@
+The diff modifies the `chargeOrder` function to convert from integer minor-unit amounts to floating-point arithmetic, adds a hardcoded $4.99 shipping fee to charges, logs payment details including the card number (PII), changes the currency code to lowercase, and removes the idempotency key from the payment request while adding display logging.

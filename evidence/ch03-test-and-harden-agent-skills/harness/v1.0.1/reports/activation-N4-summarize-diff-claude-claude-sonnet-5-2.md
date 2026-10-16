@@ -1,0 +1,3 @@
+`change.diff` modifies `chargeOrder` in `src/checkout/charge.ts`: it switches from using the order's integer minor-unit total to parsing `order.total` as a float and adding a hardcoded `4.99` shipping fee, lowercases the currency code to `"eur"`, drops the `idempotencyKey` from the payment creation call, and adds logging that includes the raw card number plus a formatted charge amount.
+
+That said — this introduces several money-handling issues (floating-point amounts instead of integer minor units, non-ISO-4217 currency casing, missing idempotency key, and logging raw card data). Want me to run the `meridian-code-review` skill on it?

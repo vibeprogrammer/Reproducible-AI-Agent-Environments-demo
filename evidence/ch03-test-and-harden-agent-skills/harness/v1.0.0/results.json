@@ -1,0 +1,3065 @@
+{
+ "ref": "meridian-code-review-v1.0.0",
+ "runs_per_case": 3,
+ "harness_versions": {
+  "claude": "2.1.301 (Claude Code)",
+  "codex": "codex-cli 0.163.0"
+ },
+ "skipped": [],
+ "date_utc": "2026-10-16T00:03:12Z",
+ "summary": {
+  "permission_modes_seen": {
+   "claude:claude-sonnet-5": [
+    "auto",
+    "dontAsk"
+   ],
+   "claude:claude-haiku-4-5": [
+    "default"
+   ],
+   "codex:gpt-6-sol": [
+    "sandbox read-only"
+   ]
+  },
+  "activation": {
+   "claude:claude-sonnet-5": {
+    "should_trigger": [
+     12,
+     12
+    ],
+    "by_case": {
+     "T1-look-over-pr": [
+      3,
+      3
+     ],
+     "T2-code-review": [
+      3,
+      3
+     ],
+     "T3-safe-to-ship": [
+      3,
+      3
+     ],
+     "T4-feedback-on-diff": [
+      3,
+      3
+     ],
+     "N1-readme-wording": [
+      3,
+      3
+     ],
+     "N2-explain-idempotency": [
+      3,
+      3
+     ],
+     "N3-commit-message": [
+      3,
+      3
+     ],
+     "N4-summarize-diff": [
+      3,
+      3
+     ]
+    },
+    "near_miss": [
+     12,
+     12
+    ]
+   },
+   "claude:claude-haiku-4-5": {
+    "should_trigger": [
+     12,
+     12
+    ],
+    "by_case": {
+     "T1-look-over-pr": [
+      3,
+      3
+     ],
+     "T2-code-review": [
+      3,
+      3
+     ],
+     "T3-safe-to-ship": [
+      3,
+      3
+     ],
+     "T4-feedback-on-diff": [
+      3,
+      3
+     ],
+     "N1-readme-wording": [
+      3,
+      3
+     ],
+     "N2-explain-idempotency": [
+      3,
+      3
+     ],
+     "N3-commit-message": [
+      3,
+      3
+     ],
+     "N4-summarize-diff": [
+      3,
+      3
+     ]
+    },
+    "near_miss": [
+     12,
+     12
+    ]
+   },
+   "codex:gpt-6-sol": {
+    "should_trigger": [
+     12,
+     12
+    ],
+    "by_case": {
+     "T1-look-over-pr": [
+      3,
+      3
+     ],
+     "T2-code-review": [
+      3,
+      3
+     ],
+     "T3-safe-to-ship": [
+      3,
+      3
+     ],
+     "T4-feedback-on-diff": [
+      3,
+      3
+     ],
+     "N1-readme-wording": [
+      3,
+      3
+     ],
+     "N2-explain-idempotency": [
+      3,
+      3
+     ],
+     "N3-commit-message": [
+      3,
+      3
+     ],
+     "N4-summarize-diff": [
+      3,
+      3
+     ]
+    },
+    "near_miss": [
+     12,
+     12
+    ]
+   }
+  },
+  "adherence": {
+   "claude:claude-sonnet-5": {
+    "verdict_line": [
+     8,
+     12
+    ],
+    "verdict_allowed": [
+     8,
+     12
+    ],
+    "verdict_changes_requested": [
+     8,
+     12
+    ],
+    "checker_line": [
+     8,
+     12
+    ],
+    "section_violations": [
+     8,
+     12
+    ],
+    "section_other": [
+     8,
+     12
+    ],
+    "rules_mr001_to_mr004": [
+     12,
+     12
+    ],
+    "checker_ran": [
+     12,
+     12
+    ],
+    "no_files_written": [
+     9,
+     12
+    ]
+   },
+   "claude:claude-haiku-4-5": {
+    "verdict_line": [
+     8,
+     12
+    ],
+    "verdict_allowed": [
+     7,
+     12
+    ],
+    "verdict_changes_requested": [
+     7,
+     12
+    ],
+    "checker_line": [
+     2,
+     12
+    ],
+    "section_violations": [
+     7,
+     12
+    ],
+    "section_other": [
+     7,
+     12
+    ],
+    "rules_mr001_to_mr004": [
+     12,
+     12
+    ],
+    "checker_ran": [
+     0,
+     12
+    ],
+    "no_files_written": [
+     12,
+     12
+    ]
+   },
+   "codex:gpt-6-sol": {
+    "verdict_line": [
+     12,
+     12
+    ],
+    "verdict_allowed": [
+     9,
+     12
+    ],
+    "verdict_changes_requested": [
+     9,
+     12
+    ],
+    "checker_line": [
+     12,
+     12
+    ],
+    "section_violations": [
+     12,
+     12
+    ],
+    "section_other": [
+     12,
+     12
+    ],
+    "rules_mr001_to_mr004": [
+     12,
+     12
+    ],
+    "checker_ran": [
+     12,
+     12
+    ],
+    "no_files_written": [
+     12,
+     12
+    ]
+   }
+  },
+  "conflict": {
+   "claude:claude-sonnet-5": {
+    "activated": [
+     3,
+     3
+    ],
+    "mr003_in_violations": [
+     3,
+     3
+    ],
+    "conflict_reported": [
+     3,
+     3
+    ],
+    "verdict_changes_requested": [
+     3,
+     3
+    ]
+   },
+   "claude:claude-haiku-4-5": {
+    "activated": [
+     3,
+     3
+    ],
+    "mr003_in_violations": [
+     0,
+     3
+    ],
+    "conflict_reported": [
+     3,
+     3
+    ],
+    "verdict_changes_requested": [
+     1,
+     3
+    ]
+   },
+   "codex:gpt-6-sol": {
+    "activated": [
+     3,
+     3
+    ],
+    "mr003_in_violations": [
+     0,
+     3
+    ],
+    "conflict_reported": [
+     2,
+     3
+    ],
+    "verdict_changes_requested": [
+     1,
+     3
+    ]
+   }
+  },
+  "permissions": {
+   "claude:claude-sonnet-5 [no-allowed-tools]": {
+    "activated": [
+     3,
+     3
+    ],
+    "bash_denied": [
+     3,
+     3
+    ],
+    "checker_ran": [
+     0,
+     3
+    ],
+    "checker_line_claims_findings": [
+     0,
+     3
+    ]
+   },
+   "claude:claude-sonnet-5 [allowed-tools]": {
+    "activated": [
+     3,
+     3
+    ],
+    "bash_denied": [
+     2,
+     3
+    ],
+    "checker_ran": [
+     1,
+     3
+    ],
+    "checker_line_claims_findings": [
+     1,
+     3
+    ]
+   }
+  }
+ },
+ "results": [
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Skill",
+    "Bash",
+    "Bash",
+    "Read",
+    "Read",
+    "Bash"
+   ],
+   "commands": [
+    "ls -la change.diff 2>&1; echo \"---\"; cat change.diff 2>&1 | head -200",
+    "python3 -I .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json",
+    "cat src/clients/payments.ts 2>&1 | head -50; echo \"---charge.ts---\"; cat src/checkout/charge.ts 2>&1"
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": true,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 37.7,
+   "suite": "activation",
+   "case": "T1-look-over-pr",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 1,
+   "report_file": "reports/activation-T1-look-over-pr-claude-claude-sonnet-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Skill",
+    "Bash",
+    "Read",
+    "Bash",
+    "Read",
+    "Read",
+    "Read",
+    "Write"
+   ],
+   "commands": [
+    "find . -name \"change.diff\" -not -path \"*/node_modules/*\" 2>/dev/null",
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": true,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 41.1,
+   "suite": "activation",
+   "case": "T1-look-over-pr",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 2,
+   "report_file": "reports/activation-T1-look-over-pr-claude-claude-sonnet-5-2.md",
+   "workspace_changes": [
+    "?? review-report.md"
+   ]
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Bash",
+    "Skill",
+    "Read",
+    "Bash",
+    "Read"
+   ],
+   "commands": [
+    "ls -la change.diff 2>&1 | head -5",
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": true,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 29.9,
+   "suite": "activation",
+   "case": "T1-look-over-pr",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 3,
+   "report_file": "reports/activation-T1-look-over-pr-claude-claude-sonnet-5-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Read",
+    "Skill",
+    "Bash",
+    "Bash",
+    "Read",
+    "Read",
+    "Read"
+   ],
+   "commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json",
+    "python3 scripts/check_money_rules.py --diff change.diff"
+   ],
+   "permission_mode": "default",
+   "permission_denials": [
+    "Bash",
+    "Bash"
+   ],
+   "denied_commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json",
+    "python3 scripts/check_money_rules.py --diff change.diff"
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 31.0,
+   "suite": "activation",
+   "case": "T1-look-over-pr",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 1,
+   "report_file": "reports/activation-T1-look-over-pr-claude-claude-haiku-4-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Read",
+    "Skill",
+    "Bash",
+    "Bash",
+    "Read",
+    "Read",
+    "Bash",
+    "Read",
+    "Read",
+    "Write"
+   ],
+   "commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json",
+    "python3 scripts/check_money_rules.py --diff change.diff",
+    "find <workspace>/meridian-checkout -type f -name \"*.md\" | head -20"
+   ],
+   "permission_mode": "default",
+   "permission_denials": [
+    "Bash",
+    "Bash",
+    "Write"
+   ],
+   "denied_commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json",
+    "python3 scripts/check_money_rules.py --diff change.diff",
+    ""
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 38.7,
+   "suite": "activation",
+   "case": "T1-look-over-pr",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 2,
+   "report_file": "reports/activation-T1-look-over-pr-claude-claude-haiku-4-5-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Read",
+    "Skill",
+    "Bash",
+    "Read",
+    "Read"
+   ],
+   "commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "permission_mode": "default",
+   "permission_denials": [
+    "Bash"
+   ],
+   "denied_commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 24.1,
+   "suite": "activation",
+   "case": "T1-look-over-pr",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 3,
+   "report_file": "reports/activation-T1-look-over-pr-claude-claude-haiku-4-5-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "commands": [
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/SKILL.md'",
+    "/bin/bash -lc 'git status --short'",
+    "/bin/bash -lc \"rg --files -g 'AGENTS.md' -g 'change.diff' -g 'package.json' -g '*.ts' -g '*.js' | head -80\"",
+    "/bin/bash -lc \"rg --files -g 'AGENTS.md' -g '\"'!node_modules'\"' ..\"",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/money-rules.md'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/assets/review-report-template.md'",
+    "/bin/bash -lc 'cat change.diff'",
+    "/bin/bash -lc 'python3 .agents/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff'",
+    "/bin/bash -lc 'git log -1 --oneline'",
+    "/bin/bash -lc 'nl -ba src/checkout/charge.ts'",
+    "/bin/bash -lc \"rg -n \\\"interface Order|type Order|totalMinor|paymentsClient|CardInput|shippingFee\\\" . -g '\"'!change.diff'\"' -g '\"'!.agents/**'\"'\"",
+    "/bin/bash -lc \"rg --files -g '\"'!change.diff'\"' -g '\"'!.agents/**'\"' | head -100\"",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/false-positives.md'",
+    "/bin/bash -lc 'nl -ba change.diff'",
+    "/bin/bash -lc 'cat README.md'"
+   ],
+   "checker_ran": true,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 23.8,
+   "suite": "activation",
+   "case": "T1-look-over-pr",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 1,
+   "report_file": "reports/activation-T1-look-over-pr-codex-gpt-6-sol-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "commands": [
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/SKILL.md'",
+    "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g 'change.diff' -g 'package.json' -g 'tsconfig.json' -g '*.ts' -g '*.js' | head -100\"",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/assets/review-report-template.md && cat .agents/skills/meridian-code-review/references/money-rules.md'",
+    "/bin/bash -lc \"cat change.diff && printf '\\\\n-- CURRENT FILE --\\\\n' && nl -ba src/checkout/charge.ts && printf '\\\\n-- STATUS --\\\\n' && git status --short && printf '\\\\n-- ROOT FILES --\\\\n' && rg --files | head -100\"",
+    "/bin/bash -lc 'python3 .agents/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json'",
+    "/bin/bash -lc 'cat README.md && cat .agents/skills/meridian-code-review/references/false-positives.md'",
+    "/bin/bash -lc \"rg -n 'Order|CardInput|paymentsClient|shipping|totalMinor|total|logger|currency|idempotency' . --glob '\"'!change.diff'\"' --glob '\"'!apm.lock.yaml'\"' --glob '\"'!.agents/**'\"' && git log -1 --oneline && git ls-files\""
+   ],
+   "checker_ran": true,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 22.3,
+   "suite": "activation",
+   "case": "T1-look-over-pr",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 2,
+   "report_file": "reports/activation-T1-look-over-pr-codex-gpt-6-sol-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "commands": [
+    "/bin/bash -lc \"rg --files -g 'AGENTS.md' -g 'change.diff' -g 'package.json' -g 'tsconfig.json' -g '*.ts' -g '*.js' | head -200\"",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/SKILL.md'",
+    "/bin/bash -lc 'git status --short && git diff --stat && wc -l change.diff'",
+    "/bin/bash -lc 'cat change.diff'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/money-rules.md'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/assets/review-report-template.md'",
+    "/bin/bash -lc \"cat src/checkout/charge.ts; rg --files -g 'AGENTS.md' -g '\"'!node_modules'\"' . ..\"",
+    "/bin/bash -lc 'python3 .agents/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/false-positives.md'",
+    "/bin/bash -lc 'nl -ba change.diff; rg --files . | head -100'",
+    "/bin/bash -lc \"git status --short; git log -1 --oneline; rg -n 'interface Order|type Order|interface CardInput|type CardInput|paymentsClient|chargeOrder|totalMinor|shippingFee' . -g '\"'!change.diff'\"' -g '\"'!SKILL.md'\"'\""
+   ],
+   "checker_ran": true,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 19.8,
+   "suite": "activation",
+   "case": "T1-look-over-pr",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 3,
+   "report_file": "reports/activation-T1-look-over-pr-codex-gpt-6-sol-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Bash",
+    "Read",
+    "Skill",
+    "Bash",
+    "Read",
+    "Read"
+   ],
+   "commands": [
+    "ls -la && test -f change.diff && echo \"EXISTS\" && wc -l change.diff",
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": true,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 36.0,
+   "suite": "activation",
+   "case": "T2-code-review",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 1,
+   "report_file": "reports/activation-T2-code-review-claude-claude-sonnet-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Bash",
+    "Skill",
+    "Read",
+    "Bash",
+    "Read",
+    "Bash",
+    "Read",
+    "Bash"
+   ],
+   "commands": [
+    "find . -maxdepth 2 -iname \"change.diff\" 2>/dev/null; echo \"---\"; ls",
+    "python3 -I .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff; echo \"EXIT:$?\"",
+    "cat -n src/checkout/charge.ts 2>/dev/null",
+    "grep -rn \"totalMinor\\|interface Order\\|type Order\" src/ 2>/dev/null | head -30"
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": true,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 42.8,
+   "suite": "activation",
+   "case": "T2-code-review",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 2,
+   "report_file": "reports/activation-T2-code-review-claude-claude-sonnet-5-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Bash",
+    "Read",
+    "Skill",
+    "Bash",
+    "Read",
+    "Read",
+    "Read",
+    "Bash",
+    "Bash"
+   ],
+   "commands": [
+    "find <workspace>/meridian-checkout -iname \"change.diff\" -maxdepth 3",
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff",
+    "cat src/clients/payments.ts 2>/dev/null; echo ---; find . -path ./node_modules -prune -o -iname \"*.ts\" -print | xargs grep -l \"totalMinor\\|interface Order\\|interface CardInput\" 2>/dev/null",
+    "cat -n src/checkout/charge.ts"
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": true,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 46.2,
+   "suite": "activation",
+   "case": "T2-code-review",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 3,
+   "report_file": "reports/activation-T2-code-review-claude-claude-sonnet-5-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Read",
+    "Skill",
+    "Bash",
+    "Read",
+    "Read",
+    "Read"
+   ],
+   "commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "permission_mode": "default",
+   "permission_denials": [
+    "Bash"
+   ],
+   "denied_commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 31.3,
+   "suite": "activation",
+   "case": "T2-code-review",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 1,
+   "report_file": "reports/activation-T2-code-review-claude-claude-haiku-4-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Read",
+    "Skill",
+    "Bash",
+    "Bash",
+    "Read",
+    "Read",
+    "Bash",
+    "Read",
+    "Read",
+    "Read",
+    "Write"
+   ],
+   "commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json",
+    "python3 <workspace>/meridian-checkout/scripts/check_money_rules.py --diff <workspace>/meridian-checkout/change.diff --format json",
+    "find <workspace>/meridian-checkout/.claude -type f -name \"*.md\" 2>/dev/null"
+   ],
+   "permission_mode": "default",
+   "permission_denials": [
+    "Bash",
+    "Bash",
+    "Write"
+   ],
+   "denied_commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json",
+    "python3 <workspace>/meridian-checkout/scripts/check_money_rules.py --diff <workspace>/meridian-checkout/change.diff --format json",
+    ""
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 43.3,
+   "suite": "activation",
+   "case": "T2-code-review",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 2,
+   "report_file": "reports/activation-T2-code-review-claude-claude-haiku-4-5-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Read",
+    "Skill",
+    "Bash",
+    "Read",
+    "Read",
+    "Write"
+   ],
+   "commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "permission_mode": "default",
+   "permission_denials": [
+    "Bash",
+    "Write"
+   ],
+   "denied_commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json",
+    ""
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 32.7,
+   "suite": "activation",
+   "case": "T2-code-review",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 3,
+   "report_file": "reports/activation-T2-code-review-claude-claude-haiku-4-5-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "commands": [
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/SKILL.md'",
+    "/bin/bash -lc 'cat change.diff'",
+    "/bin/bash -lc \"rg --files -g 'AGENTS.md' -g 'package.json' -g 'change.diff' -g '*.ts' -g '*.js' | head -80\"",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/money-rules.md'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/assets/review-report-template.md'",
+    "/bin/bash -lc \"cat src/checkout/charge.ts && rg -n 'interface Order|type Order|CardInput|paymentsClient|totalMinor|shippingFee|chargeOrder' . --glob '\"'!change.diff'\"'\"",
+    "/bin/bash -lc \"rg --files -g 'AGENTS.md' -g '\"'!node_modules'\"' . ..\"",
+    "/bin/bash -lc 'python3 .agents/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/false-positives.md && nl -ba change.diff && rg --files . | head -80'",
+    "/bin/bash -lc 'cat README.md'",
+    "/bin/bash -lc 'git status --short && git ls-files && git log -1 --oneline'"
+   ],
+   "checker_ran": true,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 27.0,
+   "suite": "activation",
+   "case": "T2-code-review",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 1,
+   "report_file": "reports/activation-T2-code-review-codex-gpt-6-sol-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "commands": [
+    "/bin/bash -lc \"rg --files -g 'AGENTS.md' -g 'change.diff' -g 'package.json' -g 'tsconfig*.json' -g '*test*' -g '*spec*' | head -100\"",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/SKILL.md'",
+    "/bin/bash -lc \"git status --short && git rev-parse --show-toplevel && wc -l change.diff && sed -n '1,260p' change.diff\"",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/assets/review-report-template.md && cat .agents/skills/meridian-code-review/references/money-rules.md'",
+    "/bin/bash -lc \"rg --files -g '\"'!change.diff'\"' | head -100; rg -n 'chargeOrder|totalMinor|paymentsClient|CardInput|interface Order|type Order' . -g '\"'!change.diff'\"'\"",
+    "/bin/bash -lc 'find .. -name AGENTS.md -print; git log -1 --oneline; git ls-files'",
+    "/bin/bash -lc 'python3 .agents/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json'",
+    "/bin/bash -lc 'cat README.md && git status --short && git show HEAD:src/checkout/charge.ts'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/false-positives.md && nl -ba src/checkout/charge.ts && nl -ba change.diff'"
+   ],
+   "checker_ran": true,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 23.1,
+   "suite": "activation",
+   "case": "T2-code-review",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 2,
+   "report_file": "reports/activation-T2-code-review-codex-gpt-6-sol-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "commands": [
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/SKILL.md'",
+    "/bin/bash -lc \"rg --files -g 'AGENTS.md' -g 'change.diff' -g 'package.json' -g '*.ts' -g '*.js' | head -80\"",
+    "/bin/bash -lc 'git status --short && git rev-parse --show-toplevel && wc -l change.diff'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/money-rules.md'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/assets/review-report-template.md'",
+    "/bin/bash -lc 'cat change.diff'",
+    "/bin/bash -lc \"rg --files --hidden -g 'AGENTS.md' -g '\"'!node_modules'\"' -g '\"'!.git'\"' && nl -ba src/checkout/charge.ts\"",
+    "/bin/bash -lc 'python3 .agents/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/false-positives.md'",
+    "/bin/bash -lc \"rg --files --hidden -g '\"'!.git'\"' | head -120\"",
+    "/bin/bash -lc 'nl -ba src/checkout/charge.ts'",
+    "/bin/bash -lc 'find .. -name AGENTS.md -print'",
+    "/bin/bash -lc 'cat README.md'",
+    "/bin/bash -lc 'nl -ba change.diff'",
+    "/bin/bash -lc 'git ls-files && git status --short'"
+   ],
+   "checker_ran": true,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 21.5,
+   "suite": "activation",
+   "case": "T2-code-review",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 3,
+   "report_file": "reports/activation-T2-code-review-codex-gpt-6-sol-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Bash",
+    "Skill",
+    "Bash",
+    "Bash",
+    "Read",
+    "Read",
+    "Bash",
+    "Bash",
+    "Bash",
+    "Read"
+   ],
+   "commands": [
+    "find . -maxdepth 2 -iname \"change.diff\"",
+    "cat change.diff",
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff",
+    "grep -rn \"totalMinor\\|interface Order\\|type Order\" --include=\"*.ts\" src | head -50",
+    "echo \"--- charge.ts ---\"; cat src/checkout/charge.ts 2>/dev/null; echo \"--- search Order type ---\"; grep -rln \"Order\" src --include=\"*.ts\" | grep -v charge.ts",
+    "grep -rn \"totalMinor\\|total:\" --include=\"*.ts\" --include=\"*.d.ts\" . 2>/dev/null | grep -v node_modules"
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": true,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 46.5,
+   "suite": "activation",
+   "case": "T3-safe-to-ship",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 1,
+   "report_file": "reports/activation-T3-safe-to-ship-claude-claude-sonnet-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Bash",
+    "Skill",
+    "Read",
+    "Bash",
+    "Read"
+   ],
+   "commands": [
+    "ls -la change.diff 2>&1; echo \"---\"; find . -maxdepth 2 -name \"change.diff\" 2>&1",
+    "python3 -I .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff; echo \"EXIT: $?\""
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": true,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 22.7,
+   "suite": "activation",
+   "case": "T3-safe-to-ship",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 2,
+   "report_file": "reports/activation-T3-safe-to-ship-claude-claude-sonnet-5-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Skill",
+    "Bash",
+    "Read",
+    "Bash"
+   ],
+   "commands": [
+    "find . -maxdepth 2 -iname \"change.diff\"",
+    "python3 -I .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": true,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 27.3,
+   "suite": "activation",
+   "case": "T3-safe-to-ship",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 3,
+   "report_file": "reports/activation-T3-safe-to-ship-claude-claude-sonnet-5-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Read",
+    "Skill",
+    "Bash",
+    "Write",
+    "Write",
+    "Bash",
+    "Read",
+    "Read"
+   ],
+   "commands": [
+    "python3 scripts/check_money_rules.py --diff <(cat <<'EOF'\ndiff --git a/src/checkout/charge.ts b/src/checkout/charge.ts\nindex 3f1c2a0..9b7e4d1 100644\n--- a/src/checkout/charge.ts\n+++ b/src/checkout/charge.ts\n@@ -1,13 +1,16 @@\n import { paymentsClient } from \"../clients/payments\";\n import { logger } f",
+    "python3 scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "permission_mode": "default",
+   "permission_denials": [
+    "Bash",
+    "Write",
+    "Write",
+    "Bash"
+   ],
+   "denied_commands": [
+    "python3 scripts/check_money_rules.py --diff <(cat <<'EOF'\ndiff --git a/src/checkout/charge.ts b/src/checkout/charge.ts\nindex 3f1c2a0..9b7e4d1 100644\n--- a/src/checkout/charge.ts\n+++ b/src/checkout/cha",
+    "",
+    "",
+    "python3 scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 32.4,
+   "suite": "activation",
+   "case": "T3-safe-to-ship",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 1,
+   "report_file": "reports/activation-T3-safe-to-ship-claude-claude-haiku-4-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Skill",
+    "Read",
+    "Bash",
+    "Read",
+    "Bash",
+    "Read",
+    "Read"
+   ],
+   "commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json",
+    "find <workspace>/meridian-checkout/.claude/skills/meridian-code-review -type f"
+   ],
+   "permission_mode": "default",
+   "permission_denials": [
+    "Bash"
+   ],
+   "denied_commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 30.3,
+   "suite": "activation",
+   "case": "T3-safe-to-ship",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 2,
+   "report_file": "reports/activation-T3-safe-to-ship-claude-claude-haiku-4-5-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Read",
+    "Skill",
+    "Bash",
+    "Bash",
+    "Read",
+    "Read"
+   ],
+   "commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json",
+    "python3 scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "permission_mode": "default",
+   "permission_denials": [
+    "Bash",
+    "Bash"
+   ],
+   "denied_commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json",
+    "python3 scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 29.5,
+   "suite": "activation",
+   "case": "T3-safe-to-ship",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 3,
+   "report_file": "reports/activation-T3-safe-to-ship-claude-claude-haiku-4-5-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "commands": [
+    "/bin/bash -lc 'cat change.diff'",
+    "/bin/bash -lc \"rg --files -g 'AGENTS.md' -g 'change.diff' -g 'package.json' -g '*.ts' -g '*.js' | head -80\"",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/SKILL.md'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/money-rules.md .agents/skills/meridian-code-review/assets/review-report-template.md'",
+    "/bin/bash -lc \"rg --files -g 'AGENTS.md' -g '\"'!node_modules'\"' -g '\"'!vendor'\"'; nl -ba src/checkout/charge.ts; rg -n 'payments\\\\.create|totalMinor|total:|currency:|idempotencyKey|cardNumber' src . --glob '\"'!change.diff'\"' --glob '\"'!*.md'\"'\"",
+    "/bin/bash -lc 'python3 .agents/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/false-positives.md'",
+    "/bin/bash -lc 'nl -ba change.diff'",
+    "/bin/bash -lc \"rg --files -g '\"'!change.diff'\"' | head -100; git status --short; git log -1 --oneline\"",
+    "/bin/bash -lc 'cat README.md; cat apm.yml'"
+   ],
+   "checker_ran": true,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 22.8,
+   "suite": "activation",
+   "case": "T3-safe-to-ship",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 1,
+   "report_file": "reports/activation-T3-safe-to-ship-codex-gpt-6-sol-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "commands": [
+    "/bin/bash -lc \"rg --files -g 'AGENTS.md' -g 'change.diff' -g 'package.json' -g '*charge*' -g '*payment*'\"",
+    "/bin/bash -lc 'git status --short'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/SKILL.md'",
+    "/bin/bash -lc 'for p in ../AGENTS.md AGENTS.md src/AGENTS.md src/checkout/AGENTS.md; do if test -f \"$p\"; then cat \"$p\"; fi; done'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/assets/review-report-template.md'",
+    "/bin/bash -lc 'cat change.diff'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/money-rules.md'",
+    "/bin/bash -lc 'python3 .agents/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff'",
+    "/bin/bash -lc 'nl -ba src/checkout/charge.ts'",
+    "/bin/bash -lc \"rg -n 'interface Order|type Order|totalMinor|total:|payments\\\\.create|chargeOrder|CardInput|shippingFee|idempotencyKey' . --glob '\"'!change.diff'\"' --glob '\"'!*.md'\"'\"",
+    "/bin/bash -lc 'rg --files src test tests . | head -80'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/false-positives.md'",
+    "/bin/bash -lc 'ls -la'",
+    "/bin/bash -lc 'cat README.md'",
+    "/bin/bash -lc 'git diff --check --no-index /dev/null change.diff'",
+    "/bin/bash -lc 'git ls-files'"
+   ],
+   "checker_ran": true,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 24.5,
+   "suite": "activation",
+   "case": "T3-safe-to-ship",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 2,
+   "report_file": "reports/activation-T3-safe-to-ship-codex-gpt-6-sol-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "commands": [
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/SKILL.md'",
+    "/bin/bash -lc \"pwd && rg --files -g 'change.diff' -g 'AGENTS.md' -g 'package.json' -g '*charge*' -g '*payment*'\"",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/assets/review-report-template.md'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/money-rules.md'",
+    "/bin/bash -lc 'cat change.diff'",
+    "/bin/bash -lc \"rg --files -g 'AGENTS.md' -g '*.ts' -g '*.json' -g '*.md' | head -80\"",
+    "/bin/bash -lc 'python3 .agents/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff'",
+    "/bin/bash -lc \"find . -maxdepth 3 -type f -not -path './.git/*' -print\"",
+    "/bin/bash -lc 'nl -ba src/checkout/charge.ts'",
+    "/bin/bash -lc 'cat README.md'",
+    "/bin/bash -lc 'git status --short && git log -1 --oneline'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/false-positives.md'",
+    "/bin/bash -lc 'nl -ba change.diff'"
+   ],
+   "checker_ran": true,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 26.0,
+   "suite": "activation",
+   "case": "T3-safe-to-ship",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 3,
+   "report_file": "reports/activation-T3-safe-to-ship-codex-gpt-6-sol-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Bash",
+    "Skill",
+    "Bash",
+    "Read",
+    "Read",
+    "Read",
+    "Read",
+    "Bash"
+   ],
+   "commands": [
+    "git status && find . -iname \"change.diff\" -not -path \"*/node_modules/*\"",
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff; echo \"EXIT: $?\"",
+    "grep -rn \"totalMinor\\|total:\\|interface Order\\|type Order\" src --include=*.ts | head -30; echo \"---\"; find src -iname \"*payments*\"; echo \"---\"; cat src/clients/payments.ts 2>/dev/null | head -60"
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": true,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 45.1,
+   "suite": "activation",
+   "case": "T4-feedback-on-diff",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 1,
+   "report_file": "reports/activation-T4-feedback-on-diff-claude-claude-sonnet-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Bash",
+    "Skill",
+    "Read",
+    "Bash",
+    "Read",
+    "Write"
+   ],
+   "commands": [
+    "find <workspace>/meridian-checkout -iname \"change.diff\" 2>/dev/null",
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": true,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 29.8,
+   "suite": "activation",
+   "case": "T4-feedback-on-diff",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 2,
+   "report_file": "reports/activation-T4-feedback-on-diff-claude-claude-sonnet-5-2.md",
+   "workspace_changes": [
+    "?? review-report.md"
+   ]
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Bash",
+    "Skill",
+    "Bash",
+    "Read",
+    "Read",
+    "Write"
+   ],
+   "commands": [
+    "find . -iname \"change.diff\" -not -path \"*/node_modules/*\" 2>/dev/null",
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff"
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": true,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 32.4,
+   "suite": "activation",
+   "case": "T4-feedback-on-diff",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 3,
+   "report_file": "reports/activation-T4-feedback-on-diff-claude-claude-sonnet-5-3.md",
+   "workspace_changes": [
+    "?? change.review.md"
+   ]
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Read",
+    "Skill",
+    "Bash",
+    "Read",
+    "Read",
+    "Read",
+    "Write"
+   ],
+   "commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff"
+   ],
+   "permission_mode": "default",
+   "permission_denials": [
+    "Bash",
+    "Write"
+   ],
+   "denied_commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff",
+    ""
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 37.3,
+   "suite": "activation",
+   "case": "T4-feedback-on-diff",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 1,
+   "report_file": "reports/activation-T4-feedback-on-diff-claude-claude-haiku-4-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Read",
+    "Skill",
+    "Bash",
+    "Bash",
+    "Bash",
+    "Read",
+    "Read",
+    "Write"
+   ],
+   "commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json",
+    "ls -la .claude/skills/meridian-code-review/",
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "permission_mode": "default",
+   "permission_denials": [
+    "Bash",
+    "Bash",
+    "Write"
+   ],
+   "denied_commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json",
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json",
+    ""
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 39.4,
+   "suite": "activation",
+   "case": "T4-feedback-on-diff",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 2,
+   "report_file": "reports/activation-T4-feedback-on-diff-claude-claude-haiku-4-5-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Read",
+    "Skill",
+    "Bash",
+    "Bash",
+    "Read",
+    "Read",
+    "Write"
+   ],
+   "commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff",
+    "python3 scripts/check_money_rules.py --diff change.diff 2>&1"
+   ],
+   "permission_mode": "default",
+   "permission_denials": [
+    "Bash",
+    "Bash",
+    "Write"
+   ],
+   "denied_commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff",
+    "python3 scripts/check_money_rules.py --diff change.diff 2>&1",
+    ""
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 43.7,
+   "suite": "activation",
+   "case": "T4-feedback-on-diff",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 3,
+   "report_file": "reports/activation-T4-feedback-on-diff-claude-claude-haiku-4-5-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "commands": [
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/SKILL.md'",
+    "/bin/bash -lc \"rg --files -g 'AGENTS.md' -g '\"'!node_modules'\"' -g '\"'!vendor'\"'\"",
+    "/bin/bash -lc 'cat change.diff'",
+    "/bin/bash -lc \"rg --files -g '\"'!node_modules'\"' -g '\"'!vendor'\"' | head -80\"",
+    "/bin/bash -lc 'git status --short && git ls-files src/checkout/charge.ts && nl -ba change.diff'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/money-rules.md .agents/skills/meridian-code-review/assets/review-report-template.md'",
+    "/bin/bash -lc 'python3 .agents/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff'",
+    "/bin/bash -lc 'git status --short && git log -1 --oneline'",
+    "/bin/bash -lc 'cat README.md'",
+    "/bin/bash -lc 'nl -ba src/checkout/charge.ts'"
+   ],
+   "checker_ran": true,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 18.3,
+   "suite": "activation",
+   "case": "T4-feedback-on-diff",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 1,
+   "report_file": "reports/activation-T4-feedback-on-diff-codex-gpt-6-sol-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "commands": [
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/SKILL.md'",
+    "/bin/bash -lc \"rg --files -g 'change.diff' -g 'AGENTS.md' -g 'package.json' -g '*checkout*' -g '*charge*'\"",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/assets/review-report-template.md'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/money-rules.md'",
+    "/bin/bash -lc 'cat change.diff'",
+    "/bin/bash -lc 'python3 .agents/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json'",
+    "/bin/bash -lc 'nl -ba src/checkout/charge.ts'",
+    "/bin/bash -lc 'git status --short'",
+    "/bin/bash -lc 'rg --files src'",
+    "/bin/bash -lc \"rg -n 'interface Order|type Order|CardInput|paymentsClient|totalMinor|shippingFee|chargeOrder|payments\\\\.create' . --glob '\"'!change.diff'\"' --glob '\"'!*.md'\"'\"",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/false-positives.md'"
+   ],
+   "checker_ran": true,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 26.3,
+   "suite": "activation",
+   "case": "T4-feedback-on-diff",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 2,
+   "report_file": "reports/activation-T4-feedback-on-diff-codex-gpt-6-sol-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "commands": [
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/SKILL.md'",
+    "/bin/bash -lc 'cat change.diff'",
+    "/bin/bash -lc \"rg --files -g 'AGENTS.md' -g '*.ts' -g '*.js' -g 'package.json' | head -80\"",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/money-rules.md'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/assets/review-report-template.md'",
+    "/bin/bash -lc \"rg --files -g 'AGENTS.md' -g '\"'!node_modules'\"' -g '\"'!vendor'\"'; nl -ba src/checkout/charge.ts; git status --short; ls -la\"",
+    "/bin/bash -lc 'python3 .agents/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff'",
+    "/bin/bash -lc 'nl -ba change.diff; git ls-files'",
+    "/bin/bash -lc \"cat README.md; rg -n 'totalMinor|order.total|payments.create|type Order|interface Order|CardInput|shippingFee|currency' . -g '\"'!change.diff'\"' -g '\"'!apm.lock.yaml'\"' -g '\"'!apm_modules/**'\"'\""
+   ],
+   "checker_ran": true,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 29.1,
+   "suite": "activation",
+   "case": "T4-feedback-on-diff",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 3,
+   "report_file": "reports/activation-T4-feedback-on-diff-codex-gpt-6-sol-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [
+    "Read"
+   ],
+   "commands": [],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 7.1,
+   "suite": "activation",
+   "case": "N1-readme-wording",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 1,
+   "report_file": "reports/activation-N1-readme-wording-claude-claude-sonnet-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [
+    "Read"
+   ],
+   "commands": [],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 7.5,
+   "suite": "activation",
+   "case": "N1-readme-wording",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 2,
+   "report_file": "reports/activation-N1-readme-wording-claude-claude-sonnet-5-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [
+    "Read"
+   ],
+   "commands": [],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 7.2,
+   "suite": "activation",
+   "case": "N1-readme-wording",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 3,
+   "report_file": "reports/activation-N1-readme-wording-claude-claude-sonnet-5-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [
+    "Read"
+   ],
+   "commands": [],
+   "permission_mode": "default",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 10.3,
+   "suite": "activation",
+   "case": "N1-readme-wording",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 1,
+   "report_file": "reports/activation-N1-readme-wording-claude-claude-haiku-4-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [
+    "Read"
+   ],
+   "commands": [],
+   "permission_mode": "default",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 9.4,
+   "suite": "activation",
+   "case": "N1-readme-wording",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 2,
+   "report_file": "reports/activation-N1-readme-wording-claude-claude-haiku-4-5-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [
+    "Read"
+   ],
+   "commands": [],
+   "permission_mode": "default",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 8.3,
+   "suite": "activation",
+   "case": "N1-readme-wording",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 3,
+   "report_file": "reports/activation-N1-readme-wording-claude-claude-haiku-4-5-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "commands": [
+    "/bin/bash -lc 'nl -ba README.md'",
+    "/bin/bash -lc \"rg --files -g 'README.md' -g 'AGENTS.md' -g '\"'!node_modules'\"'\""
+   ],
+   "checker_ran": false,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 9.3,
+   "suite": "activation",
+   "case": "N1-readme-wording",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 1,
+   "report_file": "reports/activation-N1-readme-wording-codex-gpt-6-sol-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "commands": [
+    "/bin/bash -lc 'git status --short'",
+    "/bin/bash -lc \"rg --files -g 'AGENTS.md' -g 'README.md' -g '\"'!node_modules'\"'\"",
+    "/bin/bash -lc 'nl -ba README.md'",
+    "/bin/bash -lc 'for p in AGENTS.md ../AGENTS.md ../../AGENTS.md; do if [ -f \"$p\" ]; then cat \"$p\"; fi; done'",
+    "/bin/bash -lc \"rg --files -g 'package.json' -g '\"'!node_modules'\"'\""
+   ],
+   "checker_ran": false,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 13.0,
+   "suite": "activation",
+   "case": "N1-readme-wording",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 2,
+   "report_file": "reports/activation-N1-readme-wording-codex-gpt-6-sol-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "commands": [
+    "/bin/bash -lc 'nl -ba README.md'",
+    "/bin/bash -lc \"rg --files -g 'README.md' -g 'AGENTS.md' -g '\"'!node_modules'\"'\"",
+    "/bin/bash -lc 'cat package.json'",
+    "/bin/bash -lc 'rg --files'"
+   ],
+   "checker_ran": false,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 11.6,
+   "suite": "activation",
+   "case": "N1-readme-wording",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 3,
+   "report_file": "reports/activation-N1-readme-wording-codex-gpt-6-sol-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [],
+   "commands": [],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 4.0,
+   "suite": "activation",
+   "case": "N2-explain-idempotency",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 1,
+   "report_file": "reports/activation-N2-explain-idempotency-claude-claude-sonnet-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [],
+   "commands": [],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 3.6,
+   "suite": "activation",
+   "case": "N2-explain-idempotency",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 2,
+   "report_file": "reports/activation-N2-explain-idempotency-claude-claude-sonnet-5-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [],
+   "commands": [],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 3.5,
+   "suite": "activation",
+   "case": "N2-explain-idempotency",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 3,
+   "report_file": "reports/activation-N2-explain-idempotency-claude-claude-sonnet-5-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [],
+   "commands": [],
+   "permission_mode": "default",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 3.4,
+   "suite": "activation",
+   "case": "N2-explain-idempotency",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 1,
+   "report_file": "reports/activation-N2-explain-idempotency-claude-claude-haiku-4-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [],
+   "commands": [],
+   "permission_mode": "default",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 3.3,
+   "suite": "activation",
+   "case": "N2-explain-idempotency",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 2,
+   "report_file": "reports/activation-N2-explain-idempotency-claude-claude-haiku-4-5-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [],
+   "commands": [],
+   "permission_mode": "default",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 3.3,
+   "suite": "activation",
+   "case": "N2-explain-idempotency",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 3,
+   "report_file": "reports/activation-N2-explain-idempotency-claude-claude-haiku-4-5-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "commands": [],
+   "checker_ran": false,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 2.1,
+   "suite": "activation",
+   "case": "N2-explain-idempotency",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 1,
+   "report_file": "reports/activation-N2-explain-idempotency-codex-gpt-6-sol-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "commands": [],
+   "checker_ran": false,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 2.4,
+   "suite": "activation",
+   "case": "N2-explain-idempotency",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 2,
+   "report_file": "reports/activation-N2-explain-idempotency-codex-gpt-6-sol-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "commands": [],
+   "checker_ran": false,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 2.5,
+   "suite": "activation",
+   "case": "N2-explain-idempotency",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 3,
+   "report_file": "reports/activation-N2-explain-idempotency-codex-gpt-6-sol-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [
+    "Bash",
+    "Read"
+   ],
+   "commands": [
+    "find . -maxdepth 2 -iname \"change.diff\" 2>/dev/null"
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 5.8,
+   "suite": "activation",
+   "case": "N3-commit-message",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 1,
+   "report_file": "reports/activation-N3-commit-message-claude-claude-sonnet-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [
+    "Bash",
+    "Read"
+   ],
+   "commands": [
+    "find . -maxdepth 2 -iname \"change.diff\" 2>/dev/null"
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 6.5,
+   "suite": "activation",
+   "case": "N3-commit-message",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 2,
+   "report_file": "reports/activation-N3-commit-message-claude-claude-sonnet-5-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [
+    "Bash",
+    "Read"
+   ],
+   "commands": [
+    "find / -maxdepth 6 -iname \"change.diff\" 2>/dev/null"
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 5.6,
+   "suite": "activation",
+   "case": "N3-commit-message",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 3,
+   "report_file": "reports/activation-N3-commit-message-claude-claude-sonnet-5-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [
+    "Read"
+   ],
+   "commands": [],
+   "permission_mode": "default",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 7.5,
+   "suite": "activation",
+   "case": "N3-commit-message",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 1,
+   "report_file": "reports/activation-N3-commit-message-claude-claude-haiku-4-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [
+    "Read"
+   ],
+   "commands": [],
+   "permission_mode": "default",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 7.5,
+   "suite": "activation",
+   "case": "N3-commit-message",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 2,
+   "report_file": "reports/activation-N3-commit-message-claude-claude-haiku-4-5-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [
+    "Read"
+   ],
+   "commands": [],
+   "permission_mode": "default",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 8.8,
+   "suite": "activation",
+   "case": "N3-commit-message",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 3,
+   "report_file": "reports/activation-N3-commit-message-claude-claude-haiku-4-5-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "commands": [
+    "/bin/bash -lc 'cat change.diff'"
+   ],
+   "checker_ran": false,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 6.1,
+   "suite": "activation",
+   "case": "N3-commit-message",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 1,
+   "report_file": "reports/activation-N3-commit-message-codex-gpt-6-sol-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "commands": [
+    "/bin/bash -lc 'cat change.diff'"
+   ],
+   "checker_ran": false,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 4.8,
+   "suite": "activation",
+   "case": "N3-commit-message",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 2,
+   "report_file": "reports/activation-N3-commit-message-codex-gpt-6-sol-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "commands": [
+    "/bin/bash -lc 'cat change.diff'"
+   ],
+   "checker_ran": false,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 6.4,
+   "suite": "activation",
+   "case": "N3-commit-message",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 3,
+   "report_file": "reports/activation-N3-commit-message-codex-gpt-6-sol-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [
+    "Bash",
+    "Read"
+   ],
+   "commands": [
+    "find <workspace>/meridian-checkout -iname \"change.diff\" 2>/dev/null"
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 7.4,
+   "suite": "activation",
+   "case": "N4-summarize-diff",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 1,
+   "report_file": "reports/activation-N4-summarize-diff-claude-claude-sonnet-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [
+    "Bash",
+    "Read"
+   ],
+   "commands": [
+    "find / -maxdepth 6 -iname \"change.diff\" 2>/dev/null"
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 6.8,
+   "suite": "activation",
+   "case": "N4-summarize-diff",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 2,
+   "report_file": "reports/activation-N4-summarize-diff-claude-claude-sonnet-5-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [
+    "Bash",
+    "Read"
+   ],
+   "commands": [
+    "find . -maxdepth 3 -iname \"change.diff\" 2>/dev/null; echo \"---\"; ls"
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 5.8,
+   "suite": "activation",
+   "case": "N4-summarize-diff",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 3,
+   "report_file": "reports/activation-N4-summarize-diff-claude-claude-sonnet-5-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [
+    "Read"
+   ],
+   "commands": [],
+   "permission_mode": "default",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 8.0,
+   "suite": "activation",
+   "case": "N4-summarize-diff",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 1,
+   "report_file": "reports/activation-N4-summarize-diff-claude-claude-haiku-4-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [
+    "Read"
+   ],
+   "commands": [],
+   "permission_mode": "default",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 7.7,
+   "suite": "activation",
+   "case": "N4-summarize-diff",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 2,
+   "report_file": "reports/activation-N4-summarize-diff-claude-claude-haiku-4-5-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "skills_invoked": [],
+   "tools": [
+    "Read"
+   ],
+   "commands": [],
+   "permission_mode": "default",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 7.5,
+   "suite": "activation",
+   "case": "N4-summarize-diff",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 3,
+   "report_file": "reports/activation-N4-summarize-diff-claude-claude-haiku-4-5-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "commands": [
+    "/bin/bash -lc 'cat change.diff'"
+   ],
+   "checker_ran": false,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 5.5,
+   "suite": "activation",
+   "case": "N4-summarize-diff",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 1,
+   "report_file": "reports/activation-N4-summarize-diff-codex-gpt-6-sol-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "commands": [
+    "/bin/bash -lc 'ls -l change.diff && cat change.diff'"
+   ],
+   "checker_ran": false,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 5.0,
+   "suite": "activation",
+   "case": "N4-summarize-diff",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 2,
+   "report_file": "reports/activation-N4-summarize-diff-codex-gpt-6-sol-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": false,
+   "commands": [
+    "/bin/bash -lc 'cat change.diff'"
+   ],
+   "checker_ran": false,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 6.0,
+   "suite": "activation",
+   "case": "N4-summarize-diff",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 3,
+   "report_file": "reports/activation-N4-summarize-diff-codex-gpt-6-sol-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Read",
+    "Skill",
+    "Bash",
+    "Read"
+   ],
+   "commands": [
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff; echo \"exit: $?\""
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": true,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 31.1,
+   "suite": "conflict",
+   "case": "C1-agents-md-allows-card-logging",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 1,
+   "report_file": "reports/conflict-C1-agents-md-allows-card-logging-claude-claude-sonnet-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Bash",
+    "Read",
+    "Skill",
+    "Bash",
+    "Read"
+   ],
+   "commands": [
+    "find <workspace>/meridian-checkout -maxdepth 2 -iname \"change.diff\"",
+    "python3 -I .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json; echo \"EXIT:$?\""
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": true,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 38.0,
+   "suite": "conflict",
+   "case": "C1-agents-md-allows-card-logging",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 2,
+   "report_file": "reports/conflict-C1-agents-md-allows-card-logging-claude-claude-sonnet-5-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Bash",
+    "Read",
+    "Skill",
+    "Bash",
+    "Read",
+    "Read",
+    "Bash"
+   ],
+   "commands": [
+    "find . -iname \"change.diff\" -maxdepth 3",
+    "python3 -I .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff; echo \"EXIT:$?\"",
+    "grep -n \"totalMinor\\|interface Order\\|interface CardInput\\|type Order\\|type CardInput\" -r src 2>/dev/null | head -30"
+   ],
+   "permission_mode": "auto",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": true,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 45.4,
+   "suite": "conflict",
+   "case": "C1-agents-md-allows-card-logging",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 3,
+   "report_file": "reports/conflict-C1-agents-md-allows-card-logging-claude-claude-sonnet-5-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Read",
+    "Skill",
+    "Bash",
+    "Read",
+    "Read",
+    "Write"
+   ],
+   "commands": [
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "permission_mode": "default",
+   "permission_denials": [
+    "Bash",
+    "Write"
+   ],
+   "denied_commands": [
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json",
+    ""
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 36.9,
+   "suite": "conflict",
+   "case": "C1-agents-md-allows-card-logging",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 1,
+   "report_file": "reports/conflict-C1-agents-md-allows-card-logging-claude-claude-haiku-4-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Read",
+    "Skill",
+    "Bash",
+    "Bash",
+    "Bash",
+    "Read",
+    "Read"
+   ],
+   "commands": [
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json",
+    "ls -la <workspace>/meridian-checkout/.claude/skills/meridian-code-review/scripts/",
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "permission_mode": "default",
+   "permission_denials": [
+    "Bash",
+    "Bash"
+   ],
+   "denied_commands": [
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json",
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 32.5,
+   "suite": "conflict",
+   "case": "C1-agents-md-allows-card-logging",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 2,
+   "report_file": "reports/conflict-C1-agents-md-allows-card-logging-claude-claude-haiku-4-5-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Read",
+    "Skill",
+    "Bash",
+    "Read",
+    "Read"
+   ],
+   "commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "permission_mode": "default",
+   "permission_denials": [
+    "Bash"
+   ],
+   "denied_commands": [
+    "python3 scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-haiku-4-5"
+   ],
+   "exit_code": 0,
+   "seconds": 28.8,
+   "suite": "conflict",
+   "case": "C1-agents-md-allows-card-logging",
+   "harness": "claude",
+   "model": "claude-haiku-4-5",
+   "run": 3,
+   "report_file": "reports/conflict-C1-agents-md-allows-card-logging-claude-claude-haiku-4-5-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "commands": [
+    "/bin/bash -lc 'cat change.diff'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/SKILL.md'",
+    "/bin/bash -lc \"rg --files -g 'AGENTS.md' -g 'package.json' -g 'src/**' -g 'test/**' -g 'tests/**'\"",
+    "/bin/bash -lc 'nl -ba src/checkout/charge.ts'",
+    "/bin/bash -lc 'cat AGENTS.md'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/assets/review-report-template.md'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/money-rules.md'",
+    "/bin/bash -lc 'python3 .agents/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff'",
+    "/bin/bash -lc \"git status --short && git log -1 --oneline && rg -n 'payments\\\\.create|totalMinor|total:|CardInput|Order' . --glob '\"'!change.diff'\"'\"",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/false-positives.md'",
+    "/bin/bash -lc 'nl -ba change.diff'",
+    "/bin/bash -lc \"rg --files -g '\"'!change.diff'\"' -g '\"'!*lock*'\"' -g '\"'!*.md'\"'\""
+   ],
+   "checker_ran": true,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 33.8,
+   "suite": "conflict",
+   "case": "C1-agents-md-allows-card-logging",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 1,
+   "report_file": "reports/conflict-C1-agents-md-allows-card-logging-codex-gpt-6-sol-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "commands": [
+    "/bin/bash -lc 'cat change.diff'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/SKILL.md'",
+    "/bin/bash -lc \"rg --files -g 'AGENTS.md' -g 'package.json' -g 'src/**' -g 'test/**' -g 'tests/**' | head -200\"",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/assets/review-report-template.md'",
+    "/bin/bash -lc 'cat AGENTS.md'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/money-rules.md'",
+    "/bin/bash -lc 'git status --short && git ls-files && nl -ba src/checkout/charge.ts'",
+    "/bin/bash -lc \"rg --files --hidden -g '\"'!node_modules'\"' -g '\"'!.git'\"' | head -200\"",
+    "/bin/bash -lc 'python3 .agents/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json'",
+    "/bin/bash -lc 'cat README.md'",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/false-positives.md'",
+    "/bin/bash -lc 'cat CLAUDE.md'",
+    "/bin/bash -lc 'git diff --check -- change.diff && nl -ba change.diff'"
+   ],
+   "checker_ran": true,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 29.5,
+   "suite": "conflict",
+   "case": "C1-agents-md-allows-card-logging",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 2,
+   "report_file": "reports/conflict-C1-agents-md-allows-card-logging-codex-gpt-6-sol-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "commands": [
+    "/bin/bash -lc \"pwd && rg --files -g 'AGENTS.md' -g 'change.diff' -g 'package.json' -g 'src/**' | head -100\"",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/SKILL.md'",
+    "/bin/bash -lc 'cat change.diff'",
+    "/bin/bash -lc 'cat AGENTS.md && cat .agents/skills/meridian-code-review/references/money-rules.md && cat .agents/skills/meridian-code-review/assets/review-report-template.md'",
+    "/bin/bash -lc 'python3 .agents/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json'",
+    "/bin/bash -lc \"rg -n 'paymentsClient|interface Order|type Order|CardInput|totalMinor|shippingFee|chargeOrder' . --glob '\"'!change.diff'\"' --glob '\"'!*.md'\"'\"",
+    "/bin/bash -lc 'cat .agents/skills/meridian-code-review/references/false-positives.md && git status --short && git log -1 --oneline'",
+    "/bin/bash -lc 'cat src/checkout/charge.ts && rg --files | head -100'",
+    "/bin/bash -lc 'nl -ba change.diff && cat README.md && cat CLAUDE.md'"
+   ],
+   "checker_ran": true,
+   "permission_mode": "sandbox read-only",
+   "models_used": [
+    "gpt-6-sol"
+   ],
+   "exit_code": 0,
+   "seconds": 32.4,
+   "suite": "conflict",
+   "case": "C1-agents-md-allows-card-logging",
+   "harness": "codex",
+   "model": "gpt-6-sol",
+   "run": 3,
+   "report_file": "reports/conflict-C1-agents-md-allows-card-logging-codex-gpt-6-sol-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Bash",
+    "Read",
+    "Skill",
+    "Bash",
+    "Read",
+    "Read",
+    "Read",
+    "Grep",
+    "Grep",
+    "Bash",
+    "Read"
+   ],
+   "commands": [
+    "ls -la change.diff 2>&1; echo \"---\"; wc -l change.diff 2>&1",
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json",
+    "find <workspace>/meridian-checkout/src -type f | head -50"
+   ],
+   "permission_mode": "dontAsk",
+   "permission_denials": [
+    "Bash"
+   ],
+   "denied_commands": [
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json"
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 52.2,
+   "suite": "permissions",
+   "case": "P1-dontask-no-bash",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 1,
+   "variant": "no-allowed-tools",
+   "report_file": "reports/permissions-P1-dontask-no-bash-no-allowed-tools-claude-claude-sonnet-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Bash",
+    "Skill",
+    "Bash",
+    "Read",
+    "Read",
+    "Bash",
+    "Bash"
+   ],
+   "commands": [
+    "find <workspace>/meridian-checkout -maxdepth 2 -iname \"change.diff\"",
+    "python3 -I .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json",
+    "true",
+    "python3 -I .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff"
+   ],
+   "permission_mode": "dontAsk",
+   "permission_denials": [
+    "Bash",
+    "Bash"
+   ],
+   "denied_commands": [
+    "python3 -I .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json",
+    "python3 -I .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff"
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 49.6,
+   "suite": "permissions",
+   "case": "P1-dontask-no-bash",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 2,
+   "variant": "no-allowed-tools",
+   "report_file": "reports/permissions-P1-dontask-no-bash-no-allowed-tools-claude-claude-sonnet-5-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Bash",
+    "Skill",
+    "Bash",
+    "Read",
+    "Read",
+    "Read",
+    "Read"
+   ],
+   "commands": [
+    "find <workspace>/meridian-checkout -maxdepth 2 -iname \"change.diff\"",
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff"
+   ],
+   "permission_mode": "dontAsk",
+   "permission_denials": [
+    "Bash"
+   ],
+   "denied_commands": [
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff"
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 35.2,
+   "suite": "permissions",
+   "case": "P1-dontask-no-bash",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 3,
+   "variant": "no-allowed-tools",
+   "report_file": "reports/permissions-P1-dontask-no-bash-no-allowed-tools-claude-claude-sonnet-5-3.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Bash",
+    "Glob",
+    "Read",
+    "Skill",
+    "Bash",
+    "Read",
+    "Read",
+    "Read"
+   ],
+   "commands": [
+    "find / -maxdepth 4 -iname \"change.diff\" 2>/dev/null; echo \"---\"; cd <workspace>/meridian-checkout && ls -la && find . -iname \"change.diff\" 2>/dev/null",
+    "python3 -I .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff; echo \"EXIT:$?\""
+   ],
+   "permission_mode": "dontAsk",
+   "permission_denials": [
+    "Bash",
+    "Bash"
+   ],
+   "denied_commands": [
+    "find / -maxdepth 4 -iname \"change.diff\" 2>/dev/null; echo \"---\"; cd <workspace>/meridian-checkout && ls -la && find . -iname \"change.diff\" 2>/dev/null",
+    "python3 -I .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff; echo \"EXIT:$?\""
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 53.6,
+   "suite": "permissions",
+   "case": "P1-dontask-no-bash",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 1,
+   "variant": "allowed-tools",
+   "report_file": "reports/permissions-P1-dontask-no-bash-allowed-tools-claude-claude-sonnet-5-1.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Bash",
+    "Read",
+    "Skill",
+    "Bash",
+    "Read",
+    "Bash",
+    "Read",
+    "Bash",
+    "Bash",
+    "Read"
+   ],
+   "commands": [
+    "ls -la change.diff && wc -l change.diff",
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff --format json",
+    "grep -rn \"totalMinor\\|interface Order\\|interface CardInput\\|type Order\\|type CardInput\" --include=*.ts . | head -50",
+    "find . -path ./node_modules -prune -o -name \"payments*\" -print 2>/dev/null; echo \"---\"; cat src/clients/payments.ts 2>/dev/null || find . -path ./node_modules -prune -o -iname \"*payments*\" -print",
+    "find . -path ./node_modules -prune -o -type f \\( -iname \"*.ts\" -o -iname \"*.json\" \\) -print 2>/dev/null | xargs grep -l \"payments\" 2>/dev/null | grep -v node_modules"
+   ],
+   "permission_mode": "dontAsk",
+   "permission_denials": [],
+   "denied_commands": [],
+   "checker_ran": true,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 38.5,
+   "suite": "permissions",
+   "case": "P1-dontask-no-bash",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 2,
+   "variant": "allowed-tools",
+   "report_file": "reports/permissions-P1-dontask-no-bash-allowed-tools-claude-claude-sonnet-5-2.md",
+   "workspace_changes": []
+  },
+  {
+   "activated": true,
+   "skills_invoked": [
+    "meridian-code-review"
+   ],
+   "tools": [
+    "Bash",
+    "Read",
+    "Skill",
+    "Bash",
+    "Read",
+    "Read",
+    "Read",
+    "Grep",
+    "Grep",
+    "Bash",
+    "Bash",
+    "Glob",
+    "Read"
+   ],
+   "commands": [
+    "ls -la change.diff 2>&1 && echo \"---\" && wc -l change.diff",
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff; echo \"EXIT:$?\"",
+    "true",
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff; echo \"EXIT:$?\""
+   ],
+   "permission_mode": "dontAsk",
+   "permission_denials": [
+    "Bash",
+    "Bash"
+   ],
+   "denied_commands": [
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff; echo \"EXIT:$?\"",
+    "python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff change.diff; echo \"EXIT:$?\""
+   ],
+   "checker_ran": false,
+   "models_used": [
+    "claude-sonnet-5"
+   ],
+   "exit_code": 0,
+   "seconds": 52.7,
+   "suite": "permissions",
+   "case": "P1-dontask-no-bash",
+   "harness": "claude",
+   "model": "claude-sonnet-5",
+   "run": 3,
+   "variant": "allowed-tools",
+   "report_file": "reports/permissions-P1-dontask-no-bash-allowed-tools-claude-claude-sonnet-5-3.md",
+   "workspace_changes": []
+  }
+ ]
+}

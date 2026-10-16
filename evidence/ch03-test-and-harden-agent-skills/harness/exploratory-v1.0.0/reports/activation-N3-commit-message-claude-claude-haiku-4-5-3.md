@@ -1,0 +1,1 @@
+Switch to floating-point amounts and add shipping fee calculation

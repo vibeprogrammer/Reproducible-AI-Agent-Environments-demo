@@ -1,0 +1,1 @@
+`change.diff` changes charging to parse the order total as a decimal and add a 4.99 shipping fee. It also changes the currency from `EUR` to `eur`, removes the idempotency key, logs the card number before charging, and logs the payment ID and formatted amount afterward.

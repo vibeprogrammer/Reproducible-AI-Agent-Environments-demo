@@ -1,0 +1,305 @@
+== ch03-test-and-harden-agent-skills == workspace: <workspace> (fresh mktemp dir, isolated HOME)
+
+## 1. Install the published v1.0.0 and run the suite on the installed copy
+$ bash -c grep -E "resolved_ref|resolved_commit" v100/apm.lock.yaml
+  resolved_commit: d77ad927023f2b227bd130c2f436866cc07b2e9e
+  resolved_ref: meridian-code-review-v1.0.0
+[exit 0]
+  PASS: output matches /resolved_commit: d77ad927023f2b227bd130c2f436866cc07b2e9e/
+$ python3 <demo-repo>/tests/meridian-code-review/run_suite.py --skill-dir v100/.claude/skills/meridian-code-review --json v100-suite.json
+== structure and metadata
+  PASS  skill-md-exists                          SKILL.md
+  PASS  frontmatter-present                      
+  PASS  name-matches-spec                        meridian-code-review
+  PASS  name-matches-folder                      meridian-code-review vs meridian-code-review
+  PASS  description-length                       435 chars
+  PASS  description-says-what                    starts with what the skill does
+  PASS  description-says-when                    has a 'Use when' clause
+  PASS  compatibility-length                     
+  PASS  body-under-500-lines                     55 lines
+  PASS  version-consistent                       SKILL.md 1.0.0, apm.yml 1.0.0
+== resources referenced from SKILL.md
+  PASS  referenced-files-exist                   4 referenced, missing: none
+  PASS  no-orphan-resources                      unreferenced: none
+== checker: exit-code contract and fixtures
+  PASS  usage-error-exit-2                       no arguments -> 2
+  PASS  missing-input-exit-2                     -> 2
+  FAIL  help-documents-diff-semantics            --diff help must describe what diff mode really checks
+  PASS  fixture:bad-diff-six-findings            the Chapter 2 fixture: one of every rule, three MR001
+  PASS  fixture:good-diff-clean                  the compliant version of the same change
+  PASS  fixture:deleted-idempotency-key          deleting the key from an unchanged create call must be reported
+  FAIL  fixture:unchanged-line-after-deletion    exit 1, rules ['MR001']
+  FAIL  fixture:non-utf8-input-is-input-error    exit 1, rules None, traceback
+  PASS  fixture:known-false-positive-fee-rate    known: false positive, see references/false-positives.md
+  PASS  fixture:known-gap-whole-object-log       known: false negative, see references/money-rules.md (MR003)
+== side effects (read-only, no network, no subprocess)
+  PASS  no-write-network-or-subprocess-events    0 audit events []
+  PASS  audited-run-still-finds-issues           exit 1
+  PASS  skill-folder-unchanged                   
+  PASS  working-dir-unchanged                    
+== 26 checks, 23 passed, 3 failed: help-documents-diff-semantics, fixture:unchanged-line-after-deletion, fixture:non-utf8-input-is-input-error
+[exit 1]
+  PASS: exit code 1 (the suite fails on v1.0.0)
+  PASS: output matches /FAIL  help-documents-diff-semantics/
+  PASS: output matches /FAIL  fixture:unchanged-line-after-deletion/
+  PASS: output matches /FAIL  fixture:non-utf8-input-is-input-error/
+  PASS: output matches /26 checks, 23 passed, 3 failed/
+
+## 2. The two checker defects, shown directly on v1.0.0
+$ python3 v100/.claude/skills/meridian-code-review/scripts/check_money_rules.py --diff <demo-repo>/tests/meridian-code-review/fixtures/context-after-deletion.diff
+src/checkout/fees.ts:1: MR001 decimal literal assigned to a money field
+    const legacyFee = 0.35;
+1 finding(s)
+[exit 1]
+  PASS: exit code 1 (v1.0.0 reports an unchanged line)
+  PASS: output matches /MR001 decimal literal assigned to a money field/
+$ bash -c python3 v100/.claude/skills/meridian-code-review/scripts/check_money_rules.py --diff '<demo-repo>/tests/meridian-code-review/fixtures/non-utf8.diff' 2>&1 | tail -1
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xf8 in position 188: invalid start byte
+[exit 0]
+  PASS: output matches /UnicodeDecodeError/
+$ bash -c python3 v100/.claude/skills/meridian-code-review/scripts/check_money_rules.py --diff '<demo-repo>/tests/meridian-code-review/fixtures/non-utf8.diff' >/dev/null 2>&1; echo exit=$?
+exit=1
+[exit 0]
+  PASS: output matches /^exit=1$/
+
+## 3. Install v1.0.1 and run the same suite
+$ bash -c grep -E "resolved_ref|resolved_commit" v101/apm.lock.yaml
+  resolved_commit: 1d8dbb13d4c7ad66cd7cfb92b24b673f4b564fbf
+  resolved_ref: meridian-code-review-v1.0.1
+[exit 0]
+  PASS: output matches /resolved_commit: 1d8dbb13d4c7ad66cd7cfb92b24b673f4b564fbf/
+$ python3 <demo-repo>/tests/meridian-code-review/run_suite.py --skill-dir v101/.claude/skills/meridian-code-review --expect-version 1.0.1 --json v101-suite.json
+== structure and metadata
+  PASS  skill-md-exists                          SKILL.md
+  PASS  frontmatter-present                      
+  PASS  name-matches-spec                        meridian-code-review
+  PASS  name-matches-folder                      meridian-code-review vs meridian-code-review
+  PASS  description-length                       435 chars
+  PASS  description-says-what                    starts with what the skill does
+  PASS  description-says-when                    has a 'Use when' clause
+  PASS  compatibility-length                     
+  PASS  body-under-500-lines                     67 lines
+  PASS  version-consistent                       SKILL.md 1.0.1, apm.yml 1.0.1
+  PASS  version-is-expected                      expected 1.0.1
+== resources referenced from SKILL.md
+  PASS  referenced-files-exist                   4 referenced, missing: none
+  PASS  no-orphan-resources                      unreferenced: none
+== checker: exit-code contract and fixtures
+  PASS  usage-error-exit-2                       no arguments -> 2
+  PASS  missing-input-exit-2                     -> 2
+  PASS  help-documents-diff-semantics            --diff help must describe what diff mode really checks
+  PASS  fixture:bad-diff-six-findings            the Chapter 2 fixture: one of every rule, three MR001
+  PASS  fixture:good-diff-clean                  the compliant version of the same change
+  PASS  fixture:deleted-idempotency-key          deleting the key from an unchanged create call must be reported
+  PASS  fixture:unchanged-line-after-deletion    documented contract: MR001/MR003/MR004 report added lines only; an unchanged line after a deletion is not part of the change
+  PASS  fixture:non-utf8-input-is-input-error    exit 1 means findings; unreadable input must be exit 2, never a traceback
+  PASS  fixture:known-false-positive-fee-rate    known: false positive, see references/false-positives.md
+  PASS  fixture:known-gap-whole-object-log       known: false negative, see references/money-rules.md (MR003)
+== side effects (read-only, no network, no subprocess)
+  PASS  no-write-network-or-subprocess-events    0 audit events []
+  PASS  audited-run-still-finds-issues           exit 1
+  PASS  skill-folder-unchanged                   
+  PASS  working-dir-unchanged                    
+== 27 checks, 27 passed, 0 failed
+[exit 0]
+  PASS: exit code 0 (the suite passes on v1.0.1)
+  PASS: output matches /27 checks, 27 passed, 0 failed/
+$ python3 <demo-repo>/tests/meridian-code-review/run_suite.py --skill-dir v101/.agents/skills/meridian-code-review --expect-version 1.0.1
+== structure and metadata
+  PASS  skill-md-exists                          SKILL.md
+  PASS  frontmatter-present                      
+  PASS  name-matches-spec                        meridian-code-review
+  PASS  name-matches-folder                      meridian-code-review vs meridian-code-review
+  PASS  description-length                       435 chars
+  PASS  description-says-what                    starts with what the skill does
+  PASS  description-says-when                    has a 'Use when' clause
+  PASS  compatibility-length                     
+  PASS  body-under-500-lines                     67 lines
+  PASS  version-consistent                       SKILL.md 1.0.1, apm.yml 1.0.1
+  PASS  version-is-expected                      expected 1.0.1
+== resources referenced from SKILL.md
+  PASS  referenced-files-exist                   4 referenced, missing: none
+  PASS  no-orphan-resources                      unreferenced: none
+== checker: exit-code contract and fixtures
+  PASS  usage-error-exit-2                       no arguments -> 2
+  PASS  missing-input-exit-2                     -> 2
+  PASS  help-documents-diff-semantics            --diff help must describe what diff mode really checks
+  PASS  fixture:bad-diff-six-findings            the Chapter 2 fixture: one of every rule, three MR001
+  PASS  fixture:good-diff-clean                  the compliant version of the same change
+  PASS  fixture:deleted-idempotency-key          deleting the key from an unchanged create call must be reported
+  PASS  fixture:unchanged-line-after-deletion    documented contract: MR001/MR003/MR004 report added lines only; an unchanged line after a deletion is not part of the change
+  PASS  fixture:non-utf8-input-is-input-error    exit 1 means findings; unreadable input must be exit 2, never a traceback
+  PASS  fixture:known-false-positive-fee-rate    known: false positive, see references/false-positives.md
+  PASS  fixture:known-gap-whole-object-log       known: false negative, see references/money-rules.md (MR003)
+== side effects (read-only, no network, no subprocess)
+  PASS  no-write-network-or-subprocess-events    0 audit events []
+  PASS  audited-run-still-finds-issues           exit 1
+  PASS  skill-folder-unchanged                   
+  PASS  working-dir-unchanged                    
+== 27 checks, 27 passed, 0 failed
+[exit 0]
+  PASS: exit code 0 (same result on the copy APM deployed for Codex)
+$ python3 v101/.claude/skills/meridian-code-review/scripts/check_money_rules.py --diff <demo-repo>/tests/meridian-code-review/fixtures/context-after-deletion.diff
+0 finding(s)
+[exit 0]
+  PASS: exit code 0
+$ python3 v101/.claude/skills/meridian-code-review/scripts/check_money_rules.py --diff <demo-repo>/tests/meridian-code-review/fixtures/non-utf8.diff
+error: input is not UTF-8: 'utf-8' codec can't decode byte 0xf8 in position 188: invalid start byte
+[exit 2]
+  PASS: exit code 2 (input error, not findings)
+  PASS: output matches /error: input is not UTF-8/
+$ python3 v101/.claude/skills/meridian-code-review/scripts/check_money_rules.py --diff <demo-repo>/tests/meridian-code-review/fixtures/deleted-key.diff
+src/checkout/refund.ts:10: MR002 payment/charge/refund created without an idempotency key
+    const refund = await paymentsClient.refunds.create({
+1 finding(s)
+[exit 1]
+  PASS: exit code 1
+  PASS: output matches /MR002 payment/charge/refund created without an idempotency key/
+$ bash -c python3 'v101/.claude/skills/meridian-code-review/scripts/check_money_rules.py' --help | sed -n '/--diff FILE/,/--files/p'
+usage: check_money_rules.py [-h] (--diff FILE | --files PATH [PATH ...]) [--format {text,json}]
+
+Check a diff or files against Meridian's money rules.
+
+options:
+  -h, --help            show this help message and exit
+  --diff FILE           unified diff to check ('-' reads stdin); MR001/MR003/MR004 check added lines only; MR002 also
+                        counts deleted lines near a create call
+  --files PATH [PATH ...]
+[exit 0]
+  PASS: output matches /MR002/
+
+## 4. Negative controls: the suite must fail on planted defects
+$ python3 <demo-repo>/tests/meridian-code-review/run_suite.py --skill-dir planted
+== structure and metadata
+  PASS  skill-md-exists                          SKILL.md
+  PASS  frontmatter-present                      
+  PASS  name-matches-spec                        meridian-code-review
+  FAIL  name-matches-folder                      meridian-code-review vs planted
+  PASS  description-length                       435 chars
+  PASS  description-says-what                    starts with what the skill does
+  PASS  description-says-when                    has a 'Use when' clause
+  PASS  compatibility-length                     
+  PASS  body-under-500-lines                     67 lines
+  FAIL  version-consistent                       SKILL.md 1.0.1, apm.yml 1.0.2
+== resources referenced from SKILL.md
+  FAIL  referenced-files-exist                   4 referenced, missing: references/false-positives.md
+  PASS  no-orphan-resources                      unreferenced: none
+== checker: exit-code contract and fixtures
+  PASS  usage-error-exit-2                       no arguments -> 2
+  PASS  missing-input-exit-2                     -> 2
+  PASS  help-documents-diff-semantics            --diff help must describe what diff mode really checks
+  PASS  fixture:bad-diff-six-findings            the Chapter 2 fixture: one of every rule, three MR001
+  PASS  fixture:good-diff-clean                  the compliant version of the same change
+  PASS  fixture:deleted-idempotency-key          deleting the key from an unchanged create call must be reported
+  PASS  fixture:unchanged-line-after-deletion    documented contract: MR001/MR003/MR004 report added lines only; an unchanged line after a deletion is not part of the change
+  PASS  fixture:non-utf8-input-is-input-error    exit 1 means findings; unreadable input must be exit 2, never a traceback
+  PASS  fixture:known-false-positive-fee-rate    known: false positive, see references/false-positives.md
+  PASS  fixture:known-gap-whole-object-log       known: false negative, see references/money-rules.md (MR003)
+== side effects (read-only, no network, no subprocess)
+  FAIL  no-write-network-or-subprocess-events    4 audit events [['open-for-write', 'leak.txt'], ['socket.getaddrinfo', "('127.0.0.1', 9, 0, 1, 0)"], ['socket.__new__', '(<socket.socket fd=-1, family=0, type=0, proto=0>, 2, 1, 6)']]
+  PASS  audited-run-still-finds-issues           exit 1
+  PASS  skill-folder-unchanged                   
+  FAIL  working-dir-unchanged                    
+== 26 checks, 21 passed, 5 failed: name-matches-folder, version-consistent, referenced-files-exist, no-write-network-or-subprocess-events, working-dir-unchanged
+[exit 1]
+  PASS: exit code 1
+  PASS: output matches /FAIL  version-consistent/
+  PASS: output matches /FAIL  referenced-files-exist .*missing: references/false-positives.md/
+  PASS: output matches /FAIL  no-write-network-or-subprocess-events/
+  PASS: output matches /FAIL  working-dir-unchanged/
+
+## 5. Spec validation (skills-ref) and APM's content scan
+$ ./.venv/bin/skills-ref validate meridian-code-review
+Valid skill: meridian-code-review
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /Valid skill/
+$ bash -c cd meridian-code-review && apm audit --file SKILL.md
+
+[*] 1 file(s) scanned -- no issues found
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /no issues found/
+
+## 6. Why the suite lives outside the package folder
+$ bash -c cd consumer && find .claude/skills -type f | sort
+.claude/skills/pkg-with-tests/CHANGELOG.md
+.claude/skills/pkg-with-tests/SKILL.md
+.claude/skills/pkg-with-tests/apm.yml
+.claude/skills/pkg-with-tests/assets/review-report-template.md
+.claude/skills/pkg-with-tests/references/false-positives.md
+.claude/skills/pkg-with-tests/references/money-rules.md
+.claude/skills/pkg-with-tests/scripts/check_money_rules.py
+.claude/skills/pkg-with-tests/tests/bad.diff
+[exit 0]
+  PASS: output matches /tests/bad.diff/
+$ bash -c cd v101 && find .claude/skills -type f | sort
+.claude/skills/meridian-code-review/CHANGELOG.md
+.claude/skills/meridian-code-review/SKILL.md
+.claude/skills/meridian-code-review/apm.yml
+.claude/skills/meridian-code-review/assets/review-report-template.md
+.claude/skills/meridian-code-review/references/false-positives.md
+.claude/skills/meridian-code-review/references/money-rules.md
+.claude/skills/meridian-code-review/scripts/check_money_rules.py
+[exit 0]
+  PASS: output does not match //tests//
+
+## 7. Behavioural tests in real harnesses (Claude Code, Codex CLI)
+  skipped: harness runs (set RUN_HARNESS_TESTS=1 and ANTHROPIC_API_KEY and/or OPENAI_API_KEY; see README)
+$ python3 <demo-repo>/ch03-test-and-harden-agent-skills/harness/summarize.py <demo-repo>/evidence/ch03-test-and-harden-agent-skills/harness/v1.0.0/results.json
+ref: meridian-code-review-v1.0.0, runs per case: 3, date: 2026-10-16T00:03:12Z
+harnesses: 2.1.301 (Claude Code); codex-cli 0.163.0
+activation  claude:claude-sonnet-5     should-trigger 12/12  near-miss 12/12
+activation  claude:claude-haiku-4-5    should-trigger 12/12  near-miss 12/12
+activation  codex:gpt-6-sol            should-trigger 12/12  near-miss 12/12
+adherence   claude:claude-sonnet-5     verdict_line 8/12, verdict_allowed 8/12, verdict_changes_requested 8/12, checker_line 8/12, section_violations 8/12, section_other 8/12, rules_mr001_to_mr004 12/12, checker_ran 12/12, no_files_written 9/12
+adherence   claude:claude-haiku-4-5    verdict_line 8/12, verdict_allowed 7/12, verdict_changes_requested 7/12, checker_line 2/12, section_violations 7/12, section_other 7/12, rules_mr001_to_mr004 12/12, checker_ran 0/12, no_files_written 12/12
+adherence   codex:gpt-6-sol            verdict_line 12/12, verdict_allowed 9/12, verdict_changes_requested 9/12, checker_line 12/12, section_violations 12/12, section_other 12/12, rules_mr001_to_mr004 12/12, checker_ran 12/12, no_files_written 12/12
+conflict    claude:claude-sonnet-5     activated 3/3, mr003_in_violations 3/3, conflict_reported 3/3, verdict_changes_requested 3/3
+conflict    claude:claude-haiku-4-5    activated 3/3, mr003_in_violations 0/3, conflict_reported 3/3, verdict_changes_requested 1/3
+conflict    codex:gpt-6-sol            activated 3/3, mr003_in_violations 0/3, conflict_reported 2/3, verdict_changes_requested 1/3
+permissions claude:claude-sonnet-5 [no-allowed-tools] activated 3/3, bash_denied 3/3, checker_ran 0/3, checker_line_claims_findings 0/3
+permissions claude:claude-sonnet-5 [allowed-tools]   activated 3/3, bash_denied 2/3, checker_ran 1/3, checker_line_claims_findings 1/3
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /2\.1\.301 \(Claude Code\)/
+  PASS: output matches /codex-cli 0\.163\.0/
+  PASS: output matches /ref: meridian-code-review-v1.0.0/
+$ python3 <demo-repo>/ch03-test-and-harden-agent-skills/harness/summarize.py <demo-repo>/evidence/ch03-test-and-harden-agent-skills/harness/v1.0.1/results.json
+ref: meridian-code-review-v1.0.1, runs per case: 3, date: 2026-10-16T00:02:44Z
+harnesses: 2.1.301 (Claude Code); codex-cli 0.163.0
+activation  claude:claude-sonnet-5     should-trigger 12/12  near-miss 12/12
+activation  claude:claude-haiku-4-5    should-trigger 12/12  near-miss 12/12
+activation  codex:gpt-6-sol            should-trigger 12/12  near-miss 12/12
+adherence   claude:claude-sonnet-5     verdict_line 12/12, verdict_allowed 12/12, verdict_changes_requested 12/12, checker_line 12/12, section_violations 12/12, section_other 12/12, rules_mr001_to_mr004 12/12, checker_ran 12/12, no_files_written 12/12
+adherence   claude:claude-haiku-4-5    verdict_line 11/12, verdict_allowed 11/12, verdict_changes_requested 11/12, checker_line 11/12, section_violations 10/12, section_other 10/12, rules_mr001_to_mr004 12/12, checker_ran 0/12, no_files_written 12/12
+adherence   codex:gpt-6-sol            verdict_line 12/12, verdict_allowed 12/12, verdict_changes_requested 12/12, checker_line 12/12, section_violations 12/12, section_other 12/12, rules_mr001_to_mr004 12/12, checker_ran 12/12, no_files_written 12/12
+conflict    claude:claude-sonnet-5     activated 3/3, mr003_in_violations 3/3, conflict_reported 3/3, verdict_changes_requested 2/3
+conflict    claude:claude-haiku-4-5    activated 3/3, mr003_in_violations 2/3, conflict_reported 2/3, verdict_changes_requested 3/3
+conflict    codex:gpt-6-sol            activated 3/3, mr003_in_violations 0/3, conflict_reported 0/3, verdict_changes_requested 3/3
+permissions claude:claude-sonnet-5 [no-allowed-tools] activated 3/3, bash_denied 3/3, checker_ran 0/3, checker_line_claims_findings 0/3
+permissions claude:claude-sonnet-5 [allowed-tools]   activated 3/3, bash_denied 3/3, checker_ran 0/3, checker_line_claims_findings 0/3
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /2\.1\.301 \(Claude Code\)/
+  PASS: output matches /codex-cli 0\.163\.0/
+  PASS: output matches /ref: meridian-code-review-v1.0.1/
+
+## 8. CI wiring for the skill's repository
+$ bash -c cd '<demo-repo>' && sed -n '/^on:/,/^permissions:/p;/run_suite.py/p' .github/workflows/meridian-code-review-tests.yml
+on:
+  push:
+    paths:
+      - "packages/meridian-code-review/**"
+      - "tests/meridian-code-review/**"
+  pull_request:
+    paths:
+      - "packages/meridian-code-review/**"
+      - "tests/meridian-code-review/**"
+permissions:
+          python3 tests/meridian-code-review/run_suite.py
+[exit 0]
+  PASS: exit code 0
+  PASS: output matches /packages/meridian-code-review/\*\*/
+  PASS: output matches /tests/meridian-code-review/run_suite.py/
+== ch03-test-and-harden-agent-skills: passed (42 passed, 0 failed) ==

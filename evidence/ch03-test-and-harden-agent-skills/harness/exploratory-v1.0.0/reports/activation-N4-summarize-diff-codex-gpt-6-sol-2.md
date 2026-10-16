@@ -1,0 +1,1 @@
+`change.diff` changes checkout charging to parse the order total as a floating point value, add a 4.99 shipping fee, and send that amount with lowercase `eur`. It also removes the idempotency key and logs the card number and formatted charge amount.

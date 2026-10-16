@@ -1,0 +1,1 @@
+The diff changes checkout to parse the order total as a floating point number, add a 4.99 shipping fee, and send that sum as `amount` instead of using `totalMinor`. It also lowercases the currency code, removes the idempotency key, and adds logs that include the card number and a formatted amount.

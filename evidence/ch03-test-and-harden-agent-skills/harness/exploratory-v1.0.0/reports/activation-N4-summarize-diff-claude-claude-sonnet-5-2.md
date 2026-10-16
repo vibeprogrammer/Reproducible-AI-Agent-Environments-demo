@@ -1,0 +1,3 @@
+This diff modifies `chargeOrder` in a way that's actually a regression in several respects: it replaces the integer `amountMinor` field with a floating-point `parseFloat(order.total)` plus a hardcoded `shippingFee` added in floating point, lowercases the currency code to `"eur"`, drops the `idempotencyKey` from the payment creation call entirely, and adds two `logger.info` calls that log the raw card number alongside order/payment IDs.
+
+Given Meridian's money rules, this looks like exactly the kind of change the `meridian-code-review` skill is meant to catch — want me to run it?

@@ -1,0 +1,1 @@
+An idempotency key is a unique identifier (typically a UUID or token) sent with a request to ensure that if the request is retried due to network failures or timeouts, the operation is only performed once, not duplicated. If the same request with the same idempotency key arrives again, the server recognizes it and returns the cached result without re-executing the operation.

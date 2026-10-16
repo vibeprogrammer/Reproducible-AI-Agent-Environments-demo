@@ -1,0 +1,1 @@
+This diff rewrites `chargeOrder` in a way that breaks Meridian's money-handling rules: it switches from an integer minor-units amount to a `parseFloat` of a string total (floating-point money), adds a shipping fee as a float, lowercases the ISO currency code to `"eur"`, drops the `idempotencyKey` from the payment creation call, and logs the raw card number alongside the order ID.
