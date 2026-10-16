@@ -1,0 +1,10 @@
+name: meridian-role-payments
+version: 1.0.0
+description: Role bundle for engineers who change payment flows (adds to the baseline)
+author: meridian-finance/payments-team
+license: MIT
+
+# A role bundle sits ON TOP of the baseline. It deliberately does not
+# depend on meridian-engineering-standards: policy requires every repo to
+# declare the baseline directly, so a role bundle never hides it.
+includes: auto

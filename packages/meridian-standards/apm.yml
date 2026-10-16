@@ -1,0 +1,9 @@
+name: meridian-standards
+version: 0.9.0
+description: DEPRECATED - superseded by meridian-engineering-standards
+author: meridian-finance/agent-tooling
+license: MIT
+
+# Deprecated stand-in for Meridian's first shared package. Kept installable
+# so the Chapter 10 policy pilot has a real deprecated dependency to find.
+includes: auto

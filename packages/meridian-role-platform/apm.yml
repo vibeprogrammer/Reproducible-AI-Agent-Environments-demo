@@ -1,0 +1,8 @@
+name: meridian-role-platform
+version: 1.0.0
+description: Role bundle for platform engineers who own CI and release workflows (adds to the baseline)
+author: meridian-finance/platform-team
+license: MIT
+
+# Adds to the baseline; does not include it (see meridian-role-payments).
+includes: auto
