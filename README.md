@@ -22,7 +22,7 @@ cd Reproducible-AI-Agent-Environments-demo
 
 ## Demos
 
-One folder per chapter; each `run.sh` writes its evidence to `evidence/<folder>/`. Check counts are from a fresh-clone `verify-all.sh` run on 16 October 2026 with APM v0.33.0 and no model credentials, so steps that drive a real harness skip themselves (Chapters 3, 6 and 7 record those runs in their committed evidence). Chapter 2's count is from a rerun after a fix to its own script (b7e7320). Appendix A of the book has the details.
+One folder per chapter; each `run.sh` writes its evidence to `evidence/<folder>/`. Check counts are from a fresh-clone `verify-all.sh` run on 16 October 2026 with APM v0.33.0 and no model credentials, so steps that drive a real harness skip themselves (Chapters 3, 6 and 7 record those runs in their committed evidence). Chapter 2's count is from a rerun after a fix to its own script (b7e7320). The table reflects the later rerun of the same day (07:37–07:41 UTC, after the `meridian-engineering-standards-v1.0.1` release), in which all ten passed. Appendix A of the book has the details.
 
 | Chapter | Folder | Checks |
 | --- | --- | --- |
@@ -33,9 +33,9 @@ One folder per chapter; each `run.sh` writes its evidence to `evidence/<folder>/
 | 5 | [`ch05-declare-and-restore-environments-with-apm/`](ch05-declare-and-restore-environments-with-apm/) | 119 passed |
 | 6 | [`ch06-make-skills-portable-across-coding-tools/`](ch06-make-skills-portable-across-coding-tools/) | 92 passed |
 | 7 | [`ch07-lock-version-and-update-safely/`](ch07-lock-version-and-update-safely/) | 98 passed |
-| 8 | [`ch08-package-and-share-agent-capabilities/`](ch08-package-and-share-agent-capabilities/) | 139 passed |
+| 8 | [`ch08-package-and-share-agent-capabilities/`](ch08-package-and-share-agent-capabilities/) | 141 passed |
 | 9 | [`ch09-secure-and-automate-the-capability-supply-chain/`](ch09-secure-and-automate-the-capability-supply-chain/) | 84 passed |
-| 10 | [`ch10-govern-and-scale-across-teams/`](ch10-govern-and-scale-across-teams/) | 75 passed |
+| 10 | [`ch10-govern-and-scale-across-teams/`](ch10-govern-and-scale-across-teams/) | 79 passed |
 
 Shared Meridian packages consumed by the demos as Git dependencies live in [`packages/`](packages/); each release is a per-package tag such as `meridian-code-review-v1.1.0`.
 
