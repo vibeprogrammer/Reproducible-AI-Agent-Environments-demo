@@ -42,7 +42,7 @@ Successfully configured MCP server 'microsoft-learn' for Cursor
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 2 APM dependencies and 2 MCP servers in 1.2s.
+[*] Installed 2 APM dependencies and 2 MCP servers in 1.0s.
 [>] Installing dependencies from apm.yml...
 [i] Targets: claude, copilot, cursor  (source: apm.yml)
   [+] 
@@ -63,7 +63,7 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 1 APM dependency in 0.3s.
+[*] Installed 1 APM dependency in 0.4s.
 [i] Lockfile presence verified. Run 'apm audit' for on-disk content integrity.
 [>] Replaying install (cache-only)...
 [+] Replayed 2 package(s)

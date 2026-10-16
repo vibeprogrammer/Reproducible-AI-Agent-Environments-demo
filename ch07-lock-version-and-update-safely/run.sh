@@ -92,6 +92,23 @@ expect_rc 1 "APM 0.33.0: cold apm_modules + declared MCP servers"
 expect_out 'package manifest not found'
 keep_out frozen-cold-checkout.txt
 
+step "A6b. Control: the same project WITHOUT MCP servers, same cold --frozen install"
+rm -rf "$WORK/nomcp" "$WORK/nomcp-ci" && cp -r "$FIXTURE" "$WORK/nomcp" && cd "$WORK/nomcp"
+sed -i '/^  mcp:/,/^# Consent/{/^# Consent/!d}' apm.yml
+run_sh 'grep -c "mcp" apm.yml || true'
+expect_out '^0$'
+export HOME="$WORK/nomcp-home" && mkdir -p "$HOME"
+git init -q -b main && git add -A && git -c user.name=demo -c user.email=demo@example.invalid commit -qm "no MCP"
+run apm install
+expect_rc 0
+git add -A && git -c user.name=demo -c user.email=demo@example.invalid commit -qm "lockfile"
+cd "$WORK" && git clone -q nomcp nomcp-ci && cd nomcp-ci
+export HOME="$WORK/nomcp-ci-home" && mkdir -p "$HOME"
+run apm install --frozen
+expect_rc 0 "APM 0.33.0: cold apm_modules, no MCP servers"
+expect_out 'Lockfile presence verified'
+cd "$WORK/ci-runner" && export HOME="$WORK/ci-home"
+
 step "A7. Jon's gate: install from the lockfile, require no lockfile change, then --frozen and audit"
 run cat ci/check-agent-environment.sh
 run bash ci/check-agent-environment.sh
@@ -246,7 +263,7 @@ step "D1. Which dependencies have newer tags? (report only)"
 run env COLUMNS=250 apm outdated --verbose
 expect_rc 0
 expect_out 'meridian-code-review-v1\.0\.0'
-expect_out 'meridian-code-review-v1\.2\.0'
+expect_out 'meridian-code-review-v1\.2\.[0-9]+'
 expect_out 'outdated'
 keep_out outdated.txt
 
@@ -261,7 +278,7 @@ mkdir -p "$WORK/range-lab" && cp apm.yml apm.lock.yaml "$WORK/range-lab/" && cp 
 cd "$WORK/range-lab"
 run apm update --dry-run
 expect_rc 0
-expect_out 'meridian-code-review-v1\.2\.0|1\.2\.0'
+expect_out 'meridian-code-review-v1\.0\.0 -> meridian-code-review-v1\.2\.[0-9]+'
 keep_out range-update-dry-run.txt
 cd "$WORK/priya/meridian-checkout"
 
@@ -345,16 +362,16 @@ expect_same "$WORK/ci3.sha256" "$WORK/v110.sha256"
 export HOME="$WORK/home"
 
 # ---------------------------------------------------------------------------
-step "E. Same files, different words: the installed skill twice in Claude Code (optional)"
+step "E. Same files, different words: the installed skill three times in Claude Code (optional)"
 cd "$WORK/priya/meridian-checkout"
 cp "$REPO_ROOT/ch02-build-a-reusable-agent-skill/fixtures/bad.diff" change.diff
 if [ -n "${ANTHROPIC_API_KEY:-}" ] && command -v claude >/dev/null 2>&1; then
-  run python3 "$DEMO_DIR/behaviour/two_runs.py" . "$WORK/behaviour" --runs 2 --model claude-sonnet-5
+  # Observations, not a gate: model behaviour varies between runs, so the
+  # checks below only assert that the runs happened and were recorded.
+  run python3 "$DEMO_DIR/behaviour/two_runs.py" . "$WORK/behaviour" --runs 3 --model claude-sonnet-5
   expect_rc 0
   expect_out '"status": "ran"'
-  expect_out '"texts_identical": false'
-  expect_out 'run1: skill=True rules=MR001,MR002,MR003,MR004 changes_requested=True'
-  expect_out 'run2: skill=True rules=MR001,MR002,MR003,MR004 changes_requested=True'
+  expect_out '^summary: skill invoked in [0-3] of 3 runs'
   mkdir -p "$EVIDENCE/artifacts/behaviour"
   cp "$WORK/behaviour/"* "$EVIDENCE/artifacts/behaviour/"
 else

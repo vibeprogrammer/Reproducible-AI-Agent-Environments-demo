@@ -1,34 +1,32 @@
-The checker script execution was denied by permission settings, so I'll note that and rely on manual review (I've already read the full diff and relevant rule references).
+This diff replaces a correct, rule-compliant charge path with one that breaks all four money rules. Here's the report:
 
----
-
-# Code review: Add shipping fee to card charge
+# Code review: chargeOrder refactor (float amounts, dropped idempotency key)
 
 **Verdict:** Changes requested
 **Scope reviewed:** change.diff (src/checkout/charge.ts)
-**Checker:** `scripts/check_money_rules.py` not run: Bash execution of the script was denied by permission settings; findings below are from manual inspection against `references/money-rules.md`.
+**Checker:** not run — `check_money_rules.py` invocation was blocked by Bash permissions in this environment; findings below are from manual reading against `references/money-rules.md`.
 
 ## Money rule violations
 
 | Rule | File:line | Problem | Suggested fix |
 |------|-----------|---------|---------------|
-| MR001 | src/checkout/charge.ts:5 (`const amount = parseFloat(order.total)`) | Regression from integer minor units (`order.totalMinor`) to a float parsed from a decimal string. Floating-point arithmetic on money reintroduces rounding errors. | Keep `order.totalMinor` as the integer source of truth. |
-| MR001 | src/checkout/charge.ts:6, 9 (`shippingFee = 4.99`, `amount: amount + shippingFee`) | Decimal literal added via float arithmetic into the amount sent to the payment API, instead of an integer minor-units value (e.g. `shippingFeeMinor = 499`). | `const shippingFeeMinor = 499; amountMinor: order.totalMinor + shippingFeeMinor`. |
-| MR002 | src/checkout/charge.ts:8-12 (`paymentsClient.payments.create({...})`) | `idempotencyKey: order.id` was removed from the create call. A retry after a network timeout can now create a duplicate charge. | Restore `idempotencyKey: order.id` (or another stable key derived from the order) on the create call. |
-| MR003 | src/checkout/charge.ts:7 (`logger.info("charging card", { cardNumber: card.number, orderId: order.id })`) | Logs the full card number (PAN) before the charge is attempted. | Drop `cardNumber` entirely, or log a masked last-4 (`card.number.slice(-4)`) if a reference is needed. |
-| MR004 | src/checkout/charge.ts:10 (`currency: "eur"`) | Currency code must be the upper-case ISO 4217 code; lower-case is not accepted at the API boundary. | `currency: "EUR"`. |
+| MR001 | src/checkout/charge.ts:11 | `parseFloat(order.total)` turns a minor-units integer (`order.totalMinor`) into a float parsed from a decimal string | Keep `const amountMinor = order.totalMinor;` and do all arithmetic in integer minor units |
+| MR001 | src/checkout/charge.ts:12,16 | `shippingFee = 4.99` is a decimal literal summed into the payment amount (`amount + shippingFee`) | Add `shippingFeeMinor = 499` and compute `amountMinor + shippingFeeMinor` |
+| MR002 | src/checkout/charge.ts:14-20 | `idempotencyKey: order.id` was deleted from the `payments.create` call; per `src/payments/create-payment.ts`, the client throws `"idempotencyKey is required"` when it's missing, so this isn't just a policy violation — the call will fail at runtime | Restore `idempotencyKey: order.id` (or an order-derived stable key) in the create call |
+| MR003 | src/checkout/charge.ts:13 | `logger.info("charging card", { cardNumber: card.number, ... })` logs the raw card number (PAN) | Drop `cardNumber` entirely, or log `card.token` / a masked last-4 instead |
+| MR004 | src/checkout/charge.ts:18 | `currency: "eur"` is lower-case; Meridian's API boundary requires upper-case ISO 4217 | Use `currency: "EUR"` |
 
 ## Checker findings dismissed
 
-None — checker did not run, so there are no automated findings to dismiss.
+None — checker did not run.
 
 ## Other findings
 
-- The field sent to `paymentsClient.payments.create` changed from `amountMinor` to `amount`. Even after fixing MR001/MR002, confirm the payments client's type still accepts this shape — as written it both uses the wrong unit and (likely) the wrong field name for the API.
-- `display = amount.toFixed(2)` at line 13 is derived from the already-incorrect float `amount`, so it inherits the MR001 problem; once `amount` is replaced with an integer minor-units value, compute the display string from that integer (e.g. via a shared money-formatting helper) rather than from a float.
-- No error handling was added or changed; out of scope for this diff but note the removed idempotency key makes a retry-without-dedup bug much more likely to trigger in practice (e.g. a caller retrying on timeout).
+- `display = amount.toFixed(2)` (line 22) is only for the log line, so it wouldn't be an MR001 issue on its own — but `amount` itself is already tainted (a parsed float, not derived from minor units), so this is a symptom of the MR001 finding above rather than a separate bug.
+- Removing the idempotency key means a network retry after a timeout can create a duplicate charge — functionally this is the real-world harm MR002 exists to prevent, on top of the client-side exception noted above.
+- No tests were included/updated for this change; given it alters the amount computed and sent to the payment provider, a regression test (asserting `amountMinor` and `currency` sent to `paymentsClient.payments.create`) would have caught MR001/MR004 immediately.
 
 ## Questions for the author
 
-- Why was `idempotencyKey` dropped — was this intentional (e.g. moved to a wrapper not shown in this diff), or an accidental omission during the shipping-fee change? If a wrapper sets it, point to that code so the finding can be re-checked.
-- Is `order.total` (string, parsed with `parseFloat`) a new field, or should this still be reading `order.totalMinor`? The diff looks like it swapped a correct integer source for a decimal-string one without being asked to.
+- Was the intent here to add a shipping fee to the charge? If so, where does `order.total` / `order.totalMinor` already account for shipping — is 4.99 a duplicate charge?
+- Is `card.number` logging a leftover debugging statement, or does a downstream system actually need it? Either way it needs to go before merge.

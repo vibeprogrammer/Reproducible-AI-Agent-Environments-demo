@@ -58,7 +58,7 @@ Successfully configured MCP server 'microsoft-learn' for Cursor
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 2 APM dependencies and 2 MCP servers in 1.5s.
+[*] Installed 2 APM dependencies and 2 MCP servers in 2.0s.
 [exit 0]
   PASS: exit code 0
   PASS: exists: apm.lock.yaml
@@ -100,7 +100,7 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
 [*] Installed 1 APM dependency in 0.3s.
 [exit 0]
   PASS: exit code 0
-  PASS: identical: apm.lock.yaml == /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/lock.before
+  PASS: identical: apm.lock.yaml == /tmp/raae-ch07-lock-version-and-update-safely-PO5JJ5/lock.before
 
 ## A5. Commit manifest + lockfile (generated files stay ignored)
 $ bash -c git add -A && git commit -qm "Agent environment: apm.yml, apm.lock.yaml, CI gate" && git push -q origin HEAD:main && git ls-files | grep -E "apm|ci/|workflows"
@@ -129,6 +129,55 @@ including --root DIR or --global if specified.
 [exit 1]
   PASS: exit code 1 (APM 0.33.0: cold apm_modules + declared MCP servers)
   PASS: output matches /package manifest not found/
+
+## A6b. Control: the same project WITHOUT MCP servers, same cold --frozen install
+$ bash -c grep -c "mcp" apm.yml || true
+0
+[exit 0]
+  PASS: output matches /^0$/
+$ apm install
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #meridian-code-review-v1.0.0 @d77ad927
+  |-- Skill integrated -> .agents/skills/, .claude/skills/
+  [+] <project root> (local)
+  |-- 1 prompts integrated -> .github/prompts/
+  |-- 3 agents integrated -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) integrated -> 3 targets
+[i] Added apm_modules/ to .gitignore
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 2 APM dependencies in 1.6s.
+[exit 0]
+  PASS: exit code 0
+$ apm install --frozen
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+0.0 #d77ad927023f2b227bd130c2f436866cc07b2e9e @d77ad927
+  |-- (files unchanged)
+  [+] <project root> (local)
+  |-- 1 prompts adopted -> .github/prompts/
+  |-- 3 agents adopted -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) adopted -> 3 targets
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 2 APM dependencies in 1.2s.
+[i] Lockfile presence verified. Run 'apm audit' for on-disk content integrity.
+[exit 0]
+  PASS: exit code 0 (APM 0.33.0: cold apm_modules, no MCP servers)
+  PASS: output matches /Lockfile presence verified/
 
 ## A7. Jon's gate: install from the lockfile, require no lockfile change, then --frozen and audit
 $ cat ci/check-agent-environment.sh
@@ -201,7 +250,7 @@ Successfully configured MCP server 'microsoft-learn' for Cursor
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 2 APM dependencies and 2 MCP servers in 1.2s.
+[*] Installed 2 APM dependencies and 2 MCP servers in 1.0s.
 [>] Installing dependencies from apm.yml...
 [i] Targets: claude, copilot, cursor  (source: apm.yml)
   [+] 
@@ -222,7 +271,7 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 1 APM dependency in 0.3s.
+[*] Installed 1 APM dependency in 0.4s.
 [i] Lockfile presence verified. Run 'apm audit' for on-disk content integrity.
 [>] Replaying install (cache-only)...
 [+] Replayed 2 package(s)
@@ -250,7 +299,7 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
   PASS: exit code 0
   PASS: output matches /Lockfile presence verified/
   PASS: output matches /All [0-9]+ check\(s\) passed/
-  PASS: identical: /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/ci.sha256 == /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/priya.sha256
+  PASS: identical: /tmp/raae-ch07-lock-version-and-update-safely-PO5JJ5/ci.sha256 == /tmp/raae-ch07-lock-version-and-update-safely-PO5JJ5/priya.sha256
 $ git status --porcelain --untracked-files=no
 [exit 0]
   PASS: output does not match /apm\.(yml|lock\.yaml)/
@@ -624,11 +673,11 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 1 APM dependency in 0.4s.
+[*] Installed 1 APM dependency in 0.5s.
 [i] Lockfile presence verified. Run 'apm audit' for on-disk content integrity.
 [exit 0]
   PASS: exit code 0
-  PASS: identical: /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/after-repair.sha256 == /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/priya.sha256
+  PASS: identical: /tmp/raae-ch07-lock-version-and-update-safely-PO5JJ5/after-repair.sha256 == /tmp/raae-ch07-lock-version-and-update-safely-PO5JJ5/priya.sha256
 $ apm audit --ci --no-policy
 [>] Replaying install (cache-only)...
 [+] Replayed 2 package(s)
@@ -656,11 +705,11 @@ $ apm audit --ci --no-policy
   PASS: exit code 0
 
 ## C1. A throwaway Git server on 127.0.0.1 hosting a third-party skill
-$ bash -c git ls-remote http://127.0.0.1:57245/oss-tools/pr-summary.git | sed 's/127.0.0.1:[0-9]*/127.0.0.1:PORT/'
-377f747328a726231b080e3e9cef795e8ada73e9	HEAD
-377f747328a726231b080e3e9cef795e8ada73e9	refs/heads/main
-4b2f4cb32a912bfde12fbf00fc4472c8a6e74787	refs/tags/v1.0.0
-377f747328a726231b080e3e9cef795e8ada73e9	refs/tags/v1.0.0^{}
+$ bash -c git ls-remote http://127.0.0.1:49577/oss-tools/pr-summary.git | sed 's/127.0.0.1:[0-9]*/127.0.0.1:PORT/'
+f6b446a3e988a90e4882140719bfcf4c7051298b	HEAD
+f6b446a3e988a90e4882140719bfcf4c7051298b	refs/heads/main
+e3b1df76ba0400680468a73684dd16ff68d9f3a0	refs/tags/v1.0.0
+f6b446a3e988a90e4882140719bfcf4c7051298b	refs/tags/v1.0.0^{}
 [exit 0]
   PASS: output matches /refs/tags/v1\.0\.0/
 
@@ -668,9 +717,9 @@ $ bash -c git ls-remote http://127.0.0.1:57245/oss-tools/pr-summary.git | sed 's
 $ apm install --allow-insecure
 [>] Installing dependencies from apm.yml...
 [>] Resolving oss-tools/pr-summary...
-[!] Insecure HTTP fetch (unencrypted): http://127.0.0.1:57245/oss-tools/pr-summary#v1.0.0
+[!] Insecure HTTP fetch (unencrypted): http://127.0.0.1:49577/oss-tools/pr-summary#v1.0.0
 [i] Targets: claude  (source: apm.yml)
-  [+] oss-tools/pr-summary #v1.0.0 @377f7473
+  [+] oss-tools/pr-summary #v1.0.0 @f6b446a3
   |-- Skill integrated -> .claude/skills/
 [i] Added apm_modules/ to .gitignore
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
@@ -680,16 +729,16 @@ $ apm install --allow-insecure
   PASS: exit code 0
   PASS: .claude/skills/pr-summary/SKILL.md matches /three bullets/
 $ python3 <demo-repo>/ch07-lock-version-and-update-safely/tools/check_tag_pins.py
-OK      oss-tools/pr-summary v1.0.0 -> 377f747328a7
+OK      oss-tools/pr-summary v1.0.0 -> f6b446a3e988
 [exit 0]
   PASS: exit code 0
   PASS: output matches /^OK +oss-tools/pr-summary v1\.0\.0/
 
 ## C3. Upstream author re-points tag v1.0.0 at new content (force-moved tag)
-$ bash -c git ls-remote http://127.0.0.1:57245/oss-tools/pr-summary.git 'refs/tags/v1.0.0^{}' | cut -c1-12
-8961f2e25a86
+$ bash -c git ls-remote http://127.0.0.1:49577/oss-tools/pr-summary.git 'refs/tags/v1.0.0^{}' | cut -c1-12
+e4d7367e727a
 [exit 0]
-  PASS: output does not match /^377f747328a7/
+  PASS: output does not match /^f6b446a3e988/
 
 ## C4. apm outdated compares tag names: it does NOT notice the move
 $ apm outdated
@@ -701,7 +750,7 @@ $ apm outdated
 
 ## C5. Comparing the locked commit with the remote tag does
 $ python3 <demo-repo>/ch07-lock-version-and-update-safely/tools/check_tag_pins.py
-MOVED   oss-tools/pr-summary v1.0.0 locked 377f747328a7 remote 8961f2e25a86
+MOVED   oss-tools/pr-summary v1.0.0 locked f6b446a3e988 remote e4d7367e727a
 [exit 1]
   PASS: exit code 1
   PASS: output matches /^MOVED +oss-tools/pr-summary v1\.0\.0 locked/
@@ -709,9 +758,9 @@ MOVED   oss-tools/pr-summary v1.0.0 locked 377f747328a7 remote 8961f2e25a86
 ## C6. With the lockfile, installs keep the locked commit (normal and frozen, cold cache)
 $ apm install --allow-insecure
 [>] Installing dependencies from apm.yml...
-[!] Insecure HTTP fetch (unencrypted): http://127.0.0.1:57245/oss-tools/pr-summary#v1.0.0
+[!] Insecure HTTP fetch (unencrypted): http://127.0.0.1:49577/oss-tools/pr-summary#v1.0.0
 [i] Targets: claude  (source: apm.yml)
-  [+] oss-tools/pr-summary #v1.0.0 @377f7473 (cached)
+  [+] oss-tools/pr-summary #v1.0.0 @f6b446a3 (cached)
   |-- (files unchanged)
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
@@ -719,18 +768,18 @@ $ apm install --allow-insecure
 [exit 0]
   PASS: exit code 0
   PASS: .claude/skills/pr-summary/SKILL.md matches /three bullets/
-  PASS: apm.lock.yaml matches /resolved_commit: 377f747328a726231b080e3e9cef795e8ada73e9/
+  PASS: apm.lock.yaml matches /resolved_commit: f6b446a3e988a90e4882140719bfcf4c7051298b/
 $ apm install --frozen --allow-insecure
 [>] Installing dependencies from apm.yml...
 [>] Resolving oss-tools/pr-summary...
-[!] Insecure HTTP fetch (unencrypted): http://127.0.0.1:57245/oss-tools/pr-summary#v1.0.0
+[!] Insecure HTTP fetch (unencrypted): http://127.0.0.1:49577/oss-tools/pr-summary#v1.0.0
 [i] Targets: claude  (source: apm.yml)
-  [+] oss-tools/pr-summary #377f747328a726231b080e3e9cef795e8ada73e9 @377f7473
+  [+] oss-tools/pr-summary #f6b446a3e988a90e4882140719bfcf4c7051298b @f6b446a3
   |-- Skill integrated -> .claude/skills/
 [i] Added apm_modules/ to .gitignore
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 1 APM dependency in 0.1s.
+[*] Installed 1 APM dependency in 0.2s.
 [i] Lockfile presence verified. Run 'apm audit' for on-disk content integrity.
 [exit 0]
   PASS: exit code 0
@@ -740,9 +789,9 @@ $ apm install --frozen --allow-insecure
 $ apm install --allow-insecure
 [>] Installing dependencies from apm.yml...
 [>] Resolving oss-tools/pr-summary...
-[!] Insecure HTTP fetch (unencrypted): http://127.0.0.1:57245/oss-tools/pr-summary#v1.0.0
+[!] Insecure HTTP fetch (unencrypted): http://127.0.0.1:49577/oss-tools/pr-summary#v1.0.0
 [i] Targets: claude  (source: apm.yml)
-  [+] oss-tools/pr-summary #v1.0.0 @8961f2e2
+  [+] oss-tools/pr-summary #v1.0.0 @e4d7367e
   |-- Skill integrated -> .claude/skills/
 [i] Added apm_modules/ to .gitignore
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
@@ -751,20 +800,20 @@ $ apm install --allow-insecure
 [exit 0]
   PASS: exit code 0
   PASS: .claude/skills/pr-summary/SKILL.md matches /paste the full diff/
-  PASS: apm.lock.yaml does not match /resolved_commit: 377f747328a726231b080e3e9cef795e8ada73e9/
+  PASS: apm.lock.yaml does not match /resolved_commit: f6b446a3e988a90e4882140719bfcf4c7051298b/
 
 ## C8. If upstream rewrites history and the locked commit disappears, --frozen fails closed
-$ bash -c cd '<workspace>/srv/oss-tools/pr-summary.git' && git cat-file -e 377f747328a726231b080e3e9cef795e8ada73e9
+$ bash -c cd '<workspace>/srv/oss-tools/pr-summary.git' && git cat-file -e f6b446a3e988a90e4882140719bfcf4c7051298b
 [exit 1]
   PASS: non-zero exit (1) (the locked commit no longer exists upstream)
 $ apm install --frozen --allow-insecure
 [>] Installing dependencies from apm.yml...
 [>] Resolving oss-tools/pr-summary...
-[!] Insecure HTTP fetch (unencrypted): http://127.0.0.1:57245/oss-tools/pr-summary#v1.0.0
+[!] Insecure HTTP fetch (unencrypted): http://127.0.0.1:49577/oss-tools/pr-summary#v1.0.0
 [i] Targets: claude  (source: apm.yml)
   [x] 1 package failed:
     +- oss-tools/pr-summary -- Failed to download dependency oss-tools/pr-summary: Failed to clone repository 
-oss-tools/pr-summary: fatal: reference is not a tree: 377f747328a726231b080e3e9cef795e8ada73e9
+oss-tools/pr-summary: fatal: reference is not a tree: f6b446a3e988a90e4882140719bfcf4c7051298b
 [x] Installation failed with 1 error(s) in 0.2s. No install transaction changes were committed.
 [exit 1]
   PASS: exit code 1
@@ -774,7 +823,7 @@ oss-tools/pr-summary: fatal: reference is not a tree: 377f747328a726231b080e3e9c
 ## D1. Which dependencies have newer tags? (report only)
 $ env COLUMNS=250 apm outdated --verbose
 Skipping local dep: .
-[?25l⠋ Checking 1 dependencies                                            0%⠙ Checking meridian-code-review                                            0%⠹ Checking meridian-code-review                                            0%⠸ Checking meridian-code-review                                            0%⠴ Checking meridian-code-review                                            0%⠦ Checking meridian-code-review                                            0%⠧ Checking meridian-code-review                                            0%⠇ Checking meridian-code-review                                            0%⠋ Checking meridian-code-review                                            0%⠙ Checking meridian-code-review                                            0%⠹ Checking meridian-code-review                                            0%⠸ Checking meridian-code-review                                            0%⠴ Checking meridian-code-review                                            0%⠦ Checking meridian-code-review                                            0%  Checking meridian-code-review ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100%
+[?25l⠋ Checking 1 dependencies                                            0%⠙ Checking meridian-code-review                                            0%⠹ Checking meridian-code-review                                            0%  Checking meridian-code-review ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100%
 [?25h                                                                                                                    Dependency Status                                                                                                                     
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━┓
 ┃ Package                                                                              ┃ Current                     ┃ Latest                                                                                      ┃ Status       ┃ Source               ┃
@@ -787,7 +836,7 @@ Skipping local dep: .
 [exit 0]
   PASS: exit code 0
   PASS: output matches /meridian-code-review-v1\.0\.0/
-  PASS: output matches /meridian-code-review-v1\.2\.0/
+  PASS: output matches /meridian-code-review-v1\.2\.[0-9]+/
   PASS: output matches /outdated/
 
 ## D2. apm update leaves exact tag pins alone
@@ -815,7 +864,7 @@ $ apm update --dry-run
 [i] Dry run: no changes applied. Re-run without --dry-run to update.
 [exit 0]
   PASS: exit code 0
-  PASS: output matches /meridian-code-review-v1\.2\.0|1\.2\.0/
+  PASS: output matches /meridian-code-review-v1\.0\.0 -> meridian-code-review-v1\.2\.[0-9]+/
 
 ## D4a. Before: the installed v1.0.0 checker does not look at capture calls
 $ python3 .claude/skills/meridian-code-review/scripts/check_money_rules.py --diff <demo-repo>/ch07-lock-version-and-update-safely/fixtures/capture-without-key.diff
@@ -850,7 +899,7 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 2 APM dependencies in 1.3s.
+[*] Installed 2 APM dependencies in 2.7s.
 [exit 0]
   PASS: exit code 0
   PASS: apm.yml matches /#meridian-code-review-v1\.1\.0/
@@ -937,7 +986,7 @@ src/checkout/capture.ts:4: MR002 payment capture call without an idempotency key
   PASS: exit code 1
   PASS: output matches /MR002/
 $ bash -c git add -A && git commit -qm 'Update meridian-code-review to v1.1.0' && git checkout -q main && git merge -q --ff-only update/code-review-1.1.0 && git push -q origin main && git log --oneline -1
-d027cd0 Update meridian-code-review to v1.1.0
+043634c Update meridian-code-review to v1.1.0
 [exit 0]
   PASS: exit code 0
 
@@ -1122,13 +1171,13 @@ src/checkout/charge.ts:13: MR001 toFixed() on a money value (formatting as arith
 
 ## D8. Roll back: revert the update commit, frozen reinstall, verify
 $ git revert --no-edit HEAD
-[main 87d3aad] Revert "Update meridian-code-review to v1.2.0"
- Date: Thu Oct 15 23:56:22 2026 +0000
+[main e156814] Revert "Update meridian-code-review to v1.2.0"
+ Date: Fri Oct 16 00:17:48 2026 +0000
  2 files changed, 25 insertions(+), 25 deletions(-)
 [exit 0]
   PASS: exit code 0
   PASS: apm.yml matches /#meridian-code-review-v1\.1\.0/
-  PASS: identical: apm.lock.yaml == /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/lock.v1.1.0
+  PASS: identical: apm.lock.yaml == /tmp/raae-ch07-lock-version-and-update-safely-PO5JJ5/lock.v1.1.0
 $ cmp -s <workspace>/before-frozen.sha256 <workspace>/v110.sha256
 [exit 1]
   PASS: non-zero exit (1) (deployed files are still v1.2.0's: generated files are not in git)
@@ -1157,7 +1206,7 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
 [i] Lockfile presence verified. Run 'apm audit' for on-disk content integrity.
 [exit 0]
   PASS: exit code 0
-  PASS: identical: /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/rollback.sha256 == /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/v110.sha256
+  PASS: identical: /tmp/raae-ch07-lock-version-and-update-safely-PO5JJ5/rollback.sha256 == /tmp/raae-ch07-lock-version-and-update-safely-PO5JJ5/v110.sha256
 $ apm audit --ci --no-policy
 [>] Replaying install (cache-only)...
 [+] Replayed 2 package(s)
@@ -1271,7 +1320,7 @@ Successfully configured MCP server 'microsoft-learn' for Cursor
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 2 APM dependencies and 2 MCP servers in 1.0s.
+[*] Installed 2 APM dependencies and 2 MCP servers in 1.2s.
 [>] Installing dependencies from apm.yml...
 [i] Targets: claude, copilot, cursor  (source: apm.yml)
   [+] 
@@ -1292,7 +1341,7 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
   [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 1 APM dependency in 0.4s.
+[*] Installed 1 APM dependency in 0.5s.
 [i] Lockfile presence verified. Run 'apm audit' for on-disk content integrity.
 [>] Replaying install (cache-only)...
 [+] Replayed 2 package(s)
@@ -1318,10 +1367,10 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
 [*] All 10 check(s) passed
 [exit 0]
   PASS: exit code 0
-  PASS: identical: /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/ci3.sha256 == /tmp/raae-ch07-lock-version-and-update-safely-WdW2D3/v110.sha256
+  PASS: identical: /tmp/raae-ch07-lock-version-and-update-safely-PO5JJ5/ci3.sha256 == /tmp/raae-ch07-lock-version-and-update-safely-PO5JJ5/v110.sha256
 
-## E. Same files, different words: the installed skill twice in Claude Code (optional)
-$ python3 <demo-repo>/ch07-lock-version-and-update-safely/behaviour/two_runs.py . <workspace>/behaviour --runs 2 --model claude-sonnet-5
+## E. Same files, different words: the installed skill three times in Claude Code (optional)
+$ python3 <demo-repo>/ch07-lock-version-and-update-safely/behaviour/two_runs.py . <workspace>/behaviour --runs 3 --model claude-sonnet-5
 {
   "status": "ran",
   "claude_code": "2.1.301 (Claude Code)",
@@ -1330,15 +1379,16 @@ $ python3 <demo-repo>/ch07-lock-version-and-update-safely/behaviour/two_runs.py 
   "texts_identical": false,
   "checks_passed_per_run": [
     true,
+    true,
     true
   ]
 }
-run1: skill=True rules=MR001,MR002,MR003,MR004 changes_requested=True chars=3473
-run2: skill=True rules=MR001,MR002,MR003,MR004 changes_requested=True chars=3974
+run1: skill=True rules=MR001,MR002,MR003,MR004 changes_requested=True chars=2982 bash_calls=6 denied=3
+run2: skill=True rules=MR001,MR002,MR003,MR004 changes_requested=True chars=3734 bash_calls=5 denied=1
+run3: skill=True rules=MR001,MR002,MR003,MR004 changes_requested=True chars=3526 bash_calls=7 denied=0
+summary: skill invoked in 3 of 3 runs; 'Changes requested' in 3 of 3; all four rule IDs in 3 of 3; identical texts: False
 [exit 0]
   PASS: exit code 0
   PASS: output matches /"status": "ran"/
-  PASS: output matches /"texts_identical": false/
-  PASS: output matches /run1: skill=True rules=MR001,MR002,MR003,MR004 changes_requested=True/
-  PASS: output matches /run2: skill=True rules=MR001,MR002,MR003,MR004 changes_requested=True/
-== ch07-lock-version-and-update-safely: passed (99 passed, 0 failed) ==
+  PASS: output matches /^summary: skill invoked in [0-3] of 3 runs/
+== ch07-lock-version-and-update-safely: passed (101 passed, 0 failed) ==

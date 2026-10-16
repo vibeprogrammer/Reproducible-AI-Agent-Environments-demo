@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
-"""two_runs.py -- run the same installed skill twice in Claude Code.
+"""two_runs.py -- run the same installed skill several times in Claude Code.
 
 Usage: two_runs.py WORKSPACE OUTDIR [--runs N] [--model MODEL]
 
 WORKSPACE is a meridian-checkout checkout where `apm install` has deployed
 .claude/skills/meridian-code-review/. The script copies Chapter 2's bad.diff
-into it as change.diff, asks Claude Code N times (default 2), each in a fresh
+into it as change.diff, asks Claude Code N times (default 3), each in a fresh
 HOME, "Do a code review of change.diff.", and records for every run: whether
 the Skill tool was invoked for meridian-code-review, the final text, and
 which rule IDs (MR001-MR004) and verdict words the text contains.
 
-It then compares the runs: identical text or not, and whether every run
-passes the same deterministic checks (skill used, verdict "Changes
-requested", all four rule IDs mentioned).
+It also records the Bash commands the agent tried and the ones the harness's
+permission rules denied. It then compares the runs: identical text or not,
+and how many runs pass the same checks (skill used, verdict "Changes
+requested", all four rule IDs mentioned). These are observations, reported
+as counts over N runs; model behaviour is not deterministic, so nothing here
+is a pass/fail gate.
 
 Needs ANTHROPIC_API_KEY (and optionally ANTHROPIC_BASE_URL) and the `claude`
 CLI on PATH. Without a key it writes {"status": "skipped"} and exits 0, so
@@ -31,6 +34,13 @@ PROMPT = "Do a code review of change.diff."
 RULES = ["MR001", "MR002", "MR003", "MR004"]
 
 
+def _norm(cmd, ws):
+    """Replace the disposable workspace path so evidence is stable."""
+    root = os.path.realpath(ws)
+    cmd = cmd.replace(root, "<ws>")
+    return re.sub(r"/tmp/raae-[A-Za-z0-9._-]+", "<workspace>", cmd)
+
+
 def one_run(ws, model):
     home = tempfile.mkdtemp(prefix="claude-home-")
     env = {k: v for k, v in os.environ.items()}
@@ -43,7 +53,7 @@ def one_run(ws, model):
     p = subprocess.run(cmd, cwd=ws, env=env, capture_output=True, text=True,
                        timeout=600)
     shutil.rmtree(home, ignore_errors=True)
-    skill_used, text, used_model = False, "", None
+    skill_used, text, used_model, denials, bash = False, "", None, [], []
     for line in p.stdout.splitlines():
         try:
             ev = json.loads(line)
@@ -54,13 +64,23 @@ def one_run(ws, model):
                 if c.get("type") == "tool_use" and c.get("name") == "Skill" \
                         and "meridian-code-review" in json.dumps(c.get("input")):
                     skill_used = True
+                if c.get("type") == "tool_use" and c.get("name") == "Bash":
+                    bash.append(_norm((c.get("input") or {}).get("command", ""),
+                                      ws))
         if ev.get("type") == "result":
             text = ev.get("result") or ""
             used_model = ",".join(sorted((ev.get("modelUsage") or {}).keys()))
+            denials = [
+                {"tool": d.get("tool_name", "?"),
+                 "command": _norm((d.get("tool_input") or {}).get("command", ""),
+                                  ws)}
+                for d in ev.get("permission_denials") or []]
     return {
         "exit_code": p.returncode,
         "model_reported": used_model,
         "skill_invoked": skill_used,
+        "bash_commands": bash,
+        "permission_denials": denials,
         "rules_mentioned": [r for r in RULES if r in text],
         "verdict_changes_requested": bool(
             re.search(r"(?i)changes requested", text)),
@@ -76,7 +96,7 @@ def main(argv):
         print(__doc__)
         return 2
     ws, out = argv[1], argv[2]
-    runs = int(argv[argv.index("--runs") + 1]) if "--runs" in argv else 2
+    runs = int(argv[argv.index("--runs") + 1]) if "--runs" in argv else 3
     model = argv[argv.index("--model") + 1] if "--model" in argv else \
         "claude-sonnet-5"
     os.makedirs(out, exist_ok=True)
@@ -107,9 +127,18 @@ def main(argv):
     print(json.dumps({k: v for k, v in summary.items() if k != "runs"},
                      indent=2))
     for i, r in enumerate(results, 1):
-        print("run%d: skill=%s rules=%s changes_requested=%s chars=%d"
+        print("run%d: skill=%s rules=%s changes_requested=%s chars=%d "
+              "bash_calls=%d denied=%d"
               % (i, r["skill_invoked"], ",".join(r["rules_mentioned"]),
-                 r["verdict_changes_requested"], r["chars"]))
+                 r["verdict_changes_requested"], r["chars"],
+                 len(r["bash_commands"]), len(r["permission_denials"])))
+    n = len(results)
+    print("summary: skill invoked in %d of %d runs; 'Changes requested' in "
+          "%d of %d; all four rule IDs in %d of %d; identical texts: %s"
+          % (sum(r["skill_invoked"] for r in results), n,
+             sum(r["verdict_changes_requested"] for r in results), n,
+             sum(len(r["rules_mentioned"]) == 4 for r in results), n,
+             summary["texts_identical"]))
     return 0
 
 
