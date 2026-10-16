@@ -1,0 +1,133 @@
+# Chapter 9: Meridian's supply-chain gate for agent capabilities.
+# Runs on every pull request and push that touches the skill package, its
+# regression suite, or the Chapter 9 demo. Three jobs:
+#   consumer-gate  frozen restore + apm audit --ci (SARIF) + suite on the
+#                  installed skill, for meridian-checkout
+#   package-gate   the skill as a PR changes it: suite + install-time scan
+#   negative-tests the gate must go red on known-bad inputs
+name: ch09 supply-chain gate
+on:
+  pull_request:
+    paths:
+      - "packages/**"
+      - "tests/meridian-code-review/**"
+      - "ch09-secure-and-automate-the-capability-supply-chain/**"
+      - ".github/workflows/ch09-supply-chain-gate.yml"
+  push:
+    branches: [main]
+    paths:
+      - "packages/**"
+      - "tests/meridian-code-review/**"
+      - "ch09-secure-and-automate-the-capability-supply-chain/**"
+      - ".github/workflows/ch09-supply-chain-gate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DEMO: ch09-secure-and-automate-the-capability-supply-chain
+
+jobs:
+  consumer-gate:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: ${{ env.DEMO }}/fixture/meridian-checkout
+    steps:
+      - uses: actions/checkout@v4
+      # Pinned by commit SHA (this is microsoft/apm-action v1.10.0).
+      - uses: microsoft/apm-action@d723bb64ed70c135bbaf87d126b721dd2dae0439
+        with:
+          setup-only: "true"
+          apm-version: "0.33.0"
+      - name: APM version
+        run: apm --version
+      - name: Guard manifests and CI files
+        run: >
+          python3 ../../gate/check_supply_chain.py
+          --manifest apm.yml
+          --ci-file ../../../.github/workflows/ch09-supply-chain-gate.yml
+      # apm install --frozen refuses on a cold cache in 0.33.0 (Chapter 9,
+      # step 1 of the demo), so install from the lockfile and prove that
+      # neither the manifest nor the lockfile moved.
+      - name: Restore from the lockfile
+        run: |
+          apm install
+          git diff --exit-code -- apm.yml apm.lock.yaml
+      - name: Audit (CI mode)
+        run: apm audit --ci
+      - name: Audit report (SARIF)
+        if: always()
+        run: apm audit --ci -f sarif -o apm-audit.sarif
+      - name: Skill regression suite on the installed copy
+        run: >
+          python3 ../../../tests/meridian-code-review/run_suite.py
+          --skill-dir .claude/skills/meridian-code-review
+          --expect-version
+          "$(sed -n 's/^version: //p' .claude/skills/meridian-code-review/apm.yml)"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: apm-audit-sarif
+          path: ${{ env.DEMO }}/fixture/meridian-checkout/apm-audit.sarif
+
+  package-gate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: microsoft/apm-action@d723bb64ed70c135bbaf87d126b721dd2dae0439
+        with:
+          setup-only: "true"
+          apm-version: "0.33.0"
+      - name: Suite on the package as this change leaves it
+        run: >
+          python3 tests/meridian-code-review/run_suite.py
+          --skill-dir packages/meridian-code-review
+          --expect-version
+          "$(sed -n 's/^version: //p' packages/meridian-code-review/apm.yml)"
+      - name: Install-time scan of the package as this change leaves it
+        run: |
+          mkdir -p "$RUNNER_TEMP/consumer" && cd "$RUNNER_TEMP/consumer"
+          git init -q
+          printf 'name: pr-check\nversion: 0.0.1\ntargets: [claude]\n' > apm.yml
+          printf 'dependencies:\n  apm:\n    - %s\n' \
+            "$GITHUB_WORKSPACE/packages/meridian-code-review" >> apm.yml
+          apm install
+          apm audit
+
+  negative-tests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: microsoft/apm-action@d723bb64ed70c135bbaf87d126b721dd2dae0439
+        with:
+          setup-only: "true"
+          apm-version: "0.33.0"
+      - name: Generate the synthetic fixtures
+        run: >
+          python3 "$DEMO/make_fixtures.py" "$RUNNER_TEMP/fx"
+          --review-package packages/meridian-code-review
+      - name: Hidden Unicode must fail the install and deploy nothing
+        run: |
+          mkdir -p "$RUNNER_TEMP/c-tag" && cd "$RUNNER_TEMP/c-tag"
+          git init -q
+          printf 'name: neg\nversion: 0.0.1\ntargets: [claude]\n' > apm.yml
+          printf 'dependencies:\n  apm:\n    - %s\n' "$RUNNER_TEMP/fx/hidden-tag" >> apm.yml
+          if apm install; then echo "::error::hidden Unicode was not blocked"; exit 1; fi
+          test ! -e .claude/skills/fee-explainer/SKILL.md
+          echo "blocked as expected"
+      - name: A skill script that opens a socket must fail the suite
+        run: |
+          if python3 tests/meridian-code-review/run_suite.py \
+               --skill-dir "$RUNNER_TEMP/fx/tampered/meridian-code-review"; then
+            echo "::error::tampered script passed the suite"; exit 1
+          fi
+          echo "rejected as expected"
+      - name: The guard must reject a CI step that bypasses a gate
+        run: |
+          if python3 "$DEMO/gate/check_supply_chain.py" \
+               --ci-file "$DEMO/fixture/bad-ci-step.sh"; then
+            echo "::error::bypass flag not detected"; exit 1
+          fi
+          echo "rejected as expected"

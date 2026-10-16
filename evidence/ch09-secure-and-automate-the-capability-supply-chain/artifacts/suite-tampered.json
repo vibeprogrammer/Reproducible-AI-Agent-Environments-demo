@@ -1,0 +1,143 @@
+{
+ "checks": [
+  {
+   "id": "skill-md-exists",
+   "ok": true,
+   "detail": "SKILL.md"
+  },
+  {
+   "id": "frontmatter-present",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "id": "name-matches-spec",
+   "ok": true,
+   "detail": "meridian-code-review"
+  },
+  {
+   "id": "name-matches-folder",
+   "ok": true,
+   "detail": "meridian-code-review vs meridian-code-review"
+  },
+  {
+   "id": "description-length",
+   "ok": true,
+   "detail": "459 chars"
+  },
+  {
+   "id": "description-says-what",
+   "ok": true,
+   "detail": "starts with what the skill does"
+  },
+  {
+   "id": "description-says-when",
+   "ok": true,
+   "detail": "has a 'Use when' clause"
+  },
+  {
+   "id": "compatibility-length",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "id": "body-under-500-lines",
+   "ok": true,
+   "detail": "67 lines"
+  },
+  {
+   "id": "version-consistent",
+   "ok": true,
+   "detail": "SKILL.md 1.1.0, apm.yml 1.1.0"
+  },
+  {
+   "id": "version-is-expected",
+   "ok": true,
+   "detail": "expected 1.1.0"
+  },
+  {
+   "id": "referenced-files-exist",
+   "ok": true,
+   "detail": "4 referenced, missing: none"
+  },
+  {
+   "id": "no-orphan-resources",
+   "ok": true,
+   "detail": "unreferenced: none"
+  },
+  {
+   "id": "usage-error-exit-2",
+   "ok": true,
+   "detail": "no arguments -> 2"
+  },
+  {
+   "id": "missing-input-exit-2",
+   "ok": true,
+   "detail": "-> 2"
+  },
+  {
+   "id": "help-documents-diff-semantics",
+   "ok": true,
+   "detail": "--diff help must describe what diff mode really checks"
+  },
+  {
+   "id": "fixture:bad-diff-six-findings",
+   "ok": true,
+   "detail": "the Chapter 2 fixture: one of every rule, three MR001"
+  },
+  {
+   "id": "fixture:good-diff-clean",
+   "ok": true,
+   "detail": "the compliant version of the same change"
+  },
+  {
+   "id": "fixture:deleted-idempotency-key",
+   "ok": true,
+   "detail": "deleting the key from an unchanged create call must be reported"
+  },
+  {
+   "id": "fixture:unchanged-line-after-deletion",
+   "ok": true,
+   "detail": "documented contract: MR001/MR003/MR004 report added lines only; an unchanged line after a deletion is not part of the change"
+  },
+  {
+   "id": "fixture:non-utf8-input-is-input-error",
+   "ok": true,
+   "detail": "exit 1 means findings; unreadable input must be exit 2, never a traceback"
+  },
+  {
+   "id": "fixture:known-false-positive-fee-rate",
+   "ok": true,
+   "detail": "known: false positive, see references/false-positives.md"
+  },
+  {
+   "id": "fixture:known-gap-whole-object-log",
+   "ok": true,
+   "detail": "known: false negative, see references/money-rules.md (MR003)"
+  },
+  {
+   "id": "no-write-network-or-subprocess-events",
+   "ok": false,
+   "detail": "3 audit events [['socket.getaddrinfo', \"('127.0.0.1', 9, 0, 1, 0)\"], ['socket.__new__', '(<socket.socket fd=-1, family=0, type=0, proto=0>, 2, 1, 6)'], ['socket.connect', \"(<socket.socket fd=3, family=2, type=1, proto=6, laddr=('0.0.0.0', 0)>, ('127.0.\"]]"
+  },
+  {
+   "id": "audited-run-still-finds-issues",
+   "ok": true,
+   "detail": "exit 1"
+  },
+  {
+   "id": "skill-folder-unchanged",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "id": "working-dir-unchanged",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "passed": 26,
+ "failed": [
+  "no-write-network-or-subprocess-events"
+ ]
+}

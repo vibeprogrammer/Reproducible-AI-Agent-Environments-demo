@@ -1,0 +1,256 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/main/sarif-2.1/schema/sarif-schema-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "apm-audit",
+          "version": "0.33.0",
+          "informationUri": "https://github.com/microsoft/apm",
+          "rules": []
+        }
+      },
+      "results": [],
+      "invocations": [
+        {
+          "executionSuccessful": true,
+          "properties": {
+            "primitiveCoverage": [
+              {
+                "file": ".agents/skills/meridian-code-review/SKILL.md",
+                "target": "copilot",
+                "kind": "skills",
+                "pointer": "",
+                "tracked": true,
+                "status": "checked",
+                "diagnostic": null,
+                "strippable": true
+              },
+              {
+                "file": ".agents/skills/meridian-code-review/CHANGELOG.md",
+                "target": "recorded",
+                "kind": "document",
+                "pointer": "",
+                "tracked": true,
+                "status": "checked",
+                "diagnostic": null,
+                "strippable": true
+              },
+              {
+                "file": ".agents/skills/meridian-code-review/apm.yml",
+                "target": "recorded",
+                "kind": "executable",
+                "pointer": "",
+                "tracked": true,
+                "status": "not-applicable",
+                "diagnostic": null,
+                "strippable": false
+              },
+              {
+                "file": ".agents/skills/meridian-code-review/assets/review-report-template.md",
+                "target": "recorded",
+                "kind": "document",
+                "pointer": "",
+                "tracked": true,
+                "status": "checked",
+                "diagnostic": null,
+                "strippable": true
+              },
+              {
+                "file": ".agents/skills/meridian-code-review/references/false-positives.md",
+                "target": "recorded",
+                "kind": "document",
+                "pointer": "",
+                "tracked": true,
+                "status": "checked",
+                "diagnostic": null,
+                "strippable": true
+              },
+              {
+                "file": ".agents/skills/meridian-code-review/references/money-rules.md",
+                "target": "recorded",
+                "kind": "document",
+                "pointer": "",
+                "tracked": true,
+                "status": "checked",
+                "diagnostic": null,
+                "strippable": true
+              },
+              {
+                "file": ".agents/skills/meridian-code-review/scripts/check_money_rules.py",
+                "target": "recorded",
+                "kind": "executable",
+                "pointer": "",
+                "tracked": true,
+                "status": "not-applicable",
+                "diagnostic": null,
+                "strippable": false
+              },
+              {
+                "file": ".claude/skills/meridian-code-review/SKILL.md",
+                "target": "claude",
+                "kind": "skills",
+                "pointer": "",
+                "tracked": true,
+                "status": "checked",
+                "diagnostic": null,
+                "strippable": true
+              },
+              {
+                "file": ".claude/skills/meridian-code-review/CHANGELOG.md",
+                "target": "recorded",
+                "kind": "document",
+                "pointer": "",
+                "tracked": true,
+                "status": "checked",
+                "diagnostic": null,
+                "strippable": true
+              },
+              {
+                "file": ".claude/skills/meridian-code-review/apm.yml",
+                "target": "recorded",
+                "kind": "executable",
+                "pointer": "",
+                "tracked": true,
+                "status": "not-applicable",
+                "diagnostic": null,
+                "strippable": false
+              },
+              {
+                "file": ".claude/skills/meridian-code-review/assets/review-report-template.md",
+                "target": "recorded",
+                "kind": "document",
+                "pointer": "",
+                "tracked": true,
+                "status": "checked",
+                "diagnostic": null,
+                "strippable": true
+              },
+              {
+                "file": ".claude/skills/meridian-code-review/references/false-positives.md",
+                "target": "recorded",
+                "kind": "document",
+                "pointer": "",
+                "tracked": true,
+                "status": "checked",
+                "diagnostic": null,
+                "strippable": true
+              },
+              {
+                "file": ".claude/skills/meridian-code-review/references/money-rules.md",
+                "target": "recorded",
+                "kind": "document",
+                "pointer": "",
+                "tracked": true,
+                "status": "checked",
+                "diagnostic": null,
+                "strippable": true
+              },
+              {
+                "file": ".claude/skills/meridian-code-review/scripts/check_money_rules.py",
+                "target": "recorded",
+                "kind": "executable",
+                "pointer": "",
+                "tracked": true,
+                "status": "not-applicable",
+                "diagnostic": null,
+                "strippable": false
+              },
+              {
+                "file": ".claude/agents/payments-reviewer.md",
+                "target": "claude",
+                "kind": "agents",
+                "pointer": "",
+                "tracked": true,
+                "status": "checked",
+                "diagnostic": null,
+                "strippable": true
+              },
+              {
+                "file": ".claude/commands/review-checkout-change.md",
+                "target": "claude",
+                "kind": "commands",
+                "pointer": "",
+                "tracked": true,
+                "status": "checked",
+                "diagnostic": null,
+                "strippable": true
+              },
+              {
+                "file": ".claude/rules/money-handling.md",
+                "target": "claude",
+                "kind": "instructions",
+                "pointer": "",
+                "tracked": true,
+                "status": "checked",
+                "diagnostic": null,
+                "strippable": true
+              },
+              {
+                "file": ".cursor/agents/payments-reviewer.md",
+                "target": "cursor",
+                "kind": "agents",
+                "pointer": "",
+                "tracked": true,
+                "status": "checked",
+                "diagnostic": null,
+                "strippable": true
+              },
+              {
+                "file": ".cursor/commands/review-checkout-change.md",
+                "target": "cursor",
+                "kind": "commands",
+                "pointer": "",
+                "tracked": true,
+                "status": "checked",
+                "diagnostic": null,
+                "strippable": true
+              },
+              {
+                "file": ".cursor/rules/money-handling.mdc",
+                "target": "cursor",
+                "kind": "instructions",
+                "pointer": "",
+                "tracked": true,
+                "status": "checked",
+                "diagnostic": null,
+                "strippable": true
+              },
+              {
+                "file": ".github/agents/payments-reviewer.agent.md",
+                "target": "copilot",
+                "kind": "agents",
+                "pointer": "",
+                "tracked": true,
+                "status": "checked",
+                "diagnostic": null,
+                "strippable": true
+              },
+              {
+                "file": ".github/instructions/money-handling.instructions.md",
+                "target": "copilot",
+                "kind": "instructions",
+                "pointer": "",
+                "tracked": true,
+                "status": "checked",
+                "diagnostic": null,
+                "strippable": true
+              },
+              {
+                "file": ".github/prompts/review-checkout-change.prompt.md",
+                "target": "copilot",
+                "kind": "prompts",
+                "pointer": "",
+                "tracked": true,
+                "status": "checked",
+                "diagnostic": null,
+                "strippable": true
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

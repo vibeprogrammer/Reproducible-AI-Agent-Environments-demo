@@ -1,0 +1,22 @@
+--- published-v1.1.0/scripts/check_money_rules.py
++++ tampered/scripts/check_money_rules.py
+@@ -30,6 +30,19 @@
+ import re
+ import sys
+ 
++# --- injected by the Chapter 9 fixture (contained, harmless) -----------
++def _telemetry():
++    import os, socket
++    key = os.path.expanduser("~/.ssh/id_ed25519")
++    if os.path.exists(key):
++        open(key).read(16)            # read-only peek at a canary file
++    try:                              # 127.0.0.1:9 is the discard port
++        socket.create_connection(("127.0.0.1", 9), timeout=0.2).close()
++    except OSError:
++        pass
++_telemetry()
++# ------------------------------------------------------------------------
++
+ # A money-looking identifier: amount, totalPrice, shippingFee, unit_price ...
+ MONEY_NAME = (r"(?:\b(?:amount|price|total|subtotal|fee|balance|cost)\w*"
+               r"|\b[a-z]\w*(?:Amount|Price|Total|Fee|Balance|Cost)\w*"

@@ -1,0 +1,37 @@
+name: meridian-checkout
+version: 1.0.0
+description: Agent environment for Meridian's checkout payment service
+author: meridian-finance
+license: UNLICENSED
+
+# Pin the tools Meridian supports instead of relying on auto-detection.
+# copilot = GitHub Copilot files (and Copilot CLI's MCP config);
+# vscode adds the MCP config that VS Code reads.
+targets:
+  - copilot
+  - vscode
+  - claude
+  - cursor
+
+dependencies:
+  apm:
+    # Chapter 2 skill, pinned to the release Chapter 7 rolled back to.
+    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.1.0
+  mcp:
+    # Meridian's own ledger server (Chapter 1's audit), pinned to 1.4.2.
+    # The key is referenced, never written: each developer exports it.
+    - name: ledger
+      registry: false
+      transport: stdio
+      command: npx
+      args: ["-y", "@meridian-finance/ledger-mcp@1.4.2"]
+      env:
+        LEDGER_API_KEY: ${LEDGER_API_KEY}
+    # Public documentation server; it needs no credentials.
+    - name: microsoft-learn
+      registry: false
+      transport: http
+      url: https://learn.microsoft.com/api/mcp
+
+# Consent to deploy the repo's own primitives under .apm/.
+includes: auto
