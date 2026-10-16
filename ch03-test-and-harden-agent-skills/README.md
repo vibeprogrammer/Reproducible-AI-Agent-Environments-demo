@@ -54,12 +54,18 @@ python3 ch03-test-and-harden-agent-skills/harness/run_harness_tests.py \
 python3 ch03-test-and-harden-agent-skills/harness/summarize.py /tmp/ch03-harness/results.json
 ```
 
-The deterministic suite on its own:
+The deterministic suite on its own, against the package source at the
+v1.0.1 tag (the package on `main` has moved on since: Chapter 7 publishes
+1.1.0 and the known-bad 1.2.0, and Chapter 9 ships a 1.2.1 fix):
 
 ```bash
+git worktree add /tmp/mcr-v1.0.1 meridian-code-review-v1.0.1
 python3 tests/meridian-code-review/run_suite.py \
-  --skill-dir packages/meridian-code-review --expect-version 1.0.1
+  --skill-dir /tmp/mcr-v1.0.1/packages/meridian-code-review --expect-version 1.0.1
+git worktree remove /tmp/mcr-v1.0.1
 ```
+
+`run.sh` does not depend on `main`: it installs both published tags with APM.
 
 ## Expected observations
 
@@ -102,6 +108,11 @@ can read what the numbers summarise.
   not use). Their skill discovery is described from their documentation only.
 - Activation was measured with one skill installed next to each harness's
   built-in skills. A project with many installed skills may behave differently.
+- The CI workflow (`.github/workflows/meridian-code-review-tests.yml`) runs
+  the suite on the package source on `main`. It was added after the v1.0.1
+  commit, so its first runs were on later releases: green on 1.1.0, red on
+  the known-bad 1.2.0 (Chapter 7). Its status on `main` reflects whatever
+  package version `main` carries, not v1.0.1.
 - The `exploratory-v1.0.0` harness results were produced by an earlier
   revision of `run_harness_tests.py` that did not record the permission mode
   and detected "checker ran" from commands only. They motivated the v1.0.1
