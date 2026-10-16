@@ -3,6 +3,21 @@
 Versions follow the per-package tag convention `meridian-code-review-vX.Y.Z`.
 Published tags never move; fixes ship as new versions.
 
+## 1.2.1 (2026-10-16)
+
+Patch release (Chapter 9). Rolls forward from the known-bad 1.2.0.
+
+### Fixed
+- MR001 flags fee amounts again (`shippingFee = 4.99`). 1.2.1 restores the
+  1.1.0 money-name pattern, so `fee`/`Fee` identifiers count as money names.
+  The Chapter 3 regression suite passes again (27/27).
+
+### Known
+- The `feeRate = 0.029` false positive returns, exactly as documented in
+  references/false-positives.md for 1.0.0 to 1.1.0. Silencing it needs a
+  rule that tells rates from amounts, with its own fixture; until then the
+  reviewer drops it by hand.
+
 ## 1.2.0 (2026-10-16) - KNOWN BAD, do not use
 
 > **Known bad.** 1.2.0 removed `fee` from the money-name pattern, so MR001
