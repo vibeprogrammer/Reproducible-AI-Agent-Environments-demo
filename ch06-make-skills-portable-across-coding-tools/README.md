@@ -28,7 +28,7 @@ and Codex CLI, what they actually discovered.
 - `fixture/meridian-checkout/` — Meridian's service as Chapter 5 left it,
   with `apm.yml` declaring:
   - `meridian-code-review` at tag `meridian-code-review-v1.0.0` (Chapter 2;
-    the newest published tag when this demo was recorded);
+    the tag Chapter 5's manifest pins);
   - the project's own primitives under `.apm/`: one instructions file
     (`applyTo: src/**/*.ts`), one prompt, one agent and one hook
     (`.apm/hooks/money-rules-reminder.json` plus a read-only script);
@@ -72,6 +72,11 @@ and Codex CLI, what they actually discovered.
 ```bash
 bash ch06-make-skills-portable-across-coding-tools/run.sh
 ```
+
+Recorded run (committed in `evidence/`): APM 0.33.0 on Debian 12 x86_64,
+2026-10-15 23:52-23:55 UTC, 93 checks passed, 0 failed, with Claude Code
+2.1.301 (`claude-sonnet-5`) and Codex CLI 0.163.0 (`gpt-6-sol`), 3 runs per
+runtime check (1 for the Copilot-workspace control).
 
 ## Expected observations (APM v0.33.0)
 
