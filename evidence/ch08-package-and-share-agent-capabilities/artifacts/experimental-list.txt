@@ -1,0 +1,15 @@
+                                           Experimental Features                                            
+┏━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Flag                  ┃ Status     ┃ Description                                                         ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ verbose-version       │ disabled   │ Show Python version, platform, and install path in 'apm --version'. │
+│ copilot-cowork        │ disabled   │ Enable Microsoft 365 Copilot Cowork skills deployment via OneDrive. │
+│ copilot-app           │ disabled   │ Deploy prompts as workflows into the GitHub Copilot desktop App.    │
+│ grok-cloud            │ disabled   │ Deploy skills to xAI Grok Cloud.                                    │
+│ marketplace-authoring │ disabled   │ Enable marketplace authoring commands (init, build, publish, etc.). │
+│ registries            │ disabled   │ Enable REST-based APM package registries in apm.yml.                │
+│ canvas                │ disabled   │ Ship Copilot CLI canvas extensions via .apm/extensions/ bundles.    │
+│ external-scanners     │ disabled   │ External SARIF scanner ingestion + optional audit at install time.  │
+│ openclaw              │ disabled   │ Deploy skills to OpenClaw agent runtime directories.                │
+└───────────────────────┴────────────┴─────────────────────────────────────────────────────────────────────┘
+[i] Tip: apm experimental enable <name>

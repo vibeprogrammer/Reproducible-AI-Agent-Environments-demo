@@ -1,0 +1,35 @@
+{
+  "name": "meridian-agent-catalog",
+  "owner": {
+    "name": "meridian-finance",
+    "url": "https://github.com/meridian-finance"
+  },
+  "plugins": [
+    {
+      "name": "meridian-engineering-standards",
+      "description": "Meridian's shared payment standards and review workflow",
+      "version": "1.0.0",
+      "source": {
+        "source": "git-subdir",
+        "url": "vibeprogrammer/Reproducible-AI-Agent-Environments-demo",
+        "path": "packages/meridian-engineering-standards",
+        "ref": "meridian-engineering-standards-v1.0.0",
+        "sha": "13749d8802c87e8f2e402fd376a4466980b6bbdf",
+        "tag_pattern": "meridian-engineering-standards-v{version}"
+      }
+    },
+    {
+      "name": "meridian-code-review",
+      "description": "Meridian's payment-code review skill (money, idempotency, PII)",
+      "version": "1.1.0",
+      "source": {
+        "source": "git-subdir",
+        "url": "vibeprogrammer/Reproducible-AI-Agent-Environments-demo",
+        "path": "packages/meridian-code-review",
+        "ref": "meridian-code-review-v1.1.0",
+        "sha": "3fba23f79f6faed7c0812d2bb31cfd7b324df562",
+        "tag_pattern": "meridian-code-review-v{version}"
+      }
+    }
+  ]
+}

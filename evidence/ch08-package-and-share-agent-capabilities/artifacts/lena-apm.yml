@@ -1,0 +1,10 @@
+name: lena-sandbox
+version: 0.1.0
+targets:
+  - cursor
+dependencies:
+  apm:
+    - git: 
+        https://github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo
+      path: packages/meridian-engineering-standards
+      ref: meridian-engineering-standards-v1.0.0

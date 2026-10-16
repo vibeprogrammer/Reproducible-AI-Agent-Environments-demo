@@ -1,0 +1,16 @@
+pack:
+  format: claude-plugin
+  target: claude
+  packed_at: '2026-10-16T00:20:10.782959+00:00'
+  bundle_files:
+    commands/payment-pr.md: b90dbf2d01dddc82f3bd079361f219eec1d7839cc804b1fcb56409a90520453e
+    instructions/payment-standards.instructions.md: 62ed3b707d47682bf8e831d330ce3397ebab663f3503b56335e7609e5b8a29fe
+    plugin.json: 9430085e411a9f49ae5a5416af32876599506d8f2c83b76b0220799aa86e9205
+    skills/meridian-code-review/CHANGELOG.md: caa9098e971fec329847d7a07975d6858ca911a954991a2c0f627399bc3322c8
+    skills/meridian-code-review/SKILL.md: 41a00fac2ad72caec6b77367d24b54ef81a1ab5a337bb24ec5e38bd89eaecce5
+    skills/meridian-code-review/apm.yml: 45348451115180712cc091b1557e914f1ba3648e260a5fdc3ffaeb7e244c79fe
+    skills/meridian-code-review/assets/review-report-template.md: 732f5df1f4cf8975247be0fb0990dfb868df3aa9c5f6b1eeb324838960c91860
+    skills/meridian-code-review/references/false-positives.md: cd293eea3684535dc5b4f5e0b647ce92e2e325f5abf5d9f4acf2321a5a4ebd77
+    skills/meridian-code-review/references/money-rules.md: 8eaaba88be8df3c30dd8ab230877e83403df9c93e832217267edcd7ed8b7fa7f
+    skills/meridian-code-review/scripts/check_money_rules.py: 6d446f2168eda93ef805162e21e1b5eba7c2815031b95be741fbef1aa2201f74
+lockfile_version: '1'

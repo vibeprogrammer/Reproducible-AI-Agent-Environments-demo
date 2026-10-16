@@ -1,0 +1,7 @@
+demo: ch08-package-and-share-agent-capabilities
+started_utc: 2026-10-16T00:20:05Z
+apm_version: 0.33.0
+apm_pinned: 0.33.0
+git: git version 2.39.5
+python: Python 3.11.6
+os: Debian GNU/Linux 12 (bookworm) x86_64

@@ -1,0 +1,54 @@
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-engineering-standards...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[i] Targets: claude, copilot, cursor  (source: apm.yml)
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.
+1.0 #3fba23f79f6faed7c0812d2bb31cfd7b324df562 @3fba23f7
+  [+] 
+github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-engineering-standards#meridian-engin
+eering-standards-v1.0.0 #13749d8802c87e8f2e402fd376a4466980b6bbdf @13749d88
+  |-- Skill integrated -> .agents/skills/, .claude/skills/
+  |-- 1 prompts integrated -> .github/prompts/
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+  |-- 3 rule(s) integrated -> 3 targets
+  [+] <project root> (local)
+  |-- 1 prompts integrated -> .github/prompts/
+  |-- 3 agents integrated -> 3 targets
+  |-- 2 commands integrated -> .claude/commands/, .cursor/commands/
+[?25l[............................]   0% integrate - 0:00:00
+[............................]   0% integrate - 0:00:00
+
+[i] Targeting declared targets from apm.yml: copilot, vscode, claude, cursor
+|  [>]  ledger (self-defined, stdio)
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + ledger
+
+[!] Copilot CLI will resolve 1 environment variable at runtime that is not currently set: LEDGER_API_KEY.
+    Export it in your shell before running 'gh copilot', e.g.:
+      export LEDGER_API_KEY=...
+Successfully configured MCP server 'ledger' for VS Code
+  + ledger
+Successfully configured MCP server 'ledger' for Claude Code
+  + ledger
+Successfully configured MCP server 'ledger' for Cursor
+  + ledger
+|  [+]  ledger -> Copilot, Vscode, Claude, Cursor (configured)
+|  [>]  microsoft-learn (self-defined, http)
+|     +- Configuring for Copilot, Vscode, Claude, Cursor...
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for VS Code
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for Claude Code
+  + microsoft-learn
+Successfully configured MCP server 'microsoft-learn' for Cursor
+  + microsoft-learn
+|  [+]  microsoft-learn -> Copilot, Vscode, Claude, Cursor (configured)
+[*] Configured 2 servers
+  [i] Mapped input -> command arguments in payment-pr.md: [ticket]
+  [i] Mapped input -> command arguments in payment-pr.md: [ticket]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Mapped input -> command arguments in review-checkout-change.md: [focus]
+  [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
+  [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
+[*] Installed 3 APM dependencies and 2 MCP servers in 0.6s.

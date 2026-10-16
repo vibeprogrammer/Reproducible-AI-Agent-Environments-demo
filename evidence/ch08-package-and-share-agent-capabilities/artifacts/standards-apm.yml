@@ -1,0 +1,14 @@
+name: meridian-engineering-standards
+version: 1.0.0
+description: Meridian's shared payment standards and review workflow
+author: Meridian (fictional demo team)
+license: MIT
+
+# The review skill is a dependency, not a copy. Pin the good release
+# (1.1.0); 1.2.0 is known bad (see the skill's CHANGELOG).
+dependencies:
+  apm:
+    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-code-review#meridian-code-review-v1.1.0
+
+# Consent to publish this package's own primitives under .apm/.
+includes: auto

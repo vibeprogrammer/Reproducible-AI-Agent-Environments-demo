@@ -1,0 +1,32 @@
+[>] Installing dependencies from apm.yml...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-code-review...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-engineering-standards...
+[?25l[##############..............]  50% resolve - 0:00:00
+[x] Cannot resolve vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review: incompatible 
+immutable requirements.
+  meridian-checkout -> 
+vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review@meridian-code-review-v1.0.1 (commit
+1d8dbb13d4c7ad66cd7cfb92b24b673f4b564fbf)
+  meridian-checkout -> 
+vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards@meridian-engineering-stan
+dards-v1.0.0 -> 
+vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review@meridian-code-review-v1.1.0 (commit
+3fba23f79f6faed7c0812d2bb31cfd7b324df562)
+Align the requested refs in the root or parent manifests to the same commit, then run 'apm install' to regenerate 
+apm.lock.yaml.
+[############################] 100% resolve   0:00:00
+
+vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review: incompatible immutable 
+requirements.
+  meridian-checkout -> 
+vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review@meridian-code-review-v1.0.1 (commit
+1d8dbb13d4c7ad66cd7cfb92b24b673f4b564fbf)
+  meridian-checkout -> 
+vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards@meridian-engineering-stan
+dards-v1.0.0 -> 
+vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review@meridian-code-review-v1.1.0 (commit
+3fba23f79f6faed7c0812d2bb31cfd7b324df562)
+Align the requested refs in the root or parent manifests to the same commit, then run 'apm install' to regenerate 
+apm.lock.yaml.
+[i] Run with --verbose for detailed diagnostics
+[x] Install failed after 1.1s.

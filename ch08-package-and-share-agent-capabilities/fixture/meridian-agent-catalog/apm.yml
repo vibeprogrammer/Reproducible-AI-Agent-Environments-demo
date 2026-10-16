@@ -1,0 +1,29 @@
+# Meridian's internal capability catalogue: an APM marketplace.
+# In the book this is its own repo (meridian-finance/agent-catalog);
+# run.sh turns this folder into a local git repo to stand in for it.
+name: meridian-agent-catalog
+version: 1.0.0
+description: Meridian internal catalogue of approved agent packages
+license: UNLICENSED
+
+marketplace:
+  owner:
+    name: meridian-finance
+    url: https://github.com/meridian-finance
+  outputs:
+    claude: {}
+  packages:
+    # The team bundle. Any 1.x release; each release is a git tag
+    # rendered from tag_pattern.
+    - name: meridian-engineering-standards
+      source: vibeprogrammer/Reproducible-AI-Agent-Environments-demo
+      subdir: packages/meridian-engineering-standards
+      version: ^1.0.0
+      tag_pattern: meridian-engineering-standards-v{version}
+    # The skill on its own, for teams that only want the reviewer.
+    # ~1.1.0 accepts 1.1.x only, so the known-bad 1.2.0 is not offered.
+    - name: meridian-code-review
+      source: vibeprogrammer/Reproducible-AI-Agent-Environments-demo
+      subdir: packages/meridian-code-review
+      version: ~1.1.0
+      tag_pattern: meridian-code-review-v{version}

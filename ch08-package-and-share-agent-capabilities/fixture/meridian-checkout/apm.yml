@@ -1,0 +1,31 @@
+name: meridian-checkout
+version: 1.0.0
+description: Agent environment for Meridian's checkout payment service
+author: meridian-finance
+license: UNLICENSED
+
+targets:
+  - copilot
+  - vscode
+  - claude
+  - cursor
+
+dependencies:
+  apm:
+    # Chapter 8: one team package instead of the skill. The review
+    # skill now arrives transitively, at the version the package pins.
+    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-engineering-standards#meridian-engineering-standards-v1.0.0
+  mcp:
+    - name: ledger
+      registry: false
+      transport: stdio
+      command: npx
+      args: ["-y", "@meridian-finance/ledger-mcp@1.4.2"]
+      env:
+        LEDGER_API_KEY: ${LEDGER_API_KEY}
+    - name: microsoft-learn
+      registry: false
+      transport: http
+      url: https://learn.microsoft.com/api/mcp
+
+includes: auto
