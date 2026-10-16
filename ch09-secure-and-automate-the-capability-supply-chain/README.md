@@ -79,11 +79,33 @@ Evidence lands in `evidence/ch09-secure-and-automate-the-capability-supply-chain
     stale `version: 1.2.0` label in the lockfile; a normal `apm install`
     repairs it and the lockfile is byte-identical to the baseline.
 
+## On GitHub Actions
+
+The workflow has three jobs, all on `ubuntu-24.04` with APM 0.33.0 installed
+by `microsoft/apm-action` (pinned to commit `d723bb6`, v1.10.0, setup-only):
+`consumer-gate` (guard, `apm install` from the lockfile, `apm audit --ci`,
+SARIF report, Chapter 3's suite on the installed skill), `package-gate`
+(the suite and an install-time scan on `packages/meridian-code-review` as the
+change leaves it) and `negative-tests` (the hidden-Unicode, socket-script and
+bypass fixtures must fail).
+
+Recorded runs (16 October 2026):
+
+| Run | Commit | Result |
+|---|---|---|
+| [38827525328](https://github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/actions/runs/38827525328) | `646a669` (this demo) | consumer-gate and negative-tests passed; **package-gate failed**: `main` carried the known-bad 1.2.0 |
+| [38828045251](https://github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/actions/runs/38828045251) | `91f0319` ([PR #1](https://github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/pull/1), the 1.2.1 roll-forward) | all three jobs passed |
+| [38828784076](https://github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/actions/runs/38828784076) | `3dd6fdc` (PR #1 squash-merged) | all three jobs passed |
+
+`meridian-code-review-v1.2.1` was tagged on `3dd6fdc` only after that last run
+was green. Installing the tag in a clean workspace locks commit `3dd6fdc`,
+version 1.2.1, and Chapter 3's suite passes 27/27 on it.
+
 ## Limitations and what is NOT verified
 
 - Everything ran on Linux x86_64 with the PyPI build of APM 0.33.0. The
   GitHub Actions workflow uses the official release binary through
-  `microsoft/apm-action`; its run results are recorded in the chapter.
+  `microsoft/apm-action`; its runs are listed above.
 - The fixtures are synthetic and harmless. They show detection behaviour;
   they say nothing about how a real model would act on the injected text.
 - No harness (Copilot, Claude Code, Cursor, Codex) was asked to load the
