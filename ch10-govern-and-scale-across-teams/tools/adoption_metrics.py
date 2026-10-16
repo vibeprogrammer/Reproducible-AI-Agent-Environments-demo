@@ -94,7 +94,7 @@ def repo_metrics(repo, exceptions, today, policy_text):
         "repo": name,
         "owner": owner,
         "baseline": base[0].get("resolved_ref", base[0].get("resolved_commit", "?")[:12]) if base else "missing",
-        "role_bundles": roles,
+        "role_packages": roles,
         "internal": len(internal),
         "third_party": len(third),
         "locked": len(deps),
@@ -123,7 +123,7 @@ def main():
         policy_text = f.read()
     rows = [repo_metrics(r, exceptions, today, policy_text) for r in a.repos]
 
-    print("| repo | owner | baseline | role bundles | internal | 3rd-party | policy | exceptions |")
+    print("| repo | owner | baseline | role packages | internal | 3rd-party | policy | exceptions |")
     print("|---|---|---|---|---|---|---|---|")
     for r in rows:
         pol = r["policy"]
@@ -131,13 +131,13 @@ def main():
             pol += " (" + ", ".join(r["failed_checks"]) + ")"
         if r["warned_checks"]:
             pol += f', rule warnings: {len(r["warned_checks"])}'
-        print(f'| {r["repo"]} | {r["owner"]} | {r["baseline"]} | {", ".join(r["role_bundles"]) or "-"} '
+        print(f'| {r["repo"]} | {r["owner"]} | {r["baseline"]} | {", ".join(r["role_packages"]) or "-"} '
               f'| {r["internal"]} | {r["third_party"]} | {pol} | {", ".join(r["exceptions"]) or "-"} |')
     n = len(rows)
     summary = {
         "repos": n,
         "baseline_adopted": sum(r["baseline"] != "missing" for r in rows),
-        "role_bundle_adopted": sum(bool(r["role_bundles"]) for r in rows),
+        "role_package_adopted": sum(bool(r["role_packages"]) for r in rows),
         "owner_declared": sum(r["owner"] != "(none)" for r in rows),
         "policy_pass": sum(r["policy"] == "pass" for r in rows),
         "policy_warnings": sum(len(r["warned_checks"]) for r in rows),
@@ -146,7 +146,7 @@ def main():
         "as_of": a.today,
     }
     print()
-    print(f'baseline adopted: {summary["baseline_adopted"]}/{n}; role bundle: {summary["role_bundle_adopted"]}/{n}; '
+    print(f'baseline adopted: {summary["baseline_adopted"]}/{n}; role package: {summary["role_package_adopted"]}/{n}; '
           f'owner declared: {summary["owner_declared"]}/{n}; policy pass: {summary["policy_pass"]}/{n} '
           f'(rule warnings: {summary["policy_warnings"]}); '
           f'third-party packages: {summary["third_party_packages"]}; open exceptions: {summary["open_exceptions"]}')

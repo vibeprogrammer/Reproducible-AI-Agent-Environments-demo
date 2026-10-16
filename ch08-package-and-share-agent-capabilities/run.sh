@@ -320,6 +320,20 @@ keep_out catalog-scaffold-packages.txt
 cd "$WORK"
 
 step "11b. The committed catalogue (same entries, plus comments and a license)"
+# A range resolves to the highest matching tag when the catalogue is
+# built (APM docs, "Publish to a marketplace"). When this chapter was
+# recorded that was meridian-engineering-standards-v1.0.0; Chapter 9
+# later released v1.0.1, so the expected ref is read from the remote.
+run_sh "git ls-remote --tags $DEMO_URL 'refs/tags/meridian-engineering-standards-v1.*' | sed 's#.*refs/tags/##' | sort -V | tail -1"
+expect_out '^meridian-engineering-standards-v1\.[0-9]+\.[0-9]+$'
+STD_LATEST="$(tail -1 "$LAST_OUT" | tr -d '[:space:]')"
+STD_LATEST_SHA="$(git ls-remote "$DEMO_URL" "refs/tags/$STD_LATEST" | cut -f1)"
+run_sh "curl -fsSL https://raw.githubusercontent.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/$STD_LATEST/packages/meridian-engineering-standards/apm.yml | grep -o 'meridian-code-review-v[0-9.]*'"
+expect_out '^meridian-code-review-v1\.[0-9]+\.[0-9]+$'
+CR_UNDER="$(tail -1 "$LAST_OUT" | tr -d '[:space:]')"
+CR_UNDER_SHA="$(git ls-remote "$DEMO_URL" "refs/tags/$CR_UNDER" | cut -f1)"
+mkdir -p "$EVIDENCE/artifacts"
+echo "newest 1.x: $STD_LATEST @${STD_LATEST_SHA:0:7} -> $CR_UNDER @${CR_UNDER_SHA:0:7}" > "$EVIDENCE/artifacts/catalog-resolution.txt"
 cp -R "$HERE/fixture/meridian-agent-catalog" catalog
 cd catalog
 git init -q
@@ -332,8 +346,8 @@ expect_out 'Built marketplace\.json \[claude\] \(2 package\(s\)\)'
 expect_file .claude-plugin/marketplace.json
 run cat .claude-plugin/marketplace.json
 expect_out '"source": "git-subdir"'
-expect_out '"ref": "meridian-engineering-standards-v1\.0\.0"'
-expect_out '"sha": "13749d8802c87e8f2e402fd376a4466980b6bbdf"'
+expect_out "\"ref\": \"$STD_LATEST\""
+expect_out "\"sha\": \"$STD_LATEST_SHA\""
 expect_out '"ref": "meridian-code-review-v1\.1\.0"'
 expect_no_out 'meridian-code-review-v1\.2\.0'
 keep_artifact .claude-plugin/marketplace.json marketplace.json
@@ -355,11 +369,11 @@ expect_out 'meridian-engineering-standards@meridian'
 expect_no_out 'meridian-code-review@meridian'
 apmq apm install meridian-engineering-standards@meridian
 expect_rc 0
-expect_out 'meridian-engineering-standards-v1\.0\.0 @13749d88'
-expect_out 'meridian-code-review-v1\.1\.0 @3fba23f7'
+expect_out "$STD_LATEST @${STD_LATEST_SHA:0:8}"
+expect_out "$CR_UNDER @${CR_UNDER_SHA:0:8}"
 run cat apm.yml
 expect_out 'path: packages/meridian-engineering-standards'
-expect_out 'ref: meridian-engineering-standards-v1\.0\.0'
+expect_out "ref: $STD_LATEST"
 keep_artifact apm.yml lena-apm.yml
 run_sh "grep -nE '^  name: meridian|discovered_via|marketplace_plugin_name|^  depth' apm.lock.yaml"
 expect_out 'discovered_via: meridian'

@@ -10,8 +10,8 @@ targets:
 dependencies:
   apm:
     # Baseline (required by the org policy) ...
-    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-engineering-standards#meridian-engineering-standards-v1.0.0
-    # ... plus the role bundle for payment engineers (Chapter 10).
+    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-engineering-standards#meridian-engineering-standards-v1.0.1
+    # ... plus the role package for payment engineers (Chapter 10).
     - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-role-payments#meridian-role-payments-v1.0.0
   mcp:
     - name: ledger

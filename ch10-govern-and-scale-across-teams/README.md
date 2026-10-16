@@ -47,8 +47,9 @@ Packages added for this chapter (tags never move):
 `packages/meridian-role-payments` (`meridian-role-payments-v1.0.0`),
 `packages/meridian-role-platform` (`meridian-role-platform-v1.0.0`) and the
 deprecated stand-in `packages/meridian-standards`
-(`meridian-standards-v0.9.0`). The baseline is Chapter 8's
-`meridian-engineering-standards-v1.0.0`.
+(`meridian-standards-v0.9.0`). The baseline is `meridian-engineering-standards-v1.0.1`: Chapter 8's
+team package, re-released at the end of Chapter 9 (pull request #2) so
+that it carries the roll-forward `meridian-code-review-v1.2.1`.
 
 ## Run
 
@@ -66,7 +67,7 @@ Evidence lands in `evidence/ch10-govern-and-scale-across-teams/`
    manifest fields; the checkout override reports `block` and 3 denies.
 2. C: under the warn pilot every `apm audit --ci` exits 0, and the
    findings are: per-package tags such as
-   `meridian-engineering-standards-v1.0.0` read as "bare branch" by
+   `meridian-engineering-standards-v1.0.1` read as "bare branch" by
    `require_pinned_constraint`; the deprecated `meridian-standards` and an
    unapproved third-party package in `meridian-ledger`; a missing baseline
    and missing `author` in `meridian-platform-tools`; self-defined MCP
@@ -75,7 +76,7 @@ Evidence lands in `evidence/ch10-govern-and-scale-across-teams/`
    exits 1.
 4. F-G: after `apm uninstall`, an `author` line and `apm install` of the
    baseline, all three repos pass the enforced policy; the metrics read
-   3/3 for baseline, role bundle, owner and policy, with EXC-001 open.
+   3/3 for baseline, role package, owner and policy, with EXC-001 open.
 5. H: the same register evaluated as of 2027-01-15 reports EXC-001
    expired and exits 1 with `--fail-on-expired`.
 6. I: the org exception allows `autopilot-comment` org-wide, but the

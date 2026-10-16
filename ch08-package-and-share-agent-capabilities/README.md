@@ -46,8 +46,10 @@ bash ch08-package-and-share-agent-capabilities/run.sh
 
 Evidence goes to `../evidence/ch08-package-and-share-agent-capabilities/`
 (`transcript.log`, `environment.txt`, `result.json`, `artifacts/`).
-Last run: 139 checks passed, 0 failed (APM 0.33.0, Debian 12 x86_64,
-2026-10-16).
+Last run: 141 checks passed, 0 failed (APM 0.33.0, Debian 12 x86_64,
+2026-10-16, after the `meridian-engineering-standards-v1.0.1` release).
+The run recorded for the chapter (demo commit 48d1636, 139 checks) was
+made before that release.
 
 ## What the run shows (expected observations)
 
@@ -106,7 +108,12 @@ Last run: 139 checks passed, 0 failed (APM 0.33.0, Debian 12 x86_64,
     `apm pack` writes `.claude-plugin/marketplace.json` with
     `git-subdir` sources pinned to a tag and a commit SHA; `~1.1.0`
     resolves to `meridian-code-review-v1.1.0`, not the known-bad
-    v1.2.0. `apm marketplace add <path> --name meridian`,
+    v1.2.0. `^1.0.0` resolves to the highest matching
+    `meridian-engineering-standards-v1.*` tag at build time, so the run
+    reads that tag from the remote first (`catalog-resolution.txt`).
+    When the chapter was recorded it was v1.0.0 (13749d8, skill v1.1.0);
+    since Chapter 9's 1.0.1 release (c9e1b83) it is v1.0.1, and Lena's
+    install pulls `meridian-code-review-v1.2.1` under it. `apm marketplace add <path> --name meridian`,
     `apm marketplace browse meridian`, `apm search standards@meridian`
     and `apm install meridian-engineering-standards@meridian` work; the
     install writes a `git:`/`path:`/`ref:` entry to `apm.yml`, and the

@@ -51,6 +51,11 @@ for r in meridian-checkout meridian-ledger meridian-platform-tools; do
   pushd "repos/$r" >/dev/null; run_sh 'apm install 2>&1 | quiet'; expect_rc 0 "install $r"; popd >/dev/null
   expect_file "repos/$r/apm.lock.yaml"
 done
+# The baseline is standards 1.0.1, which carries the 1.2.1 review skill.
+run_sh "grep -E '^  name: meridian|resolved_ref' repos/meridian-checkout/apm.lock.yaml"
+expect_out 'resolved_ref: meridian-engineering-standards-v1\.0\.1'
+expect_out 'resolved_ref: meridian-code-review-v1\.2\.1'
+expect_in_file repos/meridian-ledger/apm.lock.yaml 'resolved_ref: meridian-code-review-v1\.2\.1'
 # APM itself warns about nothing here; every dependency carries a ref.
 cd repos
 
@@ -76,7 +81,7 @@ for r in ["meridian-checkout","meridian-ledger","meridian-platform-tools"]:
             for x in c.get("details") or []: print("      ", x)
 EOF'
 keep_artifact "$LAST_OUT" pilot-findings.txt
-expect_out "bare branch 'meridian-engineering-standards-v1.0.0' tracks a moving tip"
+expect_out "bare branch 'meridian-engineering-standards-v1.0.1' tracks a moving tip"
 expect_out "meridian-standards: denied by pattern"
 expect_out "autopilot-comment: not in allowed sources"
 expect_out "required-packages"
@@ -94,7 +99,7 @@ run python3 "$HERE/tools/adoption_metrics.py" meridian-checkout meridian-ledger 
 expect_rc 0
 keep_artifact "$LAST_OUT" metrics-week1.md
 keep_artifact ../metrics-week1.json
-expect_out 'baseline adopted: 2/3; role bundle: 3/3; owner declared: 2/3; policy pass: 3/3 \(rule warnings: 8\)'
+expect_out 'baseline adopted: 2/3; role package: 3/3; owner declared: 2/3; policy pass: 3/3 \(rule warnings: 8\)'
 expect_no_out 'EXC-001'
 
 step "E. Same violation, block mode: the deprecated package now fails the job"
@@ -114,9 +119,10 @@ pushd meridian-ledger >/dev/null
 pushd meridian-platform-tools >/dev/null
   run_sh "sed -i 's#^description: .*#&\nauthor: meridian-finance/platform-team#' apm.yml && grep '^author' apm.yml"
   expect_out 'author: meridian-finance/platform-team'
-  run_sh "apm install $PKG/meridian-engineering-standards#meridian-engineering-standards-v1.0.0 2>&1 | quiet"
+  run_sh "apm install $PKG/meridian-engineering-standards#meridian-engineering-standards-v1.0.1 2>&1 | quiet"
   expect_rc 0
-  expect_in_file apm.yml 'meridian-engineering-standards#meridian-engineering-standards-v1.0.0' 
+  expect_in_file apm.yml 'meridian-engineering-standards#meridian-engineering-standards-v1.0.1' 
+  expect_in_file apm.lock.yaml 'resolved_ref: meridian-code-review-v1\.2\.1'
   popd >/dev/null
 
 step "G. Week 3: the enforced policy (block, exception EXC-001 recorded)"
@@ -140,7 +146,7 @@ run python3 "$HERE/tools/adoption_metrics.py" meridian-checkout meridian-ledger 
 expect_rc 0
 keep_artifact "$LAST_OUT" metrics-week3.md
 keep_artifact ../metrics-week3.json
-expect_out 'baseline adopted: 3/3; role bundle: 3/3; owner declared: 3/3; policy pass: 3/3 \(rule warnings: 1\)'
+expect_out 'baseline adopted: 3/3; role package: 3/3; owner declared: 3/3; policy pass: 3/3 \(rule warnings: 1\)'
 expect_out 'EXC-001 \(76d left\)'
 
 step "H. Exceptions expire: the same register three months later"
@@ -215,7 +221,7 @@ EOF
     expect_out 'Required package versions match \(warnings: 1\)'
   else
     expect_rc 1 "block: the mismatch fails"
-    expect_out "expected ref 'meridian-engineering-standards-v1.1.0', got 'meridian-engineering-standards-v1.0.0'"
+    expect_out "expected ref 'meridian-engineering-standards-v1.1.0', got 'meridian-engineering-standards-v1.0.1'"
   fi
   popd >/dev/null
 done

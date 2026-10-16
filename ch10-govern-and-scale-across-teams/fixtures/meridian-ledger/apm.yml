@@ -9,7 +9,7 @@ targets:
 
 dependencies:
   apm:
-    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-engineering-standards#meridian-engineering-standards-v1.0.0
+    - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-engineering-standards#meridian-engineering-standards-v1.0.1
     - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-role-payments#meridian-role-payments-v1.0.0
     # Left over from the first shared package; deprecated.
     - vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-standards#meridian-standards-v0.9.0
