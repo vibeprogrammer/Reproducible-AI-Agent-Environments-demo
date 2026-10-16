@@ -103,8 +103,8 @@ $ apm policy status --policy-source policies/meridian-checkout/apm-policy.yml --
 ## B. Three meridian-finance repos install their agent dependencies
 $ bash -c apm install 2>&1 | quiet
 [>] Installing dependencies from apm.yml...
-[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-engineering-standards...
 [>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-role-payments...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-engineering-standards...
 
   [+] 
 github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/meridian-engineering-standards#meridian-engin
@@ -136,16 +136,16 @@ Successfully configured MCP server 'microsoft-learn' for Claude Code
   [i] Mapped input -> command arguments in payment-pr.md: [ticket]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 3 APM dependencies and 2 MCP servers in 2.3s.
+[*] Installed 3 APM dependencies and 2 MCP servers in 2.7s.
 [exit 0]
   PASS: exit code 0 (install meridian-checkout)
   PASS: exists: repos/meridian-checkout/apm.lock.yaml
 $ bash -c apm install 2>&1 | quiet
 [>] Installing dependencies from apm.yml...
 [>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-engineering-standards...
-[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-standards...
-[>] Resolving apm-autopilot-comment...
 [>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-role-payments...
+[>] Resolving apm-autopilot-comment...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-standards...
 
   [+] github.com/microsoft/apm/packages/autopilot/autopilot-comment#ee08bb59b9a7bce67fb4010e4af8652c4c53a7de 
 #ee08bb59b9a7bce67fb4010e4af8652c4c53a7de @ee08bb59
@@ -171,14 +171,14 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
   [i] Mapped input -> command arguments in payment-pr.md: [ticket]
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 5 APM dependencies in 2.0s.
+[*] Installed 5 APM dependencies in 1.9s.
 [exit 0]
   PASS: exit code 0 (install meridian-ledger)
   PASS: exists: repos/meridian-ledger/apm.lock.yaml
 $ bash -c apm install 2>&1 | quiet
 [>] Installing dependencies from apm.yml...
-[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-role-platform...
 [>] Resolving apm-pr-description-skill...
+[>] Resolving Reproducible-AI-Agent-Environments-demo-meridian-role-platform...
 
   [+] github.com/microsoft/apm/packages/pr-description-skill#ee08bb59b9a7bce67fb4010e4af8652c4c53a7de 
 #ee08bb59b9a7bce67fb4010e4af8652c4c53a7de @ee08bb59
@@ -190,7 +190,7 @@ github.com/vibeprogrammer/Reproducible-AI-Agent-Environments-demo/packages/merid
 [i] Added apm_modules/ to .gitignore
   [i] Skipped inactive experimental resolver for target 'copilot-cowork' during lockfile reconciliation.
   [i] Skipped inactive experimental resolver for target 'copilot-app' during lockfile reconciliation.
-[*] Installed 2 APM dependencies in 1.0s.
+[*] Installed 2 APM dependencies in 1.1s.
 [exit 0]
   PASS: exit code 0 (install meridian-platform-tools)
   PASS: exists: repos/meridian-platform-tools/apm.lock.yaml
@@ -808,4 +808,765 @@ microsoft/apm/packages/autopilot/autopilot-comment: not found among installed pa
 [i] The executable-trust gate is disabled for this project.
 [exit 0]
   PASS: exit code 0
-== ch10-govern-and-scale-across-teams: passed (61 passed, 0 failed) ==
+
+## M. Deprecating a release of the required baseline (soft, then hard)
+$ apm audit --ci --no-drift --no-fail-fast -f json --policy ../../policies/require-next.yml
+{
+  "passed": true,
+  "checks": [
+    {
+      "name": "lockfile-exists",
+      "passed": true,
+      "message": "Lockfile present",
+      "details": []
+    },
+    {
+      "name": "ref-consistency",
+      "passed": true,
+      "message": "All dependency refs match lockfile",
+      "details": []
+    },
+    {
+      "name": "deployment-ledger-owners",
+      "passed": true,
+      "message": "All deployment ledger owners are valid",
+      "details": []
+    },
+    {
+      "name": "deployed-files-present",
+      "passed": true,
+      "message": "All deployed files present on disk",
+      "details": []
+    },
+    {
+      "name": "no-orphaned-packages",
+      "passed": true,
+      "message": "No orphaned packages in lockfile",
+      "details": []
+    },
+    {
+      "name": "skill-subset-consistency",
+      "passed": true,
+      "message": "Skill subset selections match lockfile",
+      "details": []
+    },
+    {
+      "name": "config-consistency",
+      "passed": true,
+      "message": "No MCP configs to check",
+      "details": []
+    },
+    {
+      "name": "content-integrity",
+      "passed": true,
+      "message": "No critical hidden Unicode or hash drift detected",
+      "details": [],
+      "primitive_coverage": [
+        {
+          "file": ".claude/skills/autopilot-comment/SKILL.md",
+          "target": "claude",
+          "kind": "skills",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/autopilot-comment/apm.yml",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/commands/payment-pr.md",
+          "target": "claude",
+          "kind": "commands",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/rules/payment-standards.md",
+          "target": "claude",
+          "kind": "instructions",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/rules/payment-changes.md",
+          "target": "claude",
+          "kind": "instructions",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/SKILL.md",
+          "target": "claude",
+          "kind": "skills",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/CHANGELOG.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/apm.yml",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/assets/review-report-template.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/references/false-positives.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/references/money-rules.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/scripts/check_money_rules.py",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        }
+      ]
+    },
+    {
+      "name": "includes-consent",
+      "passed": true,
+      "message": "No local content deployed -- includes consent check skipped",
+      "details": []
+    },
+    {
+      "name": "dependency-allowlist",
+      "passed": true,
+      "message": "No dependency allow list configured",
+      "details": []
+    },
+    {
+      "name": "dependency-denylist",
+      "passed": true,
+      "message": "No dependency deny list configured",
+      "details": []
+    },
+    {
+      "name": "required-packages",
+      "passed": true,
+      "message": "All required packages present in manifest",
+      "details": []
+    },
+    {
+      "name": "required-packages-deployed",
+      "passed": true,
+      "message": "All required packages present in lockfile",
+      "details": []
+    },
+    {
+      "name": "required-executable-untrusted",
+      "passed": true,
+      "message": "No required executables to verify",
+      "details": []
+    },
+    {
+      "name": "required-package-version",
+      "passed": true,
+      "message": "Required package versions match (warnings: 1)",
+      "details": [
+        "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards: expected ref 'meridian-engineering-standards-v1.1.0', got 'meridian-engineering-standards-v1.0.0'"
+      ]
+    },
+    {
+      "name": "transitive-depth",
+      "passed": true,
+      "message": "No transitive depth limit configured",
+      "details": []
+    },
+    {
+      "name": "registry-source",
+      "passed": true,
+      "message": "No registry source policy",
+      "details": []
+    },
+    {
+      "name": "dependency-pinned-constraint",
+      "passed": true,
+      "message": "Pinned-constraint requirement disabled",
+      "details": []
+    },
+    {
+      "name": "mcp-allowlist",
+      "passed": true,
+      "message": "No MCP allow list configured",
+      "details": []
+    },
+    {
+      "name": "mcp-denylist",
+      "passed": true,
+      "message": "No MCP deny list configured",
+      "details": []
+    },
+    {
+      "name": "mcp-transport",
+      "passed": true,
+      "message": "No MCP transport restrictions configured",
+      "details": []
+    },
+    {
+      "name": "mcp-self-defined",
+      "passed": true,
+      "message": "No self-defined MCP servers found",
+      "details": []
+    },
+    {
+      "name": "explicit-includes",
+      "passed": true,
+      "message": "Explicit includes not required by policy",
+      "details": []
+    },
+    {
+      "name": "dependency-content-hashes",
+      "passed": true,
+      "message": "Dependency content hashes not required by policy",
+      "details": []
+    },
+    {
+      "name": "compilation-target",
+      "passed": true,
+      "message": "No compilation target restrictions configured",
+      "details": []
+    },
+    {
+      "name": "compilation-strategy",
+      "passed": true,
+      "message": "No compilation strategy enforced",
+      "details": []
+    },
+    {
+      "name": "source-attribution",
+      "passed": true,
+      "message": "Source attribution not required by policy",
+      "details": []
+    },
+    {
+      "name": "required-manifest-fields",
+      "passed": true,
+      "message": "No required manifest fields configured",
+      "details": []
+    },
+    {
+      "name": "scripts-policy",
+      "passed": true,
+      "message": "Scripts allowed by policy",
+      "details": []
+    },
+    {
+      "name": "unmanaged-files",
+      "passed": true,
+      "message": "Unmanaged files check disabled (action: ignore)",
+      "details": []
+    }
+  ],
+  "summary": {
+    "total": 30,
+    "passed": 30,
+    "failed": 0
+  }
+}
+[exit 0]
+  PASS: exit code 0 (project-wins: the mismatch is only a warning)
+  PASS: output matches /Required package versions match \(warnings: 1\)/
+$ apm audit --ci --no-drift --no-fail-fast -f json --policy ../../policies/require-next.yml
+{
+  "passed": false,
+  "checks": [
+    {
+      "name": "lockfile-exists",
+      "passed": true,
+      "message": "Lockfile present",
+      "details": []
+    },
+    {
+      "name": "ref-consistency",
+      "passed": true,
+      "message": "All dependency refs match lockfile",
+      "details": []
+    },
+    {
+      "name": "deployment-ledger-owners",
+      "passed": true,
+      "message": "All deployment ledger owners are valid",
+      "details": []
+    },
+    {
+      "name": "deployed-files-present",
+      "passed": true,
+      "message": "All deployed files present on disk",
+      "details": []
+    },
+    {
+      "name": "no-orphaned-packages",
+      "passed": true,
+      "message": "No orphaned packages in lockfile",
+      "details": []
+    },
+    {
+      "name": "skill-subset-consistency",
+      "passed": true,
+      "message": "Skill subset selections match lockfile",
+      "details": []
+    },
+    {
+      "name": "config-consistency",
+      "passed": true,
+      "message": "No MCP configs to check",
+      "details": []
+    },
+    {
+      "name": "content-integrity",
+      "passed": true,
+      "message": "No critical hidden Unicode or hash drift detected",
+      "details": [],
+      "primitive_coverage": [
+        {
+          "file": ".claude/skills/autopilot-comment/SKILL.md",
+          "target": "claude",
+          "kind": "skills",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/autopilot-comment/apm.yml",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/commands/payment-pr.md",
+          "target": "claude",
+          "kind": "commands",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/rules/payment-standards.md",
+          "target": "claude",
+          "kind": "instructions",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/rules/payment-changes.md",
+          "target": "claude",
+          "kind": "instructions",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/SKILL.md",
+          "target": "claude",
+          "kind": "skills",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/CHANGELOG.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/apm.yml",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/assets/review-report-template.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/references/false-positives.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/references/money-rules.md",
+          "target": "recorded",
+          "kind": "document",
+          "pointer": "",
+          "tracked": true,
+          "status": "checked",
+          "diagnostic": null,
+          "strippable": true
+        },
+        {
+          "file": ".claude/skills/meridian-code-review/scripts/check_money_rules.py",
+          "target": "recorded",
+          "kind": "executable",
+          "pointer": "",
+          "tracked": true,
+          "status": "not-applicable",
+          "diagnostic": null,
+          "strippable": false
+        }
+      ]
+    },
+    {
+      "name": "includes-consent",
+      "passed": true,
+      "message": "No local content deployed -- includes consent check skipped",
+      "details": []
+    },
+    {
+      "name": "dependency-allowlist",
+      "passed": true,
+      "message": "No dependency allow list configured",
+      "details": []
+    },
+    {
+      "name": "dependency-denylist",
+      "passed": true,
+      "message": "No dependency deny list configured",
+      "details": []
+    },
+    {
+      "name": "required-packages",
+      "passed": true,
+      "message": "All required packages present in manifest",
+      "details": []
+    },
+    {
+      "name": "required-packages-deployed",
+      "passed": true,
+      "message": "All required packages present in lockfile",
+      "details": []
+    },
+    {
+      "name": "required-executable-untrusted",
+      "passed": true,
+      "message": "No required executables to verify",
+      "details": []
+    },
+    {
+      "name": "required-package-version",
+      "passed": false,
+      "message": "1 version mismatch(es)",
+      "details": [
+        "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards: expected ref 'meridian-engineering-standards-v1.1.0', got 'meridian-engineering-standards-v1.0.0'"
+      ]
+    },
+    {
+      "name": "transitive-depth",
+      "passed": true,
+      "message": "No transitive depth limit configured",
+      "details": []
+    },
+    {
+      "name": "registry-source",
+      "passed": true,
+      "message": "No registry source policy",
+      "details": []
+    },
+    {
+      "name": "dependency-pinned-constraint",
+      "passed": true,
+      "message": "Pinned-constraint requirement disabled",
+      "details": []
+    },
+    {
+      "name": "mcp-allowlist",
+      "passed": true,
+      "message": "No MCP allow list configured",
+      "details": []
+    },
+    {
+      "name": "mcp-denylist",
+      "passed": true,
+      "message": "No MCP deny list configured",
+      "details": []
+    },
+    {
+      "name": "mcp-transport",
+      "passed": true,
+      "message": "No MCP transport restrictions configured",
+      "details": []
+    },
+    {
+      "name": "mcp-self-defined",
+      "passed": true,
+      "message": "No self-defined MCP servers found",
+      "details": []
+    },
+    {
+      "name": "explicit-includes",
+      "passed": true,
+      "message": "Explicit includes not required by policy",
+      "details": []
+    },
+    {
+      "name": "dependency-content-hashes",
+      "passed": true,
+      "message": "Dependency content hashes not required by policy",
+      "details": []
+    },
+    {
+      "name": "compilation-target",
+      "passed": true,
+      "message": "No compilation target restrictions configured",
+      "details": []
+    },
+    {
+      "name": "compilation-strategy",
+      "passed": true,
+      "message": "No compilation strategy enforced",
+      "details": []
+    },
+    {
+      "name": "source-attribution",
+      "passed": true,
+      "message": "Source attribution not required by policy",
+      "details": []
+    },
+    {
+      "name": "required-manifest-fields",
+      "passed": true,
+      "message": "No required manifest fields configured",
+      "details": []
+    },
+    {
+      "name": "scripts-policy",
+      "passed": true,
+      "message": "Scripts allowed by policy",
+      "details": []
+    },
+    {
+      "name": "unmanaged-files",
+      "passed": true,
+      "message": "Unmanaged files check disabled (action: ignore)",
+      "details": []
+    }
+  ],
+  "summary": {
+    "total": 30,
+    "passed": 29,
+    "failed": 1
+  }
+}
+[exit 1]
+  PASS: exit code 1 (block: the mismatch fails)
+  PASS: output matches /expected ref 'meridian-engineering-standards-v1.1.0', got 'meridian-engineering-standards-v1.0.0'/
+
+## N. require: checks the manifest, not the transitive graph
+$ apm audit --ci --no-drift --no-fail-fast --policy ../../policies/require-transitive.yml
+[!] drift detection skipped (--no-drift); coverage reduced -- hand-edits and missing integrations will not be caught
+
+                                        [>] APM Policy Compliance                                         
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Status   ┃ Check                         ┃ Message                                                     ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ [+]      │ lockfile-exists               │ Lockfile present                                            │
+│ [+]      │ ref-consistency               │ All dependency refs match lockfile                          │
+│ [+]      │ deployment-ledger-owners      │ All deployment ledger owners are valid                      │
+│ [+]      │ deployed-files-present        │ All deployed files present on disk                          │
+│ [+]      │ no-orphaned-packages          │ No orphaned packages in lockfile                            │
+│ [+]      │ skill-subset-consistency      │ Skill subset selections match lockfile                      │
+│ [+]      │ config-consistency            │ MCP configs match lockfile baseline                         │
+│ [+]      │ content-integrity             │ No critical hidden Unicode or hash drift detected           │
+│ [+]      │ includes-consent              │ No local content deployed -- includes consent check skipped │
+│ [+]      │ dependency-allowlist          │ No dependency allow list configured                         │
+│ [+]      │ dependency-denylist           │ No dependency deny list configured                          │
+│          │ required-packages             │ 1 required package(s) missing from manifest                 │
+│ [+]      │ required-packages-deployed    │ All required packages present in lockfile                   │
+│ [+]      │ required-executable-untrusted │ No required executables to verify                           │
+│ [+]      │ required-package-version      │ No version-pinned required packages                         │
+│ [+]      │ transitive-depth              │ No transitive depth limit configured                        │
+│ [+]      │ registry-source               │ No registry source policy                                   │
+│ [+]      │ dependency-pinned-constraint  │ Pinned-constraint requirement disabled                      │
+│ [+]      │ mcp-allowlist                 │ No MCP allow list configured                                │
+│ [+]      │ mcp-denylist                  │ No MCP deny list configured                                 │
+│ [+]      │ mcp-transport                 │ No MCP transport restrictions configured                    │
+│ [+]      │ mcp-self-defined              │ 2 self-defined MCP server(s) (warn)                         │
+│ [+]      │ explicit-includes             │ Explicit includes not required by policy                    │
+│ [+]      │ dependency-content-hashes     │ Dependency content hashes not required by policy            │
+│ [+]      │ compilation-target            │ No compilation target restrictions configured               │
+│ [+]      │ compilation-strategy          │ No compilation strategy enforced                            │
+│ [+]      │ source-attribution            │ Source attribution not required by policy                   │
+│ [+]      │ required-manifest-fields      │ No required manifest fields configured                      │
+│ [+]      │ scripts-policy                │ Scripts allowed by policy                                   │
+│ [+]      │ unmanaged-files               │ Unmanaged files check disabled (action: ignore)             │
+└──────────┴───────────────────────────────┴─────────────────────────────────────────────────────────────┘
+
+  required-packages details:
+    - vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review
+
+[x] 1 of 30 check(s) failed
+[exit 1]
+  PASS: exit code 1 (a transitive-only package counts as missing)
+  PASS: output matches /required-packages/
+  PASS: output matches /1 required package\(s\) missing from manifest/
+
+## O. A repository pins the bytes of the policy it expects
+$ apm audit --ci --no-drift --policy ../../policies/meridian-finance/apm-policy.yml
+[!] drift detection skipped (--no-drift); coverage reduced -- hand-edits and missing integrations will not be caught
+
+                                        [>] APM Policy Compliance                                         
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Status   ┃ Check                         ┃ Message                                                     ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ [+]      │ lockfile-exists               │ Lockfile present                                            │
+│ [+]      │ ref-consistency               │ All dependency refs match lockfile                          │
+│ [+]      │ deployment-ledger-owners      │ All deployment ledger owners are valid                      │
+│ [+]      │ deployed-files-present        │ All deployed files present on disk                          │
+│ [+]      │ no-orphaned-packages          │ No orphaned packages in lockfile                            │
+│ [+]      │ skill-subset-consistency      │ Skill subset selections match lockfile                      │
+│ [+]      │ config-consistency            │ No MCP configs to check                                     │
+│ [+]      │ content-integrity             │ No critical hidden Unicode or hash drift detected           │
+│ [+]      │ includes-consent              │ No local content deployed -- includes consent check skipped │
+│ [+]      │ dependency-allowlist          │ All dependencies match allow list                           │
+│ [+]      │ dependency-denylist           │ No dependencies match deny list                             │
+│ [+]      │ required-packages             │ All required packages present in manifest                   │
+│ [+]      │ required-packages-deployed    │ All required packages present in lockfile                   │
+│ [+]      │ required-executable-untrusted │ No required executables to verify                           │
+│ [+]      │ required-package-version      │ No version-pinned required packages                         │
+│ [+]      │ transitive-depth              │ All dependencies within depth limit (5)                     │
+│ [+]      │ registry-source               │ No registry source policy                                   │
+│ [+]      │ dependency-pinned-constraint  │ Pinned-constraint requirement disabled                      │
+│ [+]      │ mcp-allowlist                 │ No MCP allow list configured                                │
+│ [+]      │ mcp-denylist                  │ No MCP deny list configured                                 │
+│ [+]      │ mcp-transport                 │ All MCP transports comply with policy                       │
+│ [+]      │ mcp-self-defined              │ No self-defined MCP servers found                           │
+│ [+]      │ explicit-includes             │ Explicit includes not required by policy                    │
+│ [+]      │ dependency-content-hashes     │ Dependency content hashes not required by policy            │
+│ [+]      │ compilation-target            │ No compilation target restrictions configured               │
+│ [+]      │ compilation-strategy          │ No compilation strategy enforced                            │
+│ [+]      │ source-attribution            │ Source attribution not required by policy                   │
+│ [+]      │ required-manifest-fields      │ All required manifest fields present                        │
+│ [+]      │ scripts-policy                │ Scripts allowed by policy                                   │
+│ [+]      │ unmanaged-files               │ Unmanaged files check disabled (action: ignore)             │
+└──────────┴───────────────────────────────┴─────────────────────────────────────────────────────────────┘
+
+[*] All 30 check(s) passed
+[exit 0]
+  PASS: exit code 0 (matching hash: policy enforced and passing)
+  PASS: output matches /All 30 check\(s\) passed/
+$ apm audit --ci --no-drift --policy ../../policies/meridian-finance/apm-policy.yml
+[!] Policy fetch failed: Policy hash mismatch from file:../../policies/meridian-finance/apm-policy.yml: expected sha256:0000000000000000000000000000000000000000000000000000000000000000, got sha256:cc062058ac235e0dca6bd4c690c9a9c6cb2d9034bf975d82f8425c929e55b6f6; enforcement skipped (set policy.fetch_failure_default=block in apm.yml to fail closed)
+[!] drift detection skipped (--no-drift); coverage reduced -- hand-edits and missing integrations will not be caught
+
+                                      [>] APM Policy Compliance                                      
+┏━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Status   ┃ Check                    ┃ Message                                                     ┃
+┡━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ [+]      │ lockfile-exists          │ Lockfile present                                            │
+│ [+]      │ ref-consistency          │ All dependency refs match lockfile                          │
+│ [+]      │ deployment-ledger-owners │ All deployment ledger owners are valid                      │
+│ [+]      │ deployed-files-present   │ All deployed files present on disk                          │
+│ [+]      │ no-orphaned-packages     │ No orphaned packages in lockfile                            │
+│ [+]      │ skill-subset-consistency │ Skill subset selections match lockfile                      │
+│ [+]      │ config-consistency       │ No MCP configs to check                                     │
+│ [+]      │ content-integrity        │ No critical hidden Unicode or hash drift detected           │
+│ [+]      │ includes-consent         │ No local content deployed -- includes consent check skipped │
+└──────────┴──────────────────────────┴─────────────────────────────────────────────────────────────┘
+
+[*] All 9 check(s) passed
+[exit 0]
+  PASS: exit code 0 (mismatch with the default posture: enforcement skipped)
+  PASS: output matches /Policy hash mismatch/
+  PASS: output matches /enforcement skipped/
+$ apm audit --ci --no-drift --policy ../../policies/meridian-finance/apm-policy.yml
+[x] Policy fetch failed: Policy hash mismatch from file:../../policies/meridian-finance/apm-policy.yml: expected sha256:0000000000000000000000000000000000000000000000000000000000000000, got sha256:cc062058ac235e0dca6bd4c690c9a9c6cb2d9034bf975d82f8425c929e55b6f6 (policy.fetch_failure_default=block)
+[exit 1]
+  PASS: exit code 1 (mismatch with fetch_failure_default: block fails closed)
+  PASS: output matches /Policy hash mismatch/
+== ch10-govern-and-scale-across-teams: passed (75 passed, 0 failed) ==

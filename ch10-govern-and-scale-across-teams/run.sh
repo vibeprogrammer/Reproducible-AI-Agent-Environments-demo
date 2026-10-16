@@ -192,4 +192,75 @@ pushd meridian-ledger >/dev/null
   expect_rc 0 
   popd >/dev/null
 
+step "M. Deprecating a release of the required baseline (soft, then hard)"
+# Allow/deny patterns ignore #ref, so a single release cannot be denied.
+# For a REQUIRED package, require: with a #ref plus require_resolution
+# compares the lockfile's resolved_ref. v1.1.0 is a hypothetical next
+# release; the check is a string comparison, so it need not exist yet.
+for mode in project-wins block; do
+  cat > ../policies/require-next.yml <<EOF
+name: "meridian-finance baseline floor ($mode)"
+version: "0.0.1"
+enforcement: block
+dependencies:
+  require:
+    - "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-engineering-standards#meridian-engineering-standards-v1.1.0"
+  require_resolution: $mode
+EOF
+  pushd meridian-ledger >/dev/null
+  run apm audit --ci --no-drift --no-fail-fast -f json --policy ../../policies/require-next.yml
+  keep_artifact "$LAST_OUT" "require-next-$mode.json"
+  if [ "$mode" = project-wins ]; then
+    expect_rc 0 "project-wins: the mismatch is only a warning"
+    expect_out 'Required package versions match \(warnings: 1\)'
+  else
+    expect_rc 1 "block: the mismatch fails"
+    expect_out "expected ref 'meridian-engineering-standards-v1.1.0', got 'meridian-engineering-standards-v1.0.0'"
+  fi
+  popd >/dev/null
+done
+
+step "N. require: checks the manifest, not the transitive graph"
+# meridian-code-review reaches every repo through the baseline, but only
+# as a transitive dependency.
+cat > ../policies/require-transitive.yml <<'EOF'
+name: "require a transitive package"
+version: "0.0.1"
+enforcement: block
+dependencies:
+  require:
+    - "vibeprogrammer/reproducible-ai-agent-environments-demo/packages/meridian-code-review"
+EOF
+pushd meridian-checkout >/dev/null
+  run apm audit --ci --no-drift --no-fail-fast --policy ../../policies/require-transitive.yml
+  expect_rc 1 "a transitive-only package counts as missing"
+  expect_out 'required-packages'
+  expect_out '1 required package\(s\) missing from manifest'
+  popd >/dev/null
+
+step "O. A repository pins the bytes of the policy it expects"
+# apm.yml's policy.hash pins the leaf policy's raw bytes. With a file
+# source, a mismatch is reported; whether it fails depends on
+# policy.fetch_failure_default (observed with APM 0.33.0).
+pushd meridian-platform-tools >/dev/null
+  cp apm.yml apm.yml.orig
+  GOOD="sha256:$(sha256sum ../../policies/meridian-finance/apm-policy.yml | cut -d' ' -f1)"
+  BAD="sha256:$(printf '0%.0s' $(seq 64))"
+  printf 'policy:\n  hash: "%s"\n' "$GOOD" >> apm.yml
+  run apm audit --ci --no-drift --policy ../../policies/meridian-finance/apm-policy.yml
+  expect_rc 0 "matching hash: policy enforced and passing"
+  expect_out 'All 30 check\(s\) passed'
+  cp apm.yml.orig apm.yml; printf 'policy:\n  hash: "%s"\n' "$BAD" >> apm.yml
+  run apm audit --ci --no-drift --policy ../../policies/meridian-finance/apm-policy.yml
+  expect_rc 0 "mismatch with the default posture: enforcement skipped"
+  expect_out 'Policy hash mismatch'
+  expect_out 'enforcement skipped'
+  cp apm.yml.orig apm.yml
+  printf 'policy:\n  fetch_failure_default: block\n  hash: "%s"\n' "$BAD" >> apm.yml
+  run apm audit --ci --no-drift --policy ../../policies/meridian-finance/apm-policy.yml
+  expect_rc 1 "mismatch with fetch_failure_default: block fails closed"
+  expect_out 'Policy hash mismatch'
+  mv apm.yml.orig apm.yml
+  popd >/dev/null
+
 demo_end

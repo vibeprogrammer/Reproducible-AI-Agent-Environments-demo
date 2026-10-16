@@ -85,6 +85,17 @@ Evidence lands in `evidence/ch10-govern-and-scale-across-teams/`
    fails the allow list.
 8. K: a missing parent gives `incomplete_chain`; `apm policy status
    --check` and `apm audit --ci` both exit 1.
+9. M: a `require:` entry with a `#ref` and `require_resolution:
+   project-wins` passes with one warning when the lockfile resolved a
+   different ref; with `block` the same mismatch exits 1. This is the
+   closest 0.33.0 gets to deprecating one release of a required package.
+10. N: requiring `meridian-code-review`, which every repo receives only
+   transitively through the baseline, fails `required-packages`:
+   `require:` checks the manifest's direct dependencies.
+11. O: `policy.hash` in a repository's `apm.yml` pins the bytes of the
+   policy it expects. A matching hash passes; a mismatch is reported and
+   enforcement is skipped (exit 0) under the default posture; with
+   `policy.fetch_failure_default: block` the same mismatch exits 1.
 
 ## Limitations (what this demo does not verify)
 
@@ -107,5 +118,9 @@ Evidence lands in `evidence/ch10-govern-and-scale-across-teams/`
   denied; the demo deprecates a whole package.
 - `apm policy status` prints `Extends chain: none` for file sources even
   when the parent's rules were merged (the rule counts show the merge).
+- The hash-pin behaviour in step O was observed with a file policy
+  source. The v0.33.0 manifest reference describes a mismatch as always
+  fail-closed; with a file source we saw fail-closed only with
+  `fetch_failure_default: block`. Repository sources were not exercised.
 - The metrics are adoption facts from APM artifacts, not measures of
   agent behaviour or productivity.
